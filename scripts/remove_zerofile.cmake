@@ -1,0 +1,6 @@
+if(EXISTS "${FILENAME}")
+    file(SIZE "${FILENAME}" FILE_SIZE)
+    if(FILE_SIZE EQUAL 0)
+        file(REMOVE "${FILENAME}")
+    endif()
+endif()
