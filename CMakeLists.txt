@@ -147,40 +147,6 @@ endif()
 # Директория, в которой расположены плюгины Qt
 set(QT_PLUGIN_PATH "${QT_DIR}/../../../plugins")
 
-# Список необходимых для приложения плюгинов
-set(QT_PLUGIN_LIST
-  "accessible"
-  "accessiblebridge"
-  "iconengines"
-  "imageformats"
-  "permissions"
-  "platforminputcontexts"
-  "platforms"
-  "platformthemes"
-  "styles"
-  "xcbglintegrations"
-)
-
-# Подсистемы Qt, для которых требуются переводы
-set(QT_SYSTEMS "qt;qtbase;qtmultimedia;qtserialport")
-
-# Список необходимых для приложения модулей Qt
-set(QT_MODULES_LIST
-  "Core"                 
-  "Designer"             
-  "Gui"                  
-  "Multimedia"           
-  "MultimediaWidgets"    
-  "OpenGL"               
-  "OpenGLWidgets"        
-  "Qml"                  
-  "Quick"                
-  "SerialPort"           
-  "UiTools"              
-  "UiPlugin"             
-  "Widgets"              
-)
-
 ##############################################################################
 # Директории, создаваемые для выполнения сборки
 ##############################################################################
@@ -705,13 +671,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 endif()
 
 ##############################################################################
-# Настройка языков локализации
-##############################################################################
-
-# Английский, испанский, французский, бразильский вариант португальского, русский
-set(QT_LANG "en_US;es_ES;fr_FR;pt_BR;ru_RU")
-
-##############################################################################
 # Вывод информации о проекте, инструментах, среде сборки и среде исполнения
 ##############################################################################
 
@@ -774,7 +733,8 @@ install(FILES ${CMAKE_SOURCE_DIR}/LICENSE
 )
 
 # Установить значки программы для Linux
-if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+# !!!
+if (0 AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
     #!!! Можно использовать один и тот же SVG для всех разрешений
     message(DEBUG "Установить файл значка программы")
     install(FILES ${CMAKE_SOURCE_DIR}/src/candle/images/icons_png/icon_256.png
@@ -805,30 +765,39 @@ install(DIRECTORY "${FOUND_DEPS_PATH}/"
   TYPE LIB
 )
 
-#Установить плюгины Qt
+# Установить плюгины Qt (библиотеки)
 foreach(PLUGIN ${QT_PLUGIN_LIST})
-     # Получить список файлов плюгина
+    # Получить список файлов плюгина
     file(GLOB QT_PLUGIN_FILES_LIST
       RELATIVE "${QT_PLUGIN_PATH}/${PLUGIN}"
       "${QT_PLUGIN_PATH}/${PLUGIN}/*${CMAKE_SHARED_LIBRARY_SUFFIX}"
     )
-     # Установить файлы плюгина Qt
-    foreach(FILE ${QT_PLUGIN_FILES_LIST})
 
-        # Для конфигураций Release и MinSizeRel включать только библиотеки,
-        # без файлов отладочной информации
+    # Установить файлы плюгина Qt
+    foreach(FILE ${QT_PLUGIN_FILES_LIST})
         install(FILES "${QT_PLUGIN_PATH}/${PLUGIN}/${FILE}"
           DESTINATION "${INST_QTPLUG_DIR}/${PLUGIN}"
         )
+        # Дополнить список поиска зависимостей
+        list(APPEND DEP_FILES_LIST "${QT_PLUGIN_PATH}/${PLUGIN}/${FILE}")
+    endforeach(FILE)
+endforeach(PLUGIN)
 
-        # Для конфигураций Debug и RelWithDebInfo добавить файлы отладочной информации
-        install(DIRECTORY "${QT_PLUGIN_PATH}/${PLUGIN}/${FILE}.dSYM"
+# Для конфигураций Debug и RelWithDebInfo установить файлы
+# отладочной информации к плюгинам Qt
+foreach(PLUGIN ${QT_PLUGIN_LIST})
+     # Получить список файлов плюгина
+    file(GLOB QT_PLUGIN_FILES_LIST
+      RELATIVE "${QT_PLUGIN_PATH}/${PLUGIN}"
+      "${QT_PLUGIN_PATH}/${PLUGIN}/*.debug"
+      "${QT_PLUGIN_PATH}/${PLUGIN}/*.dSYM"
+    )
+    # Установить файлы плюгина Qt
+    foreach(FILE ${QT_PLUGIN_FILES_LIST})
+        install(FILES "${QT_PLUGIN_PATH}/${PLUGIN}/${FILE}"
           CONFIGURATIONS Debug RelWithDebInfo
           DESTINATION "${INST_QTPLUG_DIR}/${PLUGIN}"
         )
-
-        # Дополнить список поиска зависимостей
-        list(APPEND DEP_FILES_LIST "${QT_PLUGIN_PATH}/${PLUGIN}/${FILE}")
     endforeach(FILE)
 endforeach(PLUGIN)
 
@@ -933,7 +902,7 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_FILE_PATTERNS           *.h *.hxx *.cpp *.md)
     set(DOXYGEN_EXAMPLE_PATH            "${SOURCES_PATH}")
     set(DOXYGEN_IMAGE_PATH              ${DOXY_IMAGES})
-    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE  "${CMAKE_SOURCE_DIR}/readme.md")
+    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE  "${CMAKE_SOURCE_DIR}/README.md")
     set(DOXYGEN_ALPHABETICAL_INDEX      NO)
     set(DOXYGEN_HTML_STYLESHEET         "${CMAKE_SOURCE_DIR}/doc/stylesheet.css")
     set(DOXYGEN_GENERATE_TREEVIEW       YES)

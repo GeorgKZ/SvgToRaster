@@ -1,0 +1,41 @@
+Коротко — организуйте сборку в два шага и/или используйте внешние зависимости как подключаемые проекты. Варианты с примерными CMake-подходами:
+
+    Подсборка второго проекта через add_subdirectory (если вы можете включить его как сабмодуль или клонировать в поддиректорию)
+
+    Добавьте второй репозиторий как git submodule или скачивайте в configure-стадии (ExternalProject_ADD / FetchContent).
+    В корневом CMakeLists.txt:
+        Если код второго проекта совместим по структуре, используйте add_subdirectory(path/to/other) — тогда его цель будет доступна и вы можете зависеть от неё через target_link_libraries или add_dependencies.
+        Если проект независимый (своё CMake), используйте FetchContent или ExternalProject:
+            FetchContent_MakeAvailable() (CMake >= 3.14) — подтянет и добавит в конфигурацию, и вы сможете ссылаться на его targets (если он экспортирует их).
+            ExternalProject_Add — билдит отдельной стадией; чтобы главный проект ждал результата, добавьте add_dependencies(главная_цель external_project) и укажите пути к артефактам.
+
+Когда нужно запустить второе приложение во время сборки (например, генерировать файлы):
+
+    Предпочтение: сделать генерацию как часть build-режима второго проекта и экспортировать сгенерированные файлы или библиотеку.
+    Если нужно исполнить бинарь прямо в процессе сборки, используйте ExternalProject_Add с BUILD_BYPRODUCTS и командой для запуска, или в основном проекте добавьте custom_command/ custom_target, который зависит от цели второго проекта. Пример с add_custom_command:
+        add_custom_command(OUTPUT generated.h COMMAND $<TARGET_FILE:other_tool> args DEPENDS other_tool)
+        add_custom_target(gen_files DEPENDS generated.h)
+        add_dependencies(main_target gen_files)
+
+    FetchContent (рекомендуется для удобства)
+
+    В CMakeLists.txt:
+        include(FetchContent)
+        FetchContent_Declare(other_proj GIT_REPOSITORY GIT_TAG <commit/tag>)
+        FetchContent_MakeAvailable(other_proj)
+    Если other_proj экспортирует цель (например other::tool), можно использовать $<TARGET_FILE:other::tool> в custom_command DEPENDS.
+
+    ExternalProject_Add (когда нужен независимый шаг или отдельная конфигурация)
+
+    ExternalProject_Add(other_proj GIT_REPOSITORY CONFIGURE_COMMAND <...> BUILD_COMMAND <...> INSTALL_COMMAND <...> BUILD_BYPRODUCTS <path/to/binary>)
+    Затем add_dependencies(main_target other_proj) и в custom_command ссылаться на путь к бинарю (ExternalProject_Get_Property дает location).
+
+Практические советы
+
+    Используйте фиксированные теги/коммиты для стабильности сборки.
+    Предпочтительнее FetchContent если хотите единый CMake-конфиг и доступ к целям; ExternalProject — если хотите изолировать.
+    Делайте бинарь второго проекта produce-артефактом (BUILD_BYPRODUCTS) чтобы CMake правильно понимал зависимости.
+    Для запуска бинаря в configure-стадии — не делайте этого; запускать только в build-стадии через custom_command/custom_target.
+    Документируйте: как и где будет скачиваться зависимый репозиторий, какие переменные можно переопределить (URL, TAG), и как запустить сборку офлайн (submodule vs fetch).
+
+Если хотите, могу привести конкретный пример CMakeLists.txt (FetchContent и пример custom_command), укажите: FetchContent или ExternalProject, и ссылку/структуру проектов.

@@ -26,7 +26,7 @@ public:
     /**
      * \brief Выполнить начальные действия
      */
-    static void init(int &argc, char **argv);
+    static void init();
 
     /**
      * \brief Установить локализацию интерфейса согласно языковому файлу
@@ -66,17 +66,6 @@ private:
      * [qFatal()](https://doc.qt.io/qt-6/qtlogging.html#qFatal)
      */
     static QtMessageHandler m_originalMessageHandler;
-
-    /**
-     * \brief Флаг, разрешающий выводить отладочные/информационные/предупреждающие/аварийные
-     * сообщения [qDebug()](https://doc.qt.io/qt-6/qtlogging.html#qDebug),
-     * [qInfo()](https://doc.qt.io/qt-6/qtlogging.html#qInfo),
-     * [qWarning()](https://doc.qt.io/qt-6/qtlogging.html#qWarning),
-     * [qCritical()](https://doc.qt.io/qt-6/qtlogging.html#qCritical),
-     * [qFatal()](https://doc.qt.io/qt-6/qtlogging.html#qFatal)
-     * в консоль
-     */
-    static bool m_debugOutput;
 
     /**
      * \brief Дескриптор локализации приложения

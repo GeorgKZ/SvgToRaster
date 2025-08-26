@@ -80,7 +80,7 @@ set(CPACK_RESOURCE_FILE_LICENSE ${MISC_PATH}/LICENSE.txt)
 
 # Файл ReadMe, который будет встроен в инсталлятор (для PRODUCTBUILD необходимо расширение .txt)
 file(CREATE_LINK
-  ${CMAKE_SOURCE_DIR}/readme.md
+  ${CMAKE_SOURCE_DIR}/README.md
   ${MISC_PATH}/readme.txt
   COPY_ON_ERROR)
 set(CPACK_RESOURCE_FILE_README ${MISC_PATH}/readme.txt)

@@ -18,12 +18,6 @@
 
 /**
  * \file
- * * \copybrief bootstrap::m_debugOutput
- */
-bool bootstrap::m_debugOutput = false;
-
-/**
- * \file
  * * \copybrief bootstrap::m_originalMessageHandler
  */
 QtMessageHandler bootstrap::m_originalMessageHandler = nullptr;
@@ -48,9 +42,9 @@ QTranslator *bootstrap::m_qtTranslator = nullptr;
 
 /**
  * \file
- * * \copybrief bootstrap::init(int &, char **)
+ * * \copybrief bootstrap::init()
  */
-void bootstrap::init(int &argc, char **argv)
+void bootstrap::init()
 {
     /**
      * Алгоритм:
@@ -68,16 +62,6 @@ void bootstrap::init(int &argc, char **argv)
         }
     }
 #endif
-
-    /**
-     * * При наличии в командной строке ключа -DEBUG включить вывод отладочной информации
-     */
-    for (auto i = 0; i < argc; i++) {
-        if (QString(argv[i]).toUpper() == "-DEBUG") {
-            m_debugOutput = true;
-            break;
-        }
-    }
 
     /**
      * * Установить свой обработчик отладочных/информационных/предупреждающих/аварийных
@@ -103,13 +87,6 @@ void bootstrap::myMessageOutput(QtMsgType type, const QMessageLogContext &contex
     /**
      * Алгоритм:
      */
-
-    /**
-     * * Если не установлен флаг разрешения консольного вывода, то ничего не делать.
-     */
-    if (!m_debugOutput) {
-        return;
-    }
 
     /**
      * * Создать поток типа [QTextStream](https://doc.qt.io/qt-6/qtextstream.html)
@@ -161,7 +138,7 @@ void bootstrap::setTranslator(const QString &translationFileName, QTranslator **
          * * Установить новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
          */
         qApp->installTranslator(*translator);
-        qInfo() << "Translation" << translationFileName << "loaded abd installed";
+        qInfo() << "Translation" << translationFileName << "loaded and installed";
     }
 }
 
@@ -179,7 +156,7 @@ void bootstrap::setAllTranslators(const QString &language) {
     /**
      * * Установить файлы локализации приложения.
      */
-    translationFileName = ":/translations/candle_" + language + ".qm";
+    translationFileName = ":/translations/svgtoraster_" + language + ".qm";
     if (QFile::exists(translationFileName)) {
         setTranslator(translationFileName, &m_appTranslator);
     } else {
@@ -194,4 +171,3 @@ void bootstrap::setAllTranslators(const QString &language) {
         setTranslator(translationFileName, &m_qtTranslator);
     }
 }
-
