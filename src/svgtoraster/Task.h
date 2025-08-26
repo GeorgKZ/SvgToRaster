@@ -26,7 +26,7 @@ private:
 
     QString m_output_file;
 
-    int m_bitmap_size;
+    int m_bitmap_size = 1024;
 
     int m_parse_ok;
 

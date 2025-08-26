@@ -19,7 +19,7 @@ int Task::parse_args(const int &argc, char **argv)
     /** 1 Проверить наличие минимально допустимого количества аргументов программы; */
     if (argc < MINARGS) {
         if (argc > 1) {
-            qCritical() << tr("Ошибка формата командной строки: количество аргументов меньше ") << MINARGS - 1;
+            qCritical().noquote() << tr("Ошибка формата командной строки: количество аргументов меньше ") << MINARGS - 1;
         }
         print_help();
         return -1;
@@ -28,7 +28,7 @@ int Task::parse_args(const int &argc, char **argv)
     /** 2 Сформировать список директив и их параметров из аргументов командной строки; */
     arg_parser args;
     if (args.process_cmdline(const_cast<const char**>(argv), static_cast<size_t>(argc))) { //-V201
-        qCritical() << tr("Ошибка формата командной строки: первый аргумент '") << argv[1] << tr("' не является флагом");
+        qCritical().noquote() << tr("Ошибка формата командной строки: первый аргумент '") << argv[1] << tr("' не является флагом");
         return -1;
     }
 
@@ -38,16 +38,23 @@ int Task::parse_args(const int &argc, char **argv)
         if (curr_flag.compare("infile") == 0) {
           const std::vector<std::string>& parms = args.get_parameters_set(i);
           if (parms.size() < 1) {
-            qCritical() << tr("Ошибка формата командной строки: отсутствуют параметры после флага") << " 'infile'";
+            qCritical().noquote() << tr("Ошибка формата командной строки: отсутствуют параметры после флага") << " 'infile'";
             return -1;
           }
           m_input_file = args.get_parameters(i).c_str();
+
+          if (!QFile::exists(m_input_file)) {
+              qCritical().noquote() << tr("Ошибка: указанный исходный файл '") <<  m_input_file << tr("' отсутствует");
+              return -1;
+          }
+
+
           continue;
       
         } else if (curr_flag.compare("outfile") == 0) {
           const std::vector<std::string>& parms = args.get_parameters_set(i);
           if (parms.size() < 1) {
-            qCritical() << tr("Ошибка формата командной строки: отсутствует параметр после флага") << " 'outfile'";
+            qCritical().noquote() << tr("Ошибка формата командной строки: отсутствует параметр после флага") << " 'outfile'";
             return -1;
           }
           m_output_file = args.get_parameters(i).c_str();
@@ -56,21 +63,17 @@ int Task::parse_args(const int &argc, char **argv)
         } else if (curr_flag.compare("size") == 0) {
           const std::vector<std::string>& parms = args.get_parameters_set(i);
           if (parms.size() < 1) {
-            qCritical() << tr("Ошибка формата командной строки: отсутствует параметр после флага") << " 'back'";
+            qCritical().noquote() << tr("Ошибка формата командной строки: отсутствует параметр после флага") << " 'back'";
             return -1;
           }
-#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201103L) || __cplusplus >= 201103L)
-          m_bitmap_size = std::stoi(args.get_parameters(i));
-#else
-          m_bitmap_size = atoi(args.get_parameters(i).c_str());
-#endif
+          m_bitmap_size = QString(args.get_parameters(i).c_str()).toInt();
           continue;
 
         } else if (curr_flag.compare("debug") == 0) {
           continue;
 
         } else {
-            qCritical() << tr("Ошибка формата командной строки: неизвестный флаг '") << args.get_flag(i) << "'";
+            qCritical().noquote() << tr("Ошибка формата командной строки: неизвестный флаг '") << args.get_flag(i) << "'";
             return -1;
         }
     }
@@ -96,10 +99,10 @@ void Task::run()
  * * \copybrief Task::print_help()
  */
 void Task::print_help() {
-  qInfo() << tr("КРАТКАЯ СПРАВКА");
-  qInfo() << "svgtoraster [--size S] [--DEBUG] --infile <inf> --outfile <outf>";
-  qInfo() << tr("    S                - размер результирующего файла");
-  qInfo() << tr("    --DEBUG          - выводить отладочные сообщения");
-  qInfo() << tr("    <inf>            - исходный файл SVG");
-  qInfo() << tr("    <outf>           - результирующий файл PNG");
+  qInfo().noquote() << tr("USAGE:");
+  qInfo().noquote() << "svgtoraster [--size S] [--DEBUG] --infile <inf> --outfile <outf>";
+  qInfo().noquote() << tr("    S                - размер результирующего файла");
+  qInfo().noquote() << tr("    --DEBUG          - выводить отладочные сообщения");
+  qInfo().noquote() << tr("    <inf>            - исходный файл SVG");
+  qInfo().noquote() << tr("    <outf>           - результирующий файл PNG");
 }

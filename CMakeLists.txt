@@ -786,15 +786,28 @@ endforeach(PLUGIN)
 # Для конфигураций Debug и RelWithDebInfo установить файлы
 # отладочной информации к плюгинам Qt
 foreach(PLUGIN ${QT_PLUGIN_LIST})
-     # Получить список файлов плюгина
+
+    # Получить список файлов *.debug плюгина (Linux)
     file(GLOB QT_PLUGIN_FILES_LIST
       RELATIVE "${QT_PLUGIN_PATH}/${PLUGIN}"
       "${QT_PLUGIN_PATH}/${PLUGIN}/*.debug"
-      "${QT_PLUGIN_PATH}/${PLUGIN}/*.dSYM"
     )
-    # Установить файлы плюгина Qt
+    # Установить найденные файлы
     foreach(FILE ${QT_PLUGIN_FILES_LIST})
         install(FILES "${QT_PLUGIN_PATH}/${PLUGIN}/${FILE}"
+          CONFIGURATIONS Debug RelWithDebInfo
+          DESTINATION "${INST_QTPLUG_DIR}/${PLUGIN}"
+        )
+    endforeach(FILE)
+
+    # Получить список директорий *.dSYM плюгина (Mac OS)
+    file(GLOB QT_PLUGIN_FILES_LIST
+      RELATIVE "${QT_PLUGIN_PATH}/${PLUGIN}"
+      "${QT_PLUGIN_PATH}/${PLUGIN}/*.dSYM"
+    )
+    # Установить найденные директории
+    foreach(FILE ${QT_PLUGIN_FILES_LIST})
+        install(DIRECTORY "${QT_PLUGIN_PATH}/${PLUGIN}/${FILE}"
           CONFIGURATIONS Debug RelWithDebInfo
           DESTINATION "${INST_QTPLUG_DIR}/${PLUGIN}"
         )
