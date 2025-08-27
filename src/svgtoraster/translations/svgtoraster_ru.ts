@@ -4,70 +4,112 @@
 <context>
     <name>Task</name>
     <message>
-        <location filename="../Task.cpp" line="22"/>
-        <source>Ошибка формата командной строки: количество аргументов меньше </source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="40"/>
+        <source>Command line format error: the number of arguments is less than</source>
+        <translation>Ошибка формата командной строки: количество аргументов меньше, чем</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="31"/>
-        <source>Ошибка формата командной строки: первый аргумент &apos;</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="49"/>
+        <source>Command line format error: the first argument &apos;</source>
+        <translation>Ошибка формата командной строки: первый аргумент &apos;</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="31"/>
-        <source>&apos; не является флагом</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="49"/>
+        <source>&apos; is not a flag</source>
+        <translation>&apos; не является флагом</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="41"/>
-        <source>Ошибка формата командной строки: отсутствуют параметры после флага</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="59"/>
+        <location filename="../task.cpp" line="75"/>
+        <location filename="../task.cpp" line="84"/>
+        <source>flag</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="47"/>
-        <source>Ошибка: указанный исходный файл &apos;</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="65"/>
+        <source>Error: the specified &apos;</source>
+        <translation>Ошибка: указанный исходный файл &apos;</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="47"/>
-        <source>&apos; отсутствует</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="65"/>
+        <source>&apos; source file is missing</source>
+        <translation>&apos; отсутствует</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="57"/>
-        <location filename="../Task.cpp" line="66"/>
-        <source>Ошибка формата командной строки: отсутствует параметр после флага</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="59"/>
+        <location filename="../task.cpp" line="75"/>
+        <location filename="../task.cpp" line="84"/>
+        <source>Command line format error: missing parameter after the</source>
+        <translation>Ошибка формата командной строки: отсутствует параметр после флага</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="76"/>
-        <source>Ошибка формата командной строки: неизвестный флаг &apos;</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="91"/>
+        <source>Command line format error: unknown &apos;</source>
+        <translation>Ошибка формата командной строки: неизвестный флаг &apos;</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="102"/>
+        <location filename="../task.cpp" line="91"/>
+        <source>&apos; flag</source>
+        <translation>&apos;</translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="111"/>
+        <source>Source file load error</source>
+        <translation>Ошибка загрузки исходного файла</translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="114"/>
+        <source>Available input file sizes:</source>
+        <translation>Доступные размеры исходного файла:</translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="130"/>
         <source>USAGE:</source>
         <translation>ИСПОЛЬЗОВАНИЕ:</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="104"/>
-        <source>    S                - размер результирующего файла</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="132"/>
+        <source>output file size</source>
+        <translation>размер результирующего файла</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="105"/>
-        <source>    --DEBUG          - выводить отладочные сообщения</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="133"/>
+        <source>source SVG file</source>
+        <translation>Исходный файл SVG</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="106"/>
-        <source>    &lt;inf&gt;            - исходный файл SVG</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="134"/>
+        <source>target PNG file</source>
+        <translation>результирующий файл PNG</translation>
     </message>
     <message>
-        <location filename="../Task.cpp" line="107"/>
-        <source>    &lt;outf&gt;           - результирующий файл PNG</source>
-        <translation type="unfinished"></translation>
+        <location filename="../task.cpp" line="136"/>
+        <source>Supported input formats:</source>
+        <translation>Поддерживаемые форматы исходного файла</translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="137"/>
+        <source>Supported output formats:</source>
+        <translation>Поддерживаемые форматы результирующего файла</translation>
+    </message>
+</context>
+<context>
+    <name>bootstrap</name>
+    <message>
+        <location filename="../bootstrap.cpp" line="125"/>
+        <location filename="../bootstrap.cpp" line="164"/>
+        <source>Error loading translation file</source>
+        <translation>Ошибка загрузки файла перевода</translation>
+    </message>
+    <message>
+        <location filename="../bootstrap.cpp" line="142"/>
+        <source>Translation file &apos;</source>
+        <translation>Файл перевода &apos;</translation>
+    </message>
+    <message>
+        <location filename="../bootstrap.cpp" line="142"/>
+        <source>&apos; loaded and installed</source>
+        <translation>&apos; загружен и установлен</translation>
     </message>
 </context>
 </TS>

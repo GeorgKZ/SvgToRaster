@@ -1,10 +1,11 @@
 /**
  * \file
- * \brief Файл с определениями членов класса \ref bootstrap "bootstrap"
+ * \brief Файл с определениями функций-членов класса \ref bootstrap "bootstrap"
  *
  * <BR>
  */
-#include <QtCore/QSettings>
+
+//#include <QtCore/QSettings>
 #ifdef Q_OS_WINDOWS
   #include <windows.h> 
 #endif
@@ -121,7 +122,7 @@ void bootstrap::setTranslator(const QString &translationFileName, QTranslator **
         /**
          * * В случае неудачи удалить новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
          */
-        qCritical() << "Error loading" << translationFileName << "translation";
+        qCritical().noquote() << tr("Error loading translation file") << translationFileName;
         delete new_translator;
     } else {
 
@@ -138,7 +139,7 @@ void bootstrap::setTranslator(const QString &translationFileName, QTranslator **
          * * Установить новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
          */
         qApp->installTranslator(*translator);
-        qInfo() << "Translation" << translationFileName << "loaded and installed";
+        qDebug().noquote() << tr("Translation file '") << translationFileName << tr("' loaded and installed");
     }
 }
 
@@ -160,7 +161,7 @@ void bootstrap::setAllTranslators(const QString &language) {
     if (QFile::exists(translationFileName)) {
         setTranslator(translationFileName, &m_appTranslator);
     } else {
-        qCritical() << "Error loading translation file" << translationFileName;
+        qCritical().noquote() << tr("Error loading translation file") << translationFileName;
     }
 
     /**

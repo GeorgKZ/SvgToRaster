@@ -9,32 +9,32 @@ function(install_library_with_deps NAME)
     # Проверить, может это библиотека из указанного Qt
     if(EXISTS "${QT_DIR}/../../${NAME}")
         set(PATH_TO_NAME "${QT_DIR}/../..")
-        message(STATUS "FOUND Qt library ${NAME}")
+#       message(STATUS "FOUND Qt library ${NAME}")
 
     elseif(EXISTS "${QT_DIR}/../../../bin/${NAME}")
         set(PATH_TO_NAME "${QT_DIR}/../../../bin")
-        message(STATUS "FOUND Qt library ${NAME}")
+ #      message(STATUS "FOUND Qt library ${NAME}")
 
     # Проверить, может это фреймворк из указанного Qt
     elseif(EXISTS "${QT_DIR}/../../${NAME}.framework")
         set(PATH_TO_NAME "${QT_DIR}/../..")
-        message(STATUS "FOUND Qt framework ${NAME}")
+  #     message(STATUS "FOUND Qt framework ${NAME}")
         set(framework 1)
 
     # Проверить, может это библиотека приложения
     elseif(EXISTS "${FIND_DEPS_PATH}/${NAME}")
         set(PATH_TO_NAME "${FIND_DEPS_PATH}")
-        message(STATUS "FOUND application library ${NAME}")
+#       message(STATUS "FOUND application library ${NAME}")
 
     # !!!
     # Проверить, может это библиотека приложения
     elseif((EXISTS "/lib/${NAME}") OR (EXISTS "/lib/x86_64-linux-gnu/${NAME}"))
-    #   message(STATUS "FOUND system library ${NAME}")
+#       message(STATUS "FOUND system library ${NAME}")
         return()
 
     # Проверить, может такая библиотека уже найдена, тогда ничего не делать
     elseif((EXISTS "${FOUND_DEPS_PATH}/${NAME}") OR (EXISTS "${FOUND_DEPS_PATH}/${NAME}.framework"))
-        message(STATUS "SKIPPED founded library ${NAME}")
+#       message(STATUS "SKIPPED founded library ${NAME}")
         return()
 
     else()

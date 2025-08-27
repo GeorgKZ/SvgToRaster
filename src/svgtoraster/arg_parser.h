@@ -1,12 +1,19 @@
 /**
  * \file
  *
- * \brief Заголовочный файл с описанием класса arg_parser, предназначенного для разбора командной строки 
+ * \brief Заголовочный файл с объявлением класса \ref arg_parser "arg_parser",
+ * предназначенного для разбора командной строки 
  */
+
+#ifndef ARG_PARSER_H
+#define ARG_PARSER_H
+
+#include <QtCore/QString>
+#include <QtCore/QList>
 
 /**
  * \brief Класс, реализующий простой разбор командной строки, состоящей из конструкций
- * ("аргументов") типа "-flag [param ...]"
+ * ("аргументов") типа "--flag [param ...]"
  */
 class arg_parser {
 
@@ -21,19 +28,19 @@ class arg_parser {
     public:
 
     /** \brief Ключевое слово для параметров */
-    std::string flag;
+    QString flag;
 
     /** \brief Параметры по отдельности */
-    std::vector<std::string> parameters;
+    QStringList parameters;
 
     /** \brief Параметры в виде одной строки */
-    std::string str_parameters;
+    QString str_parameters;
   };
 
   /** 
    * \brief Набор разобранных аргументов
    */
-  std::vector<argument> args;
+  QList<argument> args;
 
   /** 
    * \brief Добавить новый аргумент, установив значение флага
@@ -62,36 +69,38 @@ class arg_parser {
    * \param [in] cmdline массив строк аргументов командной строки
    * \param [in] cmdnum количество аргументов командной строки
    * \retval -1 если первый аргумент командной строки не является флагом (ключевым словом),
-   * то есть не начинается с символа '-';
+   * то есть не начинается с символов '--';
    * \retval 0 в случае успешного завершения.
    */
-  int process_cmdline(const char *cmdline[], size_t cmdnum);
+  int process_cmdline(const char *cmdline[], int cmdnum);
 
   /** 
    * \brief Получить флаг указанного аргумента
    *
    * \param [in] index номер аргумента
    */
-  const std::string& get_flag(size_t index) const;
+  const QString& get_flag(int index) const;
 
   /** 
    * \brief Получить параметры указанного аргумента в виде строки
    *
    * \param [in] index номер аргумента
    */
-  const std::string& get_parameters(size_t index) const;
+  const QString& get_parameters(int index) const;
 
   /** 
    * \brief Получить набор параметров указанного аргумента в виде вектора
    *
    * \param [in] index номер аргумента
    */
-  const std::vector<std::string>& get_parameters_set(size_t index) const;
+  const QStringList& get_parameters_set(int index) const;
 
   /** 
    * \brief Получить количество аргументов
    *
    * \return количество аргументов
    */
-  size_t get_arg_num() const;
+  int get_arg_num() const;
 };
+
+#endif // ARG_PARSER_H

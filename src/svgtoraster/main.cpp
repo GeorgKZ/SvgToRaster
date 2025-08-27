@@ -1,6 +1,12 @@
-#include "stdafx.h"
+//#include <QtCore/QCoreApplication>
+#include <QtWidgets/QApplication>
 #include "bootstrap.h"
-#include "Task.h"
+#include "task.h"
+
+/**
+ * \brief Минимально возможное количество аргументов (сама программа, исходный и результирующий файлы)
+ */
+#define MINARGS 3
 
 //#define quoting(a) prequoting(a)
 //#define prequoting(a) #a
@@ -13,7 +19,7 @@ int main(int argc, char *argv[]) {
      */
 
     /**
-     * * Создать экземпляр типа QApplication
+     * * Создать экземпляр приложения QApplication.
      */
     QApplication a(argc, argv);
 
@@ -23,16 +29,25 @@ int main(int argc, char *argv[]) {
      */
     bootstrap::init();
 
-    // Task parented to the application so that it
-    // will be deleted by the application.
-    Task *task = new Task(argc, argv, &a);
+    /**
+     * * Создать экземпляр задачи, дочернего для экземпляра приложения.
+     * Завершение родительского объекта вызовет завершение задачи.
+     */
+    Task *task = new Task(argc, argv, MINARGS, &a);
 
-    // This will cause the application to exit when
-    // the task signals finished.    
+    /**
+     * * Соединить сигнал завершения, посыляемый задачей, с сигналом
+     * завершения приложения.
+     */
     QObject::connect(task, SIGNAL(finished()), &a, SLOT(quit()));
 
-    // This will run the task from the application event loop.
+    /**
+     * * Инициировать начало выполнения задачи.
+     */
     QTimer::singleShot(0, task, SLOT(run()));
 
+    /**
+     * * Передать управление приложению.
+     */
     return a.exec();
 }

@@ -1,25 +1,24 @@
 /**
  * \file
- * \brief Файл с объявлением класса \ref bootstrap "bootstrap"
+ * \brief Заголовочный файл с объявлением класса \ref bootstrap "bootstrap"
  */
 
 #ifndef BOOTSTRAP_H
 #define BOOTSTRAP_H
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
+#include <QtCore/QtCore>
 #include <QtCore/QTranslator>
-#include <QtGui/QFontDatabase>
-#include <QtWidgets/QApplication>
 
 /**
  * \brief Объявление класса \ref bootstrap "bootstrap"
  *
  * Этот статический (нужен только один экземпляр членов класса) класс
  * предназначен для выполнения действий, предшествующих созданию основного
- * окна приложения.
+ * окна и очереди задач приложения.
  */
-class bootstrap {
+class bootstrap  : public QObject {
+
+    Q_OBJECT
 
 public:
 
@@ -30,6 +29,7 @@ public:
 
     /**
      * \brief Установить локализацию интерфейса согласно языковому файлу
+     *
      * \param [in] translationFileName имя файла локализации с путём.
      * \param [in,out] translator указатель на дескриптор локализации.
      */
@@ -37,6 +37,8 @@ public:
 
     /**
      * \brief Установить локализацию интерфейса согласно указанному языку
+     *
+     * \param [in] language строка--код языка локализации.
      */
     static void setAllTranslators(const QString &language);
 
@@ -52,6 +54,8 @@ public:
 
     /**
      * \brief Получить названия семейств (имена) загруженных шрифтов
+     *
+     * return список строк семейств (имён) загруженных шрифтов.
      */
     static const QList<QString> &getLoadedFonts();
 

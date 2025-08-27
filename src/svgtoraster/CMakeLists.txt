@@ -105,6 +105,67 @@ if ((CMAKE_SYSTEM_NAME STREQUAL "Windows") OR (CMAKE_SYSTEM_NAME STREQUAL "MSYS"
         -D_UNICODE
         -DUNICODE
     )
+# При сборке для работы в среде MacOS/OS X
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+
+    file(WRITE
+        "${MISC_PATH}/Info.plist.in"
+
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n"
+"<plist version=\"1.0\">\n"
+"<dict>\n"
+"      <key>CFBundleInfoDictionaryVersion</key>\n"
+"      <string>6.0</string>\n"
+"      <key>CFBundlePackageType</key>\n"
+"      <string>APPL</string>\n"
+"\n"
+"      <key>CFBundleName</key>\n"
+"      <string>\${MACOSX_BUNDLE_BUNDLE_NAME}</string>\n"
+"      <key>CFBundleIdentifier</key>\n"
+"      <string>\${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>\n"
+"      <key>CFBundleExecutable</key>\n"
+"      <string>\${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>\n"
+"\n"
+"      <key>CFBundleVersion</key>\n"
+"      <string>\${MACOSX_BUNDLE_BUNDLE_VERSION}</string>\n"
+"      <key>CFBundleShortVersionString</key>\n"
+"      <string>\${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>\n"
+"      <key>CFBundleLongVersionString</key>\n"
+"      <string>\${MACOSX_BUNDLE_LONG_VERSION_STRING}</string>\n"
+"\n"
+"      <key>LSMinimumSystemVersion</key>\n"
+"      <string>\${CMAKE_OSX_DEPLOYMENT_TARGET}</string>\n"
+"\n"
+"      <key>CFBundleGetInfoString</key>\n"
+"      <string>\${MACOSX_BUNDLE_INFO_STRING}</string>\n"
+"      <key>NSHumanReadableCopyright</key>\n"
+"      <string>\${MACOSX_BUNDLE_COPYRIGHT}</string>\n"
+"\n"
+"      <key>CFBundleIconFile</key>\n"
+"      <string>\${MACOSX_BUNDLE_ICON_FILE}</string>\n"
+"\n"
+"      <key>CFBundleDevelopmentRegion</key>\n"
+"      <string>en</string>\n"
+"\n"
+"      <key>NSPrincipalClass</key>\n"
+"      <string>NSApplication</string>\n"
+"\n"
+"        <key>NSCameraUsageDescription</key>\n"
+"        <string>The camera is used by CameraWidget plugin.</string>\n"
+"        <key>com.apple.security.device.camera</key>\n"
+"        <true/>\n"
+"\n"
+"      <key>NSSupportsAutomaticGraphicsSwitching</key>\n"
+"      <true/>\n"
+"\n"
+"      <key>NSHighResolutionCapable</key>\n"
+"      <string>True</string>\n"
+"\n"
+"</dict>\n"
+"</plist>\n"
+     )
+
 endif()
 
 ##############################################################################
@@ -162,17 +223,6 @@ target_link_libraries(${MAIN_NAME} PUBLIC
 
 # Подключить подсистему лингвистики Qt
 find_package(Qt6 COMPONENTS LinguistTools REQUIRED)
-
-# Добавить файлы переводов в список файлов TS_FILES
-#file(GLOB TS_FILES "${SOURCES_PATH}/translations/${MAIN_NAME}_*.ts")
-
-# Обработать файлы перевода без интеграции в исполняемый файл
-#qt6_add_translations(${MAIN_NAME}
-#    TS_FILES ${TS_FILES}
-#    QM_FILES_OUTPUT_VARIABLE QM_FILES
-#    LUPDATE_OPTIONS -silent -source-language en_US
-#    LRELEASE_OPTIONS -silent
-#)
 
 # Обработать файлы перевода приложения для интеграции в исполняемый файл,
 # перебрать все поддерживаемые языки
@@ -247,8 +297,8 @@ qt6_add_resources(${MAIN_NAME} "system_translations"
 set_target_properties(${MAIN_NAME} PROPERTIES
   WIN32_EXECUTABLE TRUE
   MACOSX_BUNDLE TRUE
-  MACOSX_BUNDLE_INFO_PLIST "${SOURCES_PATH}/Info.plist.in"
-  MACOSX_BUNDLE_GUI_IDENTIFIER "com.github.GeorgKZ.${PROJECT_NAME}"
+  MACOSX_BUNDLE_INFO_PLIST "${MISC_PATH}/Info.plist.in"
+  MACOSX_BUNDLE_GUI_IDENTIFIER "com.github.${CUSTOM_PROJECT_VENDOR}.${PROJECT_NAME}"
   MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
   MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
   MACOSX_BUNDLE_ICON_FILE "${PROJECT_NAME_LOWERCASE}.icns"
@@ -287,17 +337,7 @@ add_dependencies(get_deps_${MAIN_NAME} ${MAIN_NAME})
 set(CMAKE_INSTALL_MESSAGE LAZY)
 
 # Исполняемый файл
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-
-    install(TARGETS ${MAIN_NAME}
-      RUNTIME
-      BUNDLE DESTINATION .
-    )
-
-else()
-
-    install(TARGETS ${MAIN_NAME}
-      RUNTIME
+install(TARGETS ${MAIN_NAME}
+  RUNTIME
+  BUNDLE DESTINATION .
 )
-
-endif()
