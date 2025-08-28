@@ -9,7 +9,10 @@ cmake_minimum_required(VERSION 3.9...3.28)
 ##############################################################################
 
 # Директория для промежуточных и собранных файлов
-if(DEFINED ENV{BUILDDIR}) 
+if(DEFINED BUILDDIR) 
+    message(DEBUG "Директория сборки согласно переменной BUILDDIR=${BUILDDIR}")
+    cmake_path(SET BUILD_PATH NORMALIZE "${BUILDDIR}")
+elseif(DEFINED ENV{BUILDDIR}) 
     message(DEBUG "Директория сборки согласно окружению BUILDDIR=$ENV{BUILDDIR}")
     cmake_path(SET BUILD_PATH NORMALIZE "$ENV{BUILDDIR}")
 else()
