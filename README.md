@@ -1,3 +1,5 @@
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 Введение
 ========
 
@@ -27,7 +29,7 @@ SvgToRaster распространяется по лицензии "GNU GENERAL 
 [репозитория](https://github.com/GeorgKZ/SvgToRaster).
 
 Использование SvgToRaster
-======================
+=========================
 ```
 SvgToRaster [--s <S>] --i <in_file> --o <out_file>
     <S>              - размеры результирующего файла
@@ -36,7 +38,7 @@ SvgToRaster [--s <S>] --i <in_file> --o <out_file>
 ```
 
 Сборка SvgToRaster
-===============
+==================
 
 Поддерживаемые платформы
 ------------------------

@@ -111,7 +111,7 @@ void Task::run()
             qCritical().noquote() << tr("Source file load error");
         } else {
 
-//          qDebug().noquote() << tr("Available input file sizes:") << icon.availableSizes();
+            qDebug().noquote() << tr("Available input file sizes:") << icon.availableSizes();
 
             QImage image = icon.pixmap(QSize(m_bitmap_size, m_bitmap_size)).toImage();
 

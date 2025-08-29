@@ -6,9 +6,9 @@
  */
 
 //#include <QtCore/QSettings>
-#ifdef Q_OS_WINDOWS
-  #include <windows.h> 
-#endif
+//#ifdef Q_OS_WINDOWS
+//  #include <windows.h> 
+//#endif
 #include "bootstrap.h"
 
 /**
@@ -139,7 +139,7 @@ void bootstrap::setTranslator(const QString &translationFileName, QTranslator **
          * * Установить новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
          */
         qApp->installTranslator(*translator);
-//      qDebug().noquote() << tr("Translation file '") << translationFileName << tr("' loaded and installed");
+        qDebug().noquote() << tr("Translation file '") << translationFileName << tr("' loaded and installed");
     }
 }
 

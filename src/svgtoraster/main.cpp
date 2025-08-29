@@ -8,9 +8,6 @@
  */
 #define MINARGS 3
 
-//#define quoting(a) prequoting(a)
-//#define prequoting(a) #a
-
 int main(int argc, char *argv[]) {
 
     /**
