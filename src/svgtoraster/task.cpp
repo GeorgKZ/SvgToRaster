@@ -5,12 +5,13 @@
  * <BR>
  */
 
-#include "task.h"
-#include "arg_parser.h"
 #include <QtGui/QIcon>
 #include <QtCore/QSize>
 #include <QImageReader>
 #include <QImageWriter>
+#include "task.h"
+#include "build_ico.h"
+#include "arg_parser.h"
 
 /**
  * \file
@@ -115,7 +116,13 @@ void Task::run()
 
             QImage image = icon.pixmap(QSize(m_bitmap_size, m_bitmap_size)).toImage();
 
-            image.save(m_output_file);
+            QFileInfo fileInfo(m_output_file);
+            if (fileInfo.suffix().compare("ico", Qt::CaseInsensitive) == 0)
+            {
+                saveIco(m_output_file);
+            } else {
+                image.save(m_output_file);
+            }
         }
     }
 
