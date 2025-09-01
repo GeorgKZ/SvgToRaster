@@ -63,32 +63,42 @@
         <translation>Доступные размеры исходного файла:</translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="137"/>
+        <location filename="../task.cpp" line="125"/>
+        <source>Cannot open output file &apos;</source>
+        <translation>Ошибка открытия файла &apos;</translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="125"/>
+        <source>&apos; for writing</source>
+        <translation>&apos; на запись</translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="141"/>
         <source>USAGE:</source>
         <translation>ИСПОЛЬЗОВАНИЕ:</translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="139"/>
+        <location filename="../task.cpp" line="143"/>
         <source>output file size</source>
         <translation>размер результирующего файла</translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="140"/>
+        <location filename="../task.cpp" line="144"/>
         <source>source SVG file</source>
         <translation>Исходный файл SVG</translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="141"/>
+        <location filename="../task.cpp" line="145"/>
         <source>target PNG file</source>
         <translation>результирующий файл PNG</translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="143"/>
+        <location filename="../task.cpp" line="147"/>
         <source>Supported input formats:</source>
         <translation>Поддерживаемые форматы исходного файла</translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="144"/>
+        <location filename="../task.cpp" line="148"/>
         <source>Supported output formats:</source>
         <translation>Поддерживаемые форматы результирующего файла</translation>
     </message>

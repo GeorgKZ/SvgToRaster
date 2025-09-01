@@ -63,32 +63,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="137"/>
-        <source>USAGE:</source>
+        <location filename="../task.cpp" line="125"/>
+        <source>Cannot open output file &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="139"/>
-        <source>output file size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../task.cpp" line="140"/>
-        <source>source SVG file</source>
+        <location filename="../task.cpp" line="125"/>
+        <source>&apos; for writing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../task.cpp" line="141"/>
-        <source>target PNG file</source>
+        <source>USAGE:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../task.cpp" line="143"/>
-        <source>Supported input formats:</source>
+        <source>output file size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../task.cpp" line="144"/>
+        <source>source SVG file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="145"/>
+        <source>target PNG file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="147"/>
+        <source>Supported input formats:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="148"/>
         <source>Supported output formats:</source>
         <translation type="unfinished"></translation>
     </message>

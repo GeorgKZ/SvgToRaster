@@ -187,7 +187,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${DOC_PATH})
 ##############################################################################
 
 # Путь к директории с изображениями для Doxygen
-set(DOXY_IMAGES "${CMAKE_SOURCE_DIR}/screenshots;${CMAKE_SOURCE_DIR}/doc/images;${CMAKE_SOURCE_DIR}/wiki/images")
+#!!! set(DOXY_IMAGES "${CMAKE_SOURCE_DIR}/screenshots;${CMAKE_SOURCE_DIR}/doc/images;${CMAKE_SOURCE_DIR}/wiki/images")
 
 # Путь к директории с переводами
 set(TRANSLATE_PATH "${BUILD_PATH}/translations")
@@ -917,7 +917,7 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_WARN_LOGFILE            "${DOC_PATH}/warnings.log")
     set(DOXYGEN_FILE_PATTERNS           *.h *.hxx *.cpp *.md)
     set(DOXYGEN_EXAMPLE_PATH            "${SOURCES_PATH}")
-    set(DOXYGEN_IMAGE_PATH              ${DOXY_IMAGES})
+#   set(DOXYGEN_IMAGE_PATH              ${DOXY_IMAGES})
     set(DOXYGEN_USE_MDFILE_AS_MAINPAGE  "${CMAKE_SOURCE_DIR}/README.md")
     set(DOXYGEN_ALPHABETICAL_INDEX      NO)
     set(DOXYGEN_HTML_STYLESHEET         "${CMAKE_SOURCE_DIR}/doc/stylesheet.css")
@@ -950,11 +950,12 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_MAX_DOT_GRAPH_DEPTH     1000)
     set(DOXYGEN_VERBATIM_HEADERS        NO)
 
-    # Формирование файлов документации html при помощи doxygen (начиная с CMAKE 3.9)
+    # Формирование файлов документации html при помощи doxygen
     doxygen_add_docs(html_doc_proc
-        ${SOURCES_PATH}
-        WORKING_DIRECTORY ${SOURCES_PATH}
-        COMMENT "Создание документации ${MAIN_NAME} в формате html"
+      "${CMAKE_SOURCE_DIR}/README.md"
+      "${CMAKE_SOURCE_DIR}/src"
+#     WORKING_DIRECTORY ${SOURCES_PATH}
+      COMMENT "Создание документации ${MAIN_NAME} в формате html"
     )
 
     # Удаление файла warnings.log, если он нулевой длины
@@ -962,7 +963,7 @@ if (DOXYGEN_FOUND)
         # Команда удаления файла warnings.log нулевой длины
         ${CMAKE_COMMAND}
           -DFILENAME=warnings.log
-          -P "scripts/remove_zerofile.cmake"
+          -P "${CMAKE_SOURCE_DIR}/scripts/remove_zerofile.cmake"
         WORKING_DIRECTORY ${DOC_PATH}
         COMMENT "Удаление файлов нулевой длины"
         VERBATIM

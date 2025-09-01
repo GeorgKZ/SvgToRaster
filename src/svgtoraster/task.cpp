@@ -119,7 +119,11 @@ void Task::run()
             QFileInfo fileInfo(m_output_file);
             if (fileInfo.suffix().compare("ico", Qt::CaseInsensitive) == 0)
             {
-                saveIco(m_output_file);
+                QList<int> icon_sizes = {256, 48, 32, 16};
+                if (saveIco(icon, m_output_file, icon_sizes) != 0)
+                {
+                    qCritical() << tr("Cannot open output file '") << m_output_file << tr("' for writing");
+                }
             } else {
                 image.save(m_output_file);
             }
