@@ -27,18 +27,18 @@ class arg_parser {
 
     public:
 
-    /** \brief Ключевое слово для параметров */
+    /** \brief Ключевое слово для параметров в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a> */
     QString flag;
 
-    /** \brief Параметры по отдельности */
+    /** \brief <a href="https://doc.qt.io/qt-6/qlist.html">Список</a> параметры по отдельности */
     QStringList parameters;
 
-    /** \brief Параметры в виде одной строки */
+    /** \brief Параметры в виде одной <a href="https://doc.qt.io/qt-6/qstring.html">строки</a> */
     QString str_parameters;
   };
 
   /** 
-   * \brief Набор разобранных аргументов
+   * \brief <a href="https://doc.qt.io/qt-6/qlist.html">Список</a> разобранных аргументов
    */
   QList<argument> args;
 
@@ -78,20 +78,23 @@ class arg_parser {
    * \brief Получить флаг указанного аргумента
    *
    * \param [in] index номер аргумента
+   * \return значение флага в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    */
   const QString& get_flag(int index) const;
 
   /** 
-   * \brief Получить параметры указанного аргумента в виде строки
+   * \brief Получить параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    *
    * \param [in] index номер аргумента
+   * \return параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    */
   const QString& get_parameters(int index) const;
 
   /** 
-   * \brief Получить набор параметров указанного аргумента в виде вектора
+   * \brief Получить набор параметров указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>
    *
    * \param [in] index номер аргумента
+   * \return строку, содержащую параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>.
    */
   const QStringList& get_parameters_set(int index) const;
 

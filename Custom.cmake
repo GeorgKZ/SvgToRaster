@@ -33,7 +33,7 @@ set(QT_PLUGIN_LIST
   "platforms"
 #  "platformthemes"
 #  "styles"
-  "xcbglintegrations"
+#  "xcbglintegrations"
 )
 
 # Подсистемы Qt, для которых требуются переводы

@@ -20,8 +20,8 @@
     </message>
     <message>
         <location filename="../task.cpp" line="60"/>
-        <location filename="../task.cpp" line="76"/>
-        <location filename="../task.cpp" line="85"/>
+        <location filename="../task.cpp" line="74"/>
+        <location filename="../task.cpp" line="83"/>
         <source>flag</source>
         <translation type="unfinished"></translation>
     </message>
@@ -36,69 +36,69 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../task.cpp" line="150"/>
+        <source>target PNG, ICO file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../task.cpp" line="60"/>
-        <location filename="../task.cpp" line="76"/>
-        <location filename="../task.cpp" line="85"/>
+        <location filename="../task.cpp" line="74"/>
+        <location filename="../task.cpp" line="83"/>
         <source>Command line format error: missing parameter after the</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="92"/>
+        <location filename="../task.cpp" line="94"/>
         <source>Command line format error: unknown &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="92"/>
+        <location filename="../task.cpp" line="94"/>
         <source>&apos; flag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="112"/>
+        <location filename="../task.cpp" line="114"/>
         <source>Source file load error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="115"/>
-        <source>Available input file sizes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../task.cpp" line="125"/>
+        <location filename="../task.cpp" line="126"/>
         <source>Cannot open output file &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="125"/>
+        <location filename="../task.cpp" line="126"/>
         <source>&apos; for writing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="141"/>
+        <location filename="../task.cpp" line="132"/>
+        <source>Cannot save output file &apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="146"/>
         <source>USAGE:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="143"/>
+        <location filename="../task.cpp" line="148"/>
         <source>output file size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="144"/>
+        <location filename="../task.cpp" line="149"/>
         <source>source SVG file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="145"/>
-        <source>target PNG file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../task.cpp" line="147"/>
+        <location filename="../task.cpp" line="152"/>
         <source>Supported input formats:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="148"/>
+        <location filename="../task.cpp" line="153"/>
         <source>Supported output formats:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -106,18 +106,18 @@
 <context>
     <name>bootstrap</name>
     <message>
-        <location filename="../bootstrap.cpp" line="125"/>
-        <location filename="../bootstrap.cpp" line="164"/>
+        <location filename="../bootstrap.cpp" line="123"/>
+        <location filename="../bootstrap.cpp" line="162"/>
         <source>Error loading translation file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bootstrap.cpp" line="142"/>
+        <location filename="../bootstrap.cpp" line="140"/>
         <source>Translation file &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bootstrap.cpp" line="142"/>
+        <location filename="../bootstrap.cpp" line="140"/>
         <source>&apos; loaded and installed</source>
         <translation type="unfinished"></translation>
     </message>

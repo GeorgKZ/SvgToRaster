@@ -1,24 +1,60 @@
-#include <QImage>
-#include <QIcon>
-#include <QFile>
-#include <QDebug>
-#include <QDataStream>
+/**
+ * \file
+ *
+ * \brief Файл с определениями функций, необходимыми для преобразования
+ * векторного изображения <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>
+ * в растровый значок формата ICO с несколькими битмапами различного размера.
+ */
 
+#include <QFile>
 #include "build_ico.h"
 
+/**
+ * \file
+ * Функции, являющиеся методами класса \ref BYTES02 "BYTES02"
+ * и дружественные этому классу:
+ * <BR>
+ */
+
+/**
+ * \file
+ * * \copybrief BYTES02::BYTES02(quint16)
+ */
 BYTES02::BYTES02(quint16 value) : m_value(value) {}
 
+/**
+ * \file
+ * * \copybrief BYTES02::operator=(quint16)
+ */
 BYTES02 &BYTES02::operator=(quint16 value)
 {
     m_value = value;
     return *this;
 }
 
+/**
+ * \file
+ * * \copybrief BYTES02::operator+=(quint16)
+ */
+BYTES02 &BYTES02::operator+=(quint16 value)
+{
+    m_value += value;
+    return *this;
+}
+
+/**
+ * \file
+ * * Оператор приведения к типу quint16
+ */
 BYTES02::operator quint16() const
 {
     return m_value;
 }
 
+/**
+ * \file
+ * * Запись структуры \ref BYTES02 "BYTES02" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+ */
 QDataStream &operator<<(QDataStream &out, const BYTES02 &b)
 {
     out <<
@@ -27,6 +63,10 @@ QDataStream &operator<<(QDataStream &out, const BYTES02 &b)
     return out;
 }
 
+/**
+ * \file
+ * * Чтение структуры \ref BYTES02 "BYTES02" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+ */
 QDataStream &operator>>(QDataStream &in, BYTES02 &b)
 {
     quint8 b1, b2;
@@ -35,20 +75,52 @@ QDataStream &operator>>(QDataStream &in, BYTES02 &b)
     return in;
 }
 
+/**
+ * \file
+ * Функции, являющиеся методами класса \ref BYTES04 "BYTES04"
+ * и дружественные этому классу:
+ * <BR>
+ */
+
+/**
+ * \file
+ * * \copybrief BYTES04::BYTES04(quint32)
+ */
 BYTES04::BYTES04(quint32 value) : m_value(value) {}
 
+/**
+ * \file
+ * * \copybrief BYTES04::operator=(quint32)
+ */
 BYTES04 &BYTES04::operator=(quint32 value)
 {
     m_value = value;
     return *this;
 }
 
+/**
+ * \file
+ * * \copybrief BYTES04::operator+=(quint32)
+ */
+BYTES04 &BYTES04::operator+=(quint32 value)
+{
+    m_value += value;
+    return *this;
+}
+
+/**
+ * \file
+ * * Оператор приведения к типу quint32
+ */
 BYTES04::operator quint32() const
 {
     return m_value;
 }
 
-
+/**
+ * \file
+ * * Запись структуры \ref BYTES04 "BYTES04" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+ */
 QDataStream &operator<<(QDataStream &out, const BYTES04 &b)
 {
     out <<
@@ -59,6 +131,10 @@ QDataStream &operator<<(QDataStream &out, const BYTES04 &b)
     return out;
 }
 
+/**
+ * \file
+ * * Чтение структуры \ref BYTES04 "BYTES04" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+ */
 QDataStream &operator>>(QDataStream &in, BYTES04 &b)
 {
     quint8 b1, b2, b3, b4;
@@ -70,8 +146,11 @@ QDataStream &operator>>(QDataStream &in, BYTES04 &b)
     return in;
 }
 
-
-
+/**
+ * \file
+ * Функции, дружественные классу \ref tagBITMAPINFOHEADER "tagBITMAPINFOHEADER":
+ * <BR>
+ */
 
 /**
  * \file
@@ -117,6 +196,12 @@ QDataStream &operator>>(QDataStream &in, tagBITMAPINFOHEADER &ihdr)
 
 /**
  * \file
+ * Функции, дружественные классу \ref tagICONDIR "tagICONDIR":
+ * <BR>
+ */
+
+/**
+ * \file
  * * \copybrief operator<<(QDataStream&, const tagICONDIR&)
  */
 QDataStream &operator<<(QDataStream &out, const tagICONDIR &icondir) {
@@ -141,7 +226,13 @@ QDataStream &operator>>(QDataStream &in, tagICONDIR &icondir) {
 
 /**
  * \file
- * * \copybrief operator<<(QDataStream&, tagICONDIRENTRY&)
+ * Функции, дружественные классу \ref tagICONDIRENTRY "tagICONDIRENTRY":
+ * <BR>
+ */
+
+/**
+ * \file
+ * * \copybrief operator<<(QDataStream&, const tagICONDIRENTRY&)
  */
 QDataStream &operator<<(QDataStream &out, const tagICONDIRENTRY &icondirentry) {
     out <<
@@ -173,6 +264,11 @@ QDataStream &operator>>(QDataStream &in, tagICONDIRENTRY &icondirentry) {
     return in;
 }
 
+/**
+ * \file
+ * Функции, не являющиеся методами:
+ * <BR>
+ */
 
 /**
  * \file
@@ -196,7 +292,7 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
     }
 
     /**
-     * * Создать файл формата ICO.
+     * * Создать файл значка.
      */
     QFile icoFile(filePath);
     if (!icoFile.open(QIODevice::WriteOnly)) {
@@ -223,29 +319,32 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
     for (const QImage &image : images) {
 
         /**
-         * *	Сформировать заголовок ICONDIR, установив значения полей:
+         * * &nbsp;&nbsp;&nbsp;&nbsp;Сформировать заголовок ICONDIR, установив значения полей:
          */
         ICONDIRENTRY iinfo = { };
-        /** *		Ширина изображения в точках, 0 означает ширину 256 точек или более */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ширина изображения в точках, 0 означает ширину 256 точек или более */
         iinfo.iiWidth = static_cast<quint8>(image.width() > 255 ? 0 : image.width());
-        /** *		Высота изображения в точках, 0 означает высоту 256 точек или более */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Высота изображения в точках, 0 означает высоту 256 точек или более */
         iinfo.iiHeight = static_cast<quint8>(image.height() > 255 ? 0 : image.height());
-        /** *		Указывает количество цветов в палитре изображения. Для полноцветных значков 0 */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Указывает количество цветов в палитре изображения. Для полноцветных значков 0 */
         iinfo.iiColors = 0;    
-        /** *		Определяет количество плоскостей. Может быть 0 или 1. */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Определяет количество плоскостей. Может быть 0 или 1. */
         iinfo.iiPlanes = 1;           
-        /** *		Определяет количество битов на пиксель. Может быть 0 или больше. */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Определяет количество битов на пиксель. Может быть 0 или больше. */
         iinfo.iiBpp = BITS_IN_BYTE * RGBA_SIZE;
-        /** *		Указывает размер растра в байтах: размер цветовой матрицы */
-        /** плюс размер матрицы прозрачности плюс размер заголовка */
-        iinfo.iiSize = static_cast<quint32>(image.width() * image.height() * RGBA_SIZE) +
-          static_cast<quint32>(image.height() * ((image.width() / BITS_IN_BYTE + (BMP_BYTE_ALIGN-1))/BMP_BYTE_ALIGN*BMP_BYTE_ALIGN)) +
-          static_cast<quint32>(sizeof(BITMAPINFOHEADER));
-        /** *		Указывает абсолютное смещение структуры BITMAPINFOHEADER в файле */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Указывает размер растра в байтах: размер цветовой матрицы */
+        iinfo.iiSize += static_cast<quint32>(image.width() * image.height() * RGBA_SIZE);
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;плюс размер матрицы прозрачности */
+        iinfo.iiSize += static_cast<quint32>(image.height() * ((image.width() / BITS_IN_BYTE + (BMP_BYTE_ALIGN-1))/BMP_BYTE_ALIGN*BMP_BYTE_ALIGN));
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;плюс размер заголовка */
+        iinfo.iiSize += static_cast<quint32>(sizeof(BITMAPINFOHEADER));
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Указывает абсолютное смещение структуры BITMAPINFOHEADER в файле */
         iinfo.iiOffset = offset + static_cast<quint32>(sizeof(ICONDIRENTRY)) * iheader.ihCount;
 
+        offset += iinfo.iiSize;
+
         /**
-         * *	Записать в файл заголовок ICONDIR.
+         * * &nbsp;&nbsp;&nbsp;&nbsp;Записать в файл заголовок ICONDIR.
          */
         out << iinfo;
     }
@@ -255,29 +354,28 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
      */
     for (const QImage &image : images) {
         /**
-         * *	Сформировать заголовок BITMAPINFOHEADER, установив значения полей:
+         * * &nbsp;&nbsp;&nbsp;&nbsp;Сформировать заголовок BITMAPINFOHEADER, установив значения полей:
          */
         BITMAPINFOHEADER ibih = { };
         ibih.biSize = sizeof(BITMAPINFOHEADER);
-        /** * Размер по горизонтали соответствует размеру формируемого растра */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Размер по горизонтали соответствует размеру формируемого растра */
         ibih.biWidth = static_cast<qint32>(image.width());
-        /** * Размер по вертикали удвоен (два растра --- растр цветности и растр прозрачности) */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Размер по вертикали удвоен (два растра --- растр цветности и растр прозрачности) */
         ibih.biHeight = static_cast<qint32>(image.height()) * 2;
         ibih.biPlanes = 1;
-        /** * На один пиксел приходится четыре восьмибитных канала */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;На один пиксел приходится четыре восьмибитных канала */
         ibih.biBitCount = BITS_IN_BYTE * RGBA_SIZE;
         ibih.biCompression = BI_RGB;
     
-        /** *    Размер в байтах строки растра прозрачности, дополнен до кратности строки 4 байтам */
+        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Размер в байтах строки растра прозрачности, дополнен до кратности строки 4 байтам; */
         int horsize = ((image.width() / BITS_IN_BYTE + (BMP_BYTE_ALIGN - 1)) / BMP_BYTE_ALIGN * BMP_BYTE_ALIGN);
     
         /**
-         * *    Размер состоит из размера растра цветности b-g-r-alpha (автоматически размер строки кратен 4 байтам)
+         * * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Размер состоит из размера растра цветности b-g-r-alpha (автоматически размер строки кратен 4 байтам)
          * и размера битового растра прозрачности.
          */
-        quint32 biSizeImage = static_cast<quint32>(image.width() * image.height() * RGBA_SIZE);
-        biSizeImage += static_cast<quint32>(image.height() * horsize);
-        ibih.biSizeImage = biSizeImage;
+        ibih.biSizeImage = static_cast<quint32>(image.width() * image.height() * RGBA_SIZE);
+        ibih.biSizeImage += static_cast<quint32>(image.height() * horsize);
     
         ibih.biXPelsPerMeter = 0;
         ibih.biYPelsPerMeter = 0;
@@ -285,48 +383,56 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
         ibih.biClrImportant = 0;
     
         /**
-         * *    Записать в файл заголовок BITMAPINFOHEADER;
+         * * &nbsp;&nbsp;&nbsp;&nbsp;Записать в файл заголовок BITMAPINFOHEADER;
          */
         out << ibih;
   
         /**
-         * *    Заполнить буфер растра цветности масштабированным изображением размером image.width() * image.height() * RGBA_SIZE;
+         * * &nbsp;&nbsp;&nbsp;&nbsp;Заполнить буфер растра цветности масштабированным изображением размером image.width() * image.height() * RGBA_SIZE;
          */
         for (int h = image.height() - 1; h >= 0; --h)
         {
             for (int w = 0; w < image.width(); ++w)
             {
                 QRgb rgb = image.pixel(w, h);
-                out << (quint8)qBlue(rgb);
-                out << (quint8)qGreen(rgb);
-                out << (quint8)qRed(rgb);
-                out << (quint8)qAlpha(rgb);
+                if (qAlpha(rgb) == 0)
+                {
+                    out << static_cast<quint8>(0);
+                    out << static_cast<quint8>(0);
+                    out << static_cast<quint8>(0);
+                    out << static_cast<quint8>(0);
+                } else {
+                    out << static_cast<quint8>(qBlue(rgb));
+                    out << static_cast<quint8>(qGreen(rgb));
+                    out << static_cast<quint8>(qRed(rgb));
+                    out << static_cast<quint8>(qAlpha(rgb));
+                }
             }
         }
   
         /**
-         * Для используемого формата растра цветности данные битового растра прозрачности (бит на точку)
+         * * &nbsp;&nbsp;&nbsp;&nbsp;Для используемого формата растра цветности данные битового растра прозрачности (бит на точку)
          * не используются, но для совместимости они должны быть заполнены по правилу: 
          *
-         * pixel = (screen AND mask_matrix) XOR color_matrix
+         * * &nbsp;&nbsp;&nbsp;&nbsp;pixel = (screen AND mask_matrix) XOR color_matrix
          *
-         * То есть для прозрачных точек необходимо заменить точку цветового растра на чёрную
+         * * &nbsp;&nbsp;&nbsp;&nbsp;То есть для прозрачных точек необходимо заменить точку цветового растра на чёрную
          * и поставить точку растра прозрачности, равную единице, а для непрозрачных точек
          * сохранить цветную точку цветового растра и поставить нулевую точку растра прозрачности.
          */
   
-        for (int ky = image.height() - 1; ky >= 0; --ky) {
-            for (int kx = 0; kx < horsize; ++kx) {
+        for (int h = image.height() - 1; h >= 0; --h) {
+            for (int w = 0; w < horsize; ++w) {
                 quint8 byte = 0;
                 int bitmask = 1;
-                for (int kz = 0; kz < BITS_IN_BYTE; ++kz) {
+                for (int b = 0; b < BITS_IN_BYTE; ++b) {
                     /**
-                     * Условие, когда точка обозначается прозрачной в растре прозрачности:
+                     * * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Условие, когда точка обозначается прозрачной в растре прозрачности:
                      * или она лежит за пределами цветового растра, или она обозначена прозрачной
                      * в альфа-канатле цветового растра.
                      */
-                    if ((kz + kx * BITS_IN_BYTE >= image.width()) ||
-                        (qAlpha(image.pixel(kx, ky)) == 0)) byte |= bitmask;
+                    if ((b + w * BITS_IN_BYTE >= image.width()) ||
+                        (qAlpha(image.pixel(w, h)) == 0)) byte |= bitmask;
                     bitmask <<= 1;
                 }
                 out << byte;
@@ -334,6 +440,9 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
         }
     }
 
+    /**
+     * * Закрыть файл значка.
+     */
     icoFile.close();
     return 0;
 }

@@ -5,10 +5,6 @@
  * <BR>
  */
 
-//#include <QtCore/QSettings>
-//#ifdef Q_OS_WINDOWS
-//  #include <windows.h> 
-//#endif
 #include "bootstrap.h"
 
 /**
@@ -77,7 +73,9 @@ void bootstrap::init()
     /**
      * * Установить локализацию согласно указанному в файле конфигурации языку.
      */
-    setAllTranslators("en");
+    QString locale = QLocale::system().name().left(2);
+
+    setAllTranslators(locale);
 }
 
 /**

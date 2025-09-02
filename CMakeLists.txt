@@ -952,6 +952,7 @@ if (DOXYGEN_FOUND)
 
     # Формирование файлов документации html при помощи doxygen
     doxygen_add_docs(html_doc_proc
+      "${CMAKE_SOURCE_DIR}/TODO.md"
       "${CMAKE_SOURCE_DIR}/README.md"
       "${CMAKE_SOURCE_DIR}/src"
 #     WORKING_DIRECTORY ${SOURCES_PATH}

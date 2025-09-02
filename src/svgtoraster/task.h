@@ -30,13 +30,16 @@ private:
 
     int parse_args(int argc, char **argv, int minargs);
 
+    /**
+     * \brief Вывод справки о программе
+     */
     void print_help();
 
     QString m_input_file;
 
     QString m_output_file;
 
-    int m_bitmap_size = 1024;
+    QList<int> m_bitmap_size;
 
     int m_parse_ok;
 

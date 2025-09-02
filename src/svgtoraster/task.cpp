@@ -66,8 +66,6 @@ int Task::parse_args(int argc, char **argv, int minargs)
               qCritical().noquote() << tr("Error: the specified '") <<  m_input_file << tr("' source file is missing");
               return -1;
           }
-
-
           continue;
       
         } else if (curr_flag.compare("o") == 0) {
@@ -85,7 +83,11 @@ int Task::parse_args(int argc, char **argv, int minargs)
             qCritical().noquote() << tr("Command line format error: missing parameter after the") << "'s'" << tr("flag");
             return -1;
           }
-          m_bitmap_size = args.get_parameters(i).toInt();
+          QStringList size_set = args.get_parameters_set(i);
+          for (const QString &size : size_set)
+          {
+              m_bitmap_size.append(size.toInt());
+          }
           continue;
 
         } else {
@@ -112,20 +114,23 @@ void Task::run()
             qCritical().noquote() << tr("Source file load error");
         } else {
 
-            qDebug().noquote() << tr("Available input file sizes:") << icon.availableSizes();
-
-            QImage image = icon.pixmap(QSize(m_bitmap_size, m_bitmap_size)).toImage();
-
-            QFileInfo fileInfo(m_output_file);
-            if (fileInfo.suffix().compare("ico", Qt::CaseInsensitive) == 0)
+            if (m_bitmap_size.empty())
             {
-                QList<int> icon_sizes = {256, 48, 32, 16};
-                if (saveIco(icon, m_output_file, icon_sizes) != 0)
+              m_bitmap_size.append(256);
+            }
+
+            if (QFileInfo(m_output_file).suffix().compare("ico", Qt::CaseInsensitive) == 0)
+            {
+                if (saveIco(icon, m_output_file, m_bitmap_size) != 0)
                 {
                     qCritical() << tr("Cannot open output file '") << m_output_file << tr("' for writing");
                 }
             } else {
-                image.save(m_output_file);
+                QImage image = icon.pixmap(QSize(m_bitmap_size[0], m_bitmap_size[0])).toImage();
+                if (!image.save(m_output_file))
+                {
+                    qCritical() << tr("Cannot save output file '") << m_output_file << "'";
+                }
             }
         }
     }
@@ -142,7 +147,7 @@ void Task::print_help() {
   qInfo().noquote() << "svgtoraster [--s <S>] --i <in_file> --o <out_file>";
   qInfo().noquote() << "    <S>              -" << tr("output file size");
   qInfo().noquote() << "    <in_file>        -" << tr("source SVG file");
-  qInfo().noquote() << "    <out_file>       -" << tr("target PNG file");
+  qInfo().noquote() << "    <out_file>       -" << tr("target PNG, ICO file");
 
   qDebug().noquote() << tr("Supported input formats:") << QImageReader::supportedImageFormats();
   qDebug().noquote() << tr("Supported output formats:") << QImageWriter::supportedImageFormats();
