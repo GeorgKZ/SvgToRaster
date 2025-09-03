@@ -3,7 +3,7 @@
  *
  * \brief Заголовочный файл с классами и функциями, необходимыми для преобразования
  * векторного изображения <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>
- * в растровый значок формата ICO с несколькими битмапами различного размера.
+ * в растровый значок формата <ahref="https://ru.wikipedia.org/wiki/ICO_(%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82_%D1%84%D0%B0%D0%B9%D0%BB%D0%B0)">ICO</a> с несколькими битмапами различного размера.
  */
 
 #ifndef BUILD_ICO_H
@@ -29,9 +29,9 @@
 
 /**
  * \brief Класс, переопределяющий двухбайтовое число для обеспечения необходимого
- * (первым идёт младший байт) порядка байт при записи в поток.
+ * (первым идёт младший байт, Little-endian) порядка байт при записи в поток.
  */
-class BYTES02 {
+class BYTES02_LE {
 
 private:
 
@@ -43,11 +43,11 @@ private:
 public:
 
   /**
-   * \brief Конструктор класса \ref BYTES02 "BYTES02".
+   * \brief Конструктор класса \ref BYTES02_LE "BYTES02_LE".
    *
    * param [in] value Значение (по умолчанию 0), присваиваемое экземпляру класса.
    */
-  BYTES02(quint16 value = 0);
+  BYTES02_LE(quint16 value = 0);
 
   /**
    * \brief Оператор присваивания.
@@ -55,7 +55,7 @@ public:
    * param [in] value Значение, присваиваемое экземпляру класса.
    * \return ссылка на экземпляр класса.
    */
-  BYTES02 &operator=(quint16 value);
+  BYTES02_LE &operator=(quint16 value);
 
   /**
    * \brief Оператор сложения.
@@ -63,7 +63,7 @@ public:
    * param [in] value Значение, прибавляемое к значению экземпляру класса.
    * \return ссылка на экземпляр класса.
    */
-  BYTES02 &operator+=(quint16 value);
+  BYTES02_LE &operator+=(quint16 value);
 
   /**
    * \brief Оператор приведения к типу quint16.
@@ -73,30 +73,30 @@ public:
   operator quint16() const;
 
   /**
-   * \brief Запись структуры \ref BYTES02 "BYTES02" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+   * \brief Запись структуры \ref BYTES02_LE "BYTES02_LE" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
    * \param [in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
-   * \param [in] b Структура \ref BYTES02 "BYTES02", которая записывается в поток.
+   * \param [in] b Структура \ref BYTES02_LE "BYTES02_LE", которая записывается в поток.
    * \return ссылка на поток, в который производится запись структуры.
    */
-  friend QDataStream &operator<<(QDataStream &out, const BYTES02 &b);
+  friend QDataStream &operator<<(QDataStream &out, const BYTES02_LE &b);
 
   /**
-   * \brief Чтение структуры \ref BYTES02 "BYTES02" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+   * \brief Чтение структуры \ref BYTES02_LE "BYTES02_LE" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
    * \param [in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
-   * \param [out] b Структура \ref BYTES02 "BYTES02", которая читается из потока.
+   * \param [out] b Структура \ref BYTES02_LE "BYTES02_LE", которая читается из потока.
    * \return ссылка на поток, из которого производится чтение структуры.
    */
-  friend QDataStream &operator>>(QDataStream &in, BYTES02 &b);
+  friend QDataStream &operator>>(QDataStream &in, BYTES02_LE &b);
 
 };
 
 /**
  * \brief Класс, переопределяющий четырёхбайтовое число для обеспечения необходимого
- * (первым идёт младший байт) порядка байт при записи в поток.
+ * (первым идёт младший байт, Little-endian) порядка байт при записи в поток.
  */
-class BYTES04 {
+class BYTES04_LE {
 
 private:
 
@@ -108,11 +108,11 @@ private:
 public:
 
   /**
-   * \brief Конструктор класса \ref BYTES04 "BYTES04".
+   * \brief Конструктор класса \ref BYTES04_LE "BYTES04_LE".
    *
    * param [in] value Значение (по умолчанию 0), присваиваемое экземпляру класса.
    */
-  BYTES04(quint32 value = 0);
+  BYTES04_LE(quint32 value = 0);
 
   /**
    * \brief Оператор присваивания.
@@ -120,7 +120,7 @@ public:
    * param [in] value Значение, присваиваемое экземпляру класса.
    * \return ссылка на экземпляр класса.
    */
-  BYTES04 &operator=(quint32 value);
+  BYTES04_LE &operator=(quint32 value);
 
   /**
    * \brief Оператор сложения.
@@ -128,7 +128,7 @@ public:
    * param [in] value Значение, прибавляемое к значению экземпляру класса.
    * \return ссылка на экземпляр класса.
    */
-  BYTES04 &operator+=(quint32 value);
+  BYTES04_LE &operator+=(quint32 value);
 
   /**
    * \brief Оператор приведения к типу quint32.
@@ -138,22 +138,22 @@ public:
   operator quint32() const;
 
   /**
-   * \brief Запись структуры \ref BYTES04 "BYTES04" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+   * \brief Запись структуры \ref BYTES04_LE "BYTES04_LE" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
    * \param [in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
-   * \param [in] b Структура \ref BYTES04 "BYTES04", которая записывается в поток.
+   * \param [in] b Структура \ref BYTES04_LE "BYTES04_LE", которая записывается в поток.
    * \return ссылка на поток, в который производится запись структуры.
    */
-  friend QDataStream &operator<<(QDataStream &out, const BYTES04 &b);
+  friend QDataStream &operator<<(QDataStream &out, const BYTES04_LE &b);
 
   /**
-   * \brief Чтение структуры \ref BYTES04 "BYTES04" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+   * \brief Чтение структуры \ref BYTES04_LE "BYTES04_LE" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
    * \param [in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
-   * \param [out] b Структура \ref BYTES04 "BYTES04", которая читается из потока.
+   * \param [out] b Структура \ref BYTES04_LE "BYTES04_LE", которая читается из потока.
    * \return ссылка на поток, из которого производится чтение структуры.
    */
-  friend QDataStream &operator>>(QDataStream &in, BYTES04 &b);
+  friend QDataStream &operator>>(QDataStream &in, BYTES04_LE &b);
 
 };
 
@@ -168,60 +168,60 @@ typedef struct tagBITMAPINFOHEADER {
   /**
    * \brief Размер данной структуры в байтах, указывающий также на версию структуры.
    */
-  BYTES04 biSize;
+  BYTES04_LE biSize;
 
   /**
    * \brief Ширина растра в пикселях. Указывается целым числом со знаком.
    * Нулевое и отрицательные значения не документированы.
    */
-  BYTES04 biWidth;
+  BYTES04_LE biWidth;
 
   /**
    * \brief Высота растра в пикселях. Указывается целым числом со знаком.
    * Нулевое и отрицательные значения не документированы.
    */
-  BYTES04 biHeight;
+  BYTES04_LE biHeight;
 
   /**
    * \brief В файле BMP допустимо только значение, равное единице. Может использоваться
    * в файлах значков и курсоров.
    */
-  BYTES02 biPlanes;
+  BYTES02_LE biPlanes;
 
   /**
    * \brief Количество бит на пиксель.
    */
-  BYTES02 biBitCount;
+  BYTES02_LE biBitCount;
 
   /**
    * \brief Указывает на способ хранения пикселей.
    */
-  BYTES04 biCompression;
+  BYTES04_LE biCompression;
 
   /**
    * \brief Размер пиксельных данных в байтах. Может быть равно нулю,
    * если хранение осуществляется двумерным массивом без сжатия.
    */
-  BYTES04 biSizeImage;
+  BYTES04_LE biSizeImage;
 
   /**
    * \brief Количество пикселей на метр по горизонтали или 0.
    */
-  BYTES04 biXPelsPerMeter;
+  BYTES04_LE biXPelsPerMeter;
 
   /**
    * \brief Количество пикселей на метр по вертикали или 0.
    */
-  BYTES04 biYPelsPerMeter;
+  BYTES04_LE biYPelsPerMeter;
 
   /**
    * \brief Размер таблицы цветов в ячейках.
    */
-  BYTES04 biClrUsed;
+  BYTES04_LE biClrUsed;
   /**
    * \brief Количество ячеек от начала таблицы цветов до последней используемой (включая её саму).
    */
-  BYTES04 biClrImportant;
+  BYTES04_LE biClrImportant;
 
   /**
    * \brief Запись структуры \ref BITMAPINFOHEADER "BITMAPINFOHEADER" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
@@ -288,17 +288,17 @@ typedef struct tagICONDIR {
   /**
    * \brief Значение зарезервировано и должно содержать ноль. 
    */
-  BYTES02 ihReserved;
+  BYTES02_LE ihReserved;
 
   /**
    * \brief Тип файла, принимает значение 1 для значка и 2 для курсора.
    */
-  BYTES02 ihType;
+  BYTES02_LE ihType;
 
   /**
    * \brief Количество изображений в файле, не меньше единицы.
    */
-  BYTES02 ihCount;
+  BYTES02_LE ihCount;
 
   /**
    * \brief Запись структуры \ref ICONDIR "ICONDIR" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
@@ -351,41 +351,41 @@ typedef struct tagICONDIRENTRY {
    * значение равно 0 или 1. В файле курсора определяет горизонтальную координату
    * «горячей точки» в пикселях относительно левого края изображения.
    */
-  BYTES02 iiPlanes;
+  BYTES02_LE iiPlanes;
 
   /**
    * \brief В файле значка определяет количество битов на пиксель, может иметь значение 0 или больше.
    * В файле курсора определяет горизонтальную координату «горячей точки» в пикселях
    * относительно левого края изображения.
    */
-  BYTES02 iiBpp;
+  BYTES02_LE iiBpp;
 
   /**
    * \brief Указывает размер растра в байтах.
    */
-  BYTES04 iiSize;
+  BYTES04_LE iiSize;
 
   /**
    * \brief Указывает абсолютное смещение структуры BITMAPINFOHEADER или данных PNG в файле.
    */
-  BYTES04 iiOffset;
+  BYTES04_LE iiOffset;
 
-/**
- * \brief Запись структуры \ref ICONDIRENTRY "ICONDIRENTRY" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
- *
- * \param [in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
- * \param [in] icondirentry Структура \ref ICONDIRENTRY "ICONDIRENTRY", которая записывается в поток.
- * \return ссылка на поток, в который производится запись структуры.
- */
-friend QDataStream &operator<<(QDataStream &out, const tagICONDIRENTRY &icondirentry);
+  /**
+   * \brief Запись структуры \ref ICONDIRENTRY "ICONDIRENTRY" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+   *
+   * \param [in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
+   * \param [in] icondirentry Структура \ref ICONDIRENTRY "ICONDIRENTRY", которая записывается в поток.
+   * \return ссылка на поток, в который производится запись структуры.
+   */
+  friend QDataStream &operator<<(QDataStream &out, const tagICONDIRENTRY &icondirentry);
 
-/**
- * \brief Чтение структуры \ref ICONDIRENTRY "ICONDIRENTRY" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
- *
- * \param [in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
- * \param [out] icondirentry Структура \ref ICONDIRENTRY "ICONDIRENTRY", которая читается из потока.
- * \return ссылка на поток, из которого производится чтение структуры.
- */
+  /**
+   * \brief Чтение структуры \ref ICONDIRENTRY "ICONDIRENTRY" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+   *
+   * \param [in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
+   * \param [out] icondirentry Структура \ref ICONDIRENTRY "ICONDIRENTRY", которая читается из потока.
+   * \return ссылка на поток, из которого производится чтение структуры.
+   */
 friend QDataStream &operator>>(QDataStream &in, tagICONDIRENTRY &icondirentry);
 
 } ICONDIRENTRY;

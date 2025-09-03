@@ -11,6 +11,7 @@
 #include <QImageWriter>
 #include "task.h"
 #include "build_ico.h"
+#include "build_icns.h"
 #include "arg_parser.h"
 
 /**
@@ -125,6 +126,12 @@ void Task::run()
                 {
                     qCritical() << tr("Cannot open output file '") << m_output_file << tr("' for writing");
                 }
+            } else if (QFileInfo(m_output_file).suffix().compare("icns", Qt::CaseInsensitive) == 0)
+            {
+                if (saveIcns(icon, m_output_file) != 0)
+                {
+                    qCritical() << tr("Cannot open output file '") << m_output_file << tr("' for writing");
+                }
             } else {
                 QImage image = icon.pixmap(QSize(m_bitmap_size[0], m_bitmap_size[0])).toImage();
                 if (!image.save(m_output_file))
@@ -147,7 +154,7 @@ void Task::print_help() {
   qInfo().noquote() << "svgtoraster [--s <S>] --i <in_file> --o <out_file>";
   qInfo().noquote() << "    <S>              -" << tr("output file size");
   qInfo().noquote() << "    <in_file>        -" << tr("source SVG file");
-  qInfo().noquote() << "    <out_file>       -" << tr("target PNG, ICO file");
+  qInfo().noquote() << "    <out_file>       -" << tr("target PNG, ICO, ICNS file");
 
   qDebug().noquote() << tr("Supported input formats:") << QImageReader::supportedImageFormats();
   qDebug().noquote() << tr("Supported output formats:") << QImageWriter::supportedImageFormats();

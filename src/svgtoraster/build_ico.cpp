@@ -3,7 +3,7 @@
  *
  * \brief Файл с определениями функций, необходимыми для преобразования
  * векторного изображения <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>
- * в растровый значок формата ICO с несколькими битмапами различного размера.
+ * в растровый значок формата <ahref="https://ru.wikipedia.org/wiki/ICO_(%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82_%D1%84%D0%B0%D0%B9%D0%BB%D0%B0)">ICO</a> с несколькими битмапами различного размера.
  */
 
 #include <QFile>
@@ -11,22 +11,22 @@
 
 /**
  * \file
- * Функции, являющиеся методами класса \ref BYTES02 "BYTES02"
+ * Функции, являющиеся методами класса \ref BYTES02_LE "BYTES02_LE"
  * и дружественные этому классу:
  * <BR>
  */
 
 /**
  * \file
- * * \copybrief BYTES02::BYTES02(quint16)
+ * * \copybrief BYTES02_LE::BYTES02_LE(quint16)
  */
-BYTES02::BYTES02(quint16 value) : m_value(value) {}
+BYTES02_LE::BYTES02_LE(quint16 value) : m_value(value) {}
 
 /**
  * \file
- * * \copybrief BYTES02::operator=(quint16)
+ * * \copybrief BYTES02_LE::operator=(quint16)
  */
-BYTES02 &BYTES02::operator=(quint16 value)
+BYTES02_LE &BYTES02_LE::operator=(quint16 value)
 {
     m_value = value;
     return *this;
@@ -34,9 +34,9 @@ BYTES02 &BYTES02::operator=(quint16 value)
 
 /**
  * \file
- * * \copybrief BYTES02::operator+=(quint16)
+ * * \copybrief BYTES02_LE::operator+=(quint16)
  */
-BYTES02 &BYTES02::operator+=(quint16 value)
+BYTES02_LE &BYTES02_LE::operator+=(quint16 value)
 {
     m_value += value;
     return *this;
@@ -46,16 +46,16 @@ BYTES02 &BYTES02::operator+=(quint16 value)
  * \file
  * * Оператор приведения к типу quint16
  */
-BYTES02::operator quint16() const
+BYTES02_LE::operator quint16() const
 {
     return m_value;
 }
 
 /**
  * \file
- * * Запись структуры \ref BYTES02 "BYTES02" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+ * * Запись структуры \ref BYTES02_LE "BYTES02_LE" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
-QDataStream &operator<<(QDataStream &out, const BYTES02 &b)
+QDataStream &operator<<(QDataStream &out, const BYTES02_LE &b)
 {
     out <<
       static_cast<quint8>(b.m_value & 0xFF) <<
@@ -65,34 +65,36 @@ QDataStream &operator<<(QDataStream &out, const BYTES02 &b)
 
 /**
  * \file
- * * Чтение структуры \ref BYTES02 "BYTES02" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+ * * Чтение структуры \ref BYTES02_LE "BYTES02_LE" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
-QDataStream &operator>>(QDataStream &in, BYTES02 &b)
+QDataStream &operator>>(QDataStream &in, BYTES02_LE &b)
 {
     quint8 b1, b2;
     in >> b1 >> b2;
-    b.m_value = b1 | (((quint16)b2) << 8);
+    b.m_value =
+      (((quint32)b1) << 0)  |
+      (((quint32)b2) << 8);
     return in;
 }
 
 /**
  * \file
- * Функции, являющиеся методами класса \ref BYTES04 "BYTES04"
+ * Функции, являющиеся методами класса \ref BYTES04_LE "BYTES04_LE"
  * и дружественные этому классу:
  * <BR>
  */
 
 /**
  * \file
- * * \copybrief BYTES04::BYTES04(quint32)
+ * * \copybrief BYTES04_LE::BYTES04_LE(quint32)
  */
-BYTES04::BYTES04(quint32 value) : m_value(value) {}
+BYTES04_LE::BYTES04_LE(quint32 value) : m_value(value) {}
 
 /**
  * \file
- * * \copybrief BYTES04::operator=(quint32)
+ * * \copybrief BYTES04_LE::operator=(quint32)
  */
-BYTES04 &BYTES04::operator=(quint32 value)
+BYTES04_LE &BYTES04_LE::operator=(quint32 value)
 {
     m_value = value;
     return *this;
@@ -100,9 +102,9 @@ BYTES04 &BYTES04::operator=(quint32 value)
 
 /**
  * \file
- * * \copybrief BYTES04::operator+=(quint32)
+ * * \copybrief BYTES04_LE::operator+=(quint32)
  */
-BYTES04 &BYTES04::operator+=(quint32 value)
+BYTES04_LE &BYTES04_LE::operator+=(quint32 value)
 {
     m_value += value;
     return *this;
@@ -112,16 +114,16 @@ BYTES04 &BYTES04::operator+=(quint32 value)
  * \file
  * * Оператор приведения к типу quint32
  */
-BYTES04::operator quint32() const
+BYTES04_LE::operator quint32() const
 {
     return m_value;
 }
 
 /**
  * \file
- * * Запись структуры \ref BYTES04 "BYTES04" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+ * * Запись структуры \ref BYTES04_LE "BYTES04_LE" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
-QDataStream &operator<<(QDataStream &out, const BYTES04 &b)
+QDataStream &operator<<(QDataStream &out, const BYTES04_LE &b)
 {
     out <<
       static_cast<quint8>((b.m_value >> 0)  & 0xFF) <<
@@ -133,15 +135,16 @@ QDataStream &operator<<(QDataStream &out, const BYTES04 &b)
 
 /**
  * \file
- * * Чтение структуры \ref BYTES04 "BYTES04" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
+ * * Чтение структуры \ref BYTES04_LE "BYTES04_LE" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
-QDataStream &operator>>(QDataStream &in, BYTES04 &b)
+QDataStream &operator>>(QDataStream &in, BYTES04_LE &b)
 {
     quint8 b1, b2, b3, b4;
     in >> b1 >> b2 >> b3 >> b4;
-    b.m_value = (quint32)b1 |
-      (((quint32)b2) << 8) |
-      (((quint32)b3) << 16) <<
+    b.m_value =
+      (((quint32)b1) << 0)  |
+      (((quint32)b2) << 8)  |
+      (((quint32)b3) << 16) |
       (((quint32)b4) << 24);
     return in;
 }
