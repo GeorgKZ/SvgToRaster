@@ -40,23 +40,25 @@ ih32,   // размер 48×48, MacOS v8.5,  24-битный RGB битмап
 h8mk,   // размер 2304 	48×48, MacOS v8.5, 8-битная маска
 it32,   // размер 128×128, MacOS v10.0, 24-битный RGB битмап
 t8mk,   // 16384 байт, размер 128×128, MacOS v10.0, 8-битная маска
-icp4,   // размер 16x16, MacOS v10.7, битмап JPEG 2000 или PNG или 24-битный RGB
-icp5,   // размер 32x32, MacOS v10.7, битмап JPEG 2000 или PNG или 24-битный RGB
-icp6,   // размер 48x48, MacOS v10.7, битмап JPEG 2000 или PNG 
-ic07,   // размер 128x128, MacOS v10.7, битмап JPEG 2000 или PNG 
-ic08,   // размер 256x256, MacOS v10.5, битмап JPEG 2000 или PNG 
-ic09,   // размер 512x512, MacOS v10.5, битмап JPEG 2000 или PNG 
+icp4,   // размер 16x16, MacOS v10.7, битмап JPEG 2000(X-не исп. в .app) или PNG(X) или 24-битный RGB
+icp5,   // размер 32x32, MacOS v10.7, битмап JPEG 2000(X) или PNG(X) или 24-битный RGB
+icp6,   // размер 48x48, MacOS v10.7, битмап JPEG 2000(X) или PNG(X)
+ic07,   // размер 128x128, MacOS v10.7, битмап JPEG 2000 или PNG
+ic08,   // размер 256x256, MacOS v10.5, битмап JPEG 2000 или PNG
+ic09,   // размер 512x512, MacOS v10.5, битмап JPEG 2000 или PNG
 ic10,   // размер 1024x1024, MacOS v10.7, битмап JPEG 2000 или PNG (512x512@2x "retina" в MacOS 10.8)
 ic11,   // размер 32x32, MacOS v10.8, битмап JPEG 2000 или PNG (16x16@2x "retina")
 ic12,   // размер 64x64, MacOS v10.8, битмап JPEG 2000 или PNG (32x32@2x "retina")
 ic13,   // размер 256x256, MacOS v10.8, битмап JPEG 2000 или PNG (128x128@2x "retina")
 ic14,   // размер 512x512, MacOS v10.8, битмап JPEG 2000 или PNG (256x256@2x "retina")
-ic04,   // размер 16x16, битмап ARGB или JPEG 2000 или PNG
-ic05,   // размер 32x32, битмап ARGB или JPEG 2000 или PNG (16x16@2x "retina")
+ic04,   // размер 16x16, битмап ARGB
+ic05,   // размер 32x32, битмап ARGB
 icsb,   // размер 18x18, битмап ARGB или JPEG 2000 или PNG
 icsB,   // размер 36x36, битмап JPEG 2000 или PNG (18x18@2x "retina")
 sb24,   // размер 24x24, битмап JPEG 2000 или PNG 
-SB24    // размер 48x48, битмап JPEG 2000 или PNG (24x24@2x "retina") 
+SB24,   // размер 48x48, битмап JPEG 2000 или PNG (24x24@2x "retina") 
+TOC,    // Список заголовков ICNSDATA, включённых в файл ICNS
+info    // Двоичный plist. Формат: https://github.com/gerickson/opencflite/blob/main/CFBinaryPList.c
 };
 
 /**

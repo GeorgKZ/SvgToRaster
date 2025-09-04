@@ -18,7 +18,8 @@
 static const char* OSTYPE_ID[] = {
  "ICON","ICN#","icm#","icm4","icm8","ics#","ics4","ics8","is32","s8mk","icl4","icl8","il32",
  "l8mk","ich#","ich4","ich8","ih32","h8mk","it32","t8mk","icp4","icp5","icp6","ic07","ic08",
- "ic09","ic10","ic11","ic12","ic13","ic14","ic04","ic05","icsb","icsB","sb24","SB24"
+ "ic09","ic10","ic11","ic12","ic13","ic14","ic04","ic05","icsb","icsB","sb24","SB24",
+ "TOC ", "info"
 };
 
 static const QList<int> icns_sizes = { 64,    128,  256,  256,  512,  512, 1024,   32 };
@@ -196,6 +197,8 @@ int saveIcns(const QIcon &icon, const QString &filePath) {
          */
         QImage img = icon.pixmap(QSize(icns_sizes[i], icns_sizes[i])).toImage();
         img.convertTo(QImage::Format_ARGB32);
+
+        //TODO Для ic04, ic5 использовать сжатие ARGB
 
         /**
          * * &nbsp;&nbsp;&nbsp;&nbsp;Сформировать в буфере битмап PNG

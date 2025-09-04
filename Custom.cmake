@@ -51,7 +51,7 @@ set(QT_MODULES_LIST
 #  "Qml"                  
 #  "Quick"                
 #  "SerialPort"           
-#  "UiTools"              
+   "UiTools"              
 #  "UiPlugin"             
 #  "Widgets"              
 )

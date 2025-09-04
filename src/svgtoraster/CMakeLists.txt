@@ -173,17 +173,9 @@ endif()
 ##############################################################################
 
 # Требуемые компоненты Qt6
-find_package(Qt6 COMPONENTS Core REQUIRED)
-#find_package(Qt6 COMPONENTS Gui REQUIRED)
-#find_package(Qt6 COMPONENTS OpenGL REQUIRED)
-#find_package(Qt6 COMPONENTS SerialPort REQUIRED)
-#find_package(Qt6 COMPONENTS Qml REQUIRED)
-#find_package(Qt6 COMPONENTS OpenGLWidgets REQUIRED)
-#find_package(Qt6 COMPONENTS Widgets REQUIRED)
-find_package(Qt6 COMPONENTS UiTools REQUIRED)
-#find_package(Qt6 COMPONENTS Quick REQUIRED)
-#find_package(Qt6 COMPONENTS Multimedia REQUIRED)
-#find_package(Qt6 COMPONENTS MultimediaWidgets REQUIRED)
+foreach(lib ${QT_MODULES_LIST})
+    find_package(Qt6 COMPONENTS ${lib} REQUIRED)
+endforeach(lib)
 
 # Сформировать список файлов с описанием интерфейса
 file(GLOB UI "${SOURCES_PATH}/*.ui")
@@ -202,20 +194,12 @@ target_include_directories(${MAIN_NAME}
     PRIVATE ${SOURCES_PATH}
 )
 
-# Добавить необходимые библиотеки Qt
-target_link_libraries(${MAIN_NAME} PUBLIC
-    Qt6::Core
-#    Qt6::Gui
-#    Qt6::OpenGL
-#    Qt6::SerialPort
-#    Qt6::Qml
-#    Qt6::OpenGLWidgets
-#    Qt6::Widgets
-    Qt6::UiTools
-#    Qt6::Quick
-#    Qt6::Multimedia
-#    Qt6::MultimediaWidgets
-)
+# Добавить библиотеки Qt
+foreach(lib ${QT_MODULES_LIST})
+    target_link_libraries(${MAIN_NAME} PUBLIC
+        Qt6::${lib}
+    )
+endforeach(lib)
 
 ##############################################################################
 # Настройка ресурса с файлами переводов
