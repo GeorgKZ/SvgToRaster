@@ -4,12 +4,22 @@ cmake_minimum_required(VERSION 3.9...3.28)
 # Установка директории для сборки и файлов CMAKE
 ##############################################################################
 
+  # Получаем текущую директорию
+  get_filename_component(CURRENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
+  # Получаем имя родительской директории - имя проекта
+  get_filename_component(PARENT_DIR_NAME ${CURRENT_DIR} NAME)
+  # Имя проекта, приведённое к нижнему регистру
+  string(TOLOWER ${PARENT_DIR_NAME} PROJ_NAME)
+
   # для MacOS
   if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+      # Установить имя виртуального RAM-диска
       set(DISKNAME "RAM_Disk")
-      set(ROOTDIR "/Volumes/${DISKNAME}")
-      # Создать RAM-диск
 
+      # Установить корневую директорию сборки
+      set(ROOTDIR "/Volumes/${DISKNAME}")
+
+      # Создать RAM-диск
       if(NOT EXISTS "${ROOTDIR}")
 
           execute_process(COMMAND
@@ -39,19 +49,22 @@ cmake_minimum_required(VERSION 3.9...3.28)
       # Установить директорию сборки
       set(BUILDDIR "${ROOTDIR}/build_svgtoraster" CACHE INTERNAL "")
   elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-      # Установить директорию сборки
-      set(BUILDDIR "T:/build_svgtoraster" CACHE INTERNAL "")
+      # Установить корневую директорию сборки
+      set(ROOTDIR "T:")
   elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+      # Установить корневую директорию сборки
+      set(ROOTDIR "/var/tmp")
+
       # mkdir /cache
       # chmod 777 /cache
       # mount -t tmpfs -o size=1024M tmpfs /cache
-
-      # Установить директорию сборки
-      set(BUILDDIR "/var/tmp/build_svgtoraster" CACHE INTERNAL "")
   endif()
 
+  # Установить директорию сборки
+  set(BUILDDIR "${ROOTDIR}/build_${PROJ_NAME}" CACHE INTERNAL "Build directory")
+
   # Установить директорию сборки для файлов CMAKE
-  set(CMAKEDIR "${BUILDDIR}/cmake" CACHE INTERNAL "")
+  set(CMAKEDIR "${BUILDDIR}/cmake" CACHE INTERNAL "Cmake files directory")
 
   # Сохранить директории в переменных окружения
   set(ENV{BUILDDIR} "${BUILDDIR}")
