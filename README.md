@@ -23,12 +23,12 @@ xbm, xpm.
 Лицензия
 ========
 
-SvgToRaster распространяется по лицензии "GNU GENERAL PUBLIC LICENSE Version 3".
+SvgToRaster распространяется по лицензии [GNU GENERAL PUBLIC LICENSE Version 3](https://www.gnu.org/licenses/gpl-3.0).
 
 Исходные тексты
 ===============
 
-Последняя версия исходных текстов cutter может быть загружена из
+Последняя версия исходных текстов SvgToRaster может быть загружена из
 [репозитория](https://github.com/GeorgKZ/SvgToRaster).
 
 Использование SvgToRaster
