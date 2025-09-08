@@ -1,5 +1,5 @@
 [![License: GPL v3](doc/License_GPLv3.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Platforms: macOS, Windows, Linux](doc/Platform.svg)]
+[![Platforms: macOS, Windows, Linux](doc/Platform.svg)]()
 
 Введение
 ========
