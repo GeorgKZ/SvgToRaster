@@ -8,8 +8,8 @@
 #ifndef ARG_PARSER_H
 #define ARG_PARSER_H
 
-#include <QtCore/QString>
-#include <QtCore/QList>
+#include <QString>
+#include <QList>
 
 /**
  * \brief Класс, реализующий простой разбор командной строки, состоящей из конструкций
@@ -80,7 +80,7 @@ class arg_parser {
    * \param [in] index номер аргумента
    * \return значение флага в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    */
-  const QString& get_flag(int index) const;
+  const QString& get_flag(size_t index) const;
 
   /** 
    * \brief Получить параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
@@ -88,7 +88,7 @@ class arg_parser {
    * \param [in] index номер аргумента
    * \return параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    */
-  const QString& get_parameters(int index) const;
+  const QString& get_parameters(size_t index) const;
 
   /** 
    * \brief Получить набор параметров указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>
@@ -96,14 +96,14 @@ class arg_parser {
    * \param [in] index номер аргумента
    * \return строку, содержащую параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>.
    */
-  const QStringList& get_parameters_set(int index) const;
+  const QStringList& get_parameters_set(size_t index) const;
 
   /** 
    * \brief Получить количество аргументов
    *
    * \return количество аргументов
    */
-  int get_arg_num() const;
+  size_t get_arg_num() const;
 };
 
 #endif // ARG_PARSER_H

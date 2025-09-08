@@ -21,25 +21,25 @@ arg_parser::arg_parser() = default;
 
 /**
  * \file
- * * \copybrief arg_parser::get_flag(int) const
+ * * \copybrief arg_parser::get_flag(size_t) const
  */
-const QString& arg_parser::get_flag(int index) const {
+const QString& arg_parser::get_flag(size_t index) const {
   return args[index].flag;
 }
 
 /**
  * \file
- * * \copybrief arg_parser::get_parameters(int) const
+ * * \copybrief arg_parser::get_parameters(size_t) const
  */
-const QString& arg_parser::get_parameters(int index) const {
+const QString& arg_parser::get_parameters(size_t index) const {
   return args[index].str_parameters;
 }
 
 /**
  * \file
- * * \copybrief arg_parser::get_parameters_set(int) const
+ * * \copybrief arg_parser::get_parameters_set(size_t) const
  */
-const QStringList& arg_parser::get_parameters_set(int index) const {
+const QStringList& arg_parser::get_parameters_set(size_t index) const {
   return args[index].parameters;
 }
 
@@ -47,7 +47,7 @@ const QStringList& arg_parser::get_parameters_set(int index) const {
  * \file
  * * \copybrief arg_parser::get_arg_num() const
  */
-int arg_parser::get_arg_num() const {
+size_t arg_parser::get_arg_num() const {
   return args.size();
 }
 
@@ -93,7 +93,7 @@ int arg_parser::process_cmdline(const char *cmdline[], int cmdnum) {
   // Добавить флаг
   add_new_flag(cmdline[1]);
 
-  for (int argi = 2; argi < cmdnum; argi++) {
+  for (size_t argi = 2; argi < static_cast<size_t>(cmdnum); argi++) { // -V201
     if (strlen(cmdline[argi])>= 2 && cmdline[argi][0] == '-' && cmdline[argi][1] == '-') {
       // Добавить флаг и остаться в режиме чтения параметров
       add_new_flag(cmdline[argi]);

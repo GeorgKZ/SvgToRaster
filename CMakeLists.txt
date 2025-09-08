@@ -919,7 +919,7 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_EXAMPLE_PATH            "${SOURCES_PATH}")
 #   set(DOXYGEN_IMAGE_PATH              ${DOXY_IMAGES})
     set(DOXYGEN_USE_MDFILE_AS_MAINPAGE  "${CMAKE_SOURCE_DIR}/README.md")
-    set(DOXYGEN_ALPHABETICAL_INDEX      NO)
+    set(DOXYGEN_ALPHABETICAL_INDEX      YES)
     set(DOXYGEN_HTML_STYLESHEET         "${CMAKE_SOURCE_DIR}/doc/stylesheet.css")
     set(DOXYGEN_GENERATE_TREEVIEW       YES)
     set(DOXYGEN_ENUM_VALUES_PER_LINE    1)
@@ -973,7 +973,7 @@ if (DOXYGEN_FOUND)
 
     # Формирование файла документации pdf при помощи doxygen
     add_custom_target(pdf_doc
-        make ${CMD_TO_NUL}
+        make > ${DOC_PATH}/build_pdf.log
         WORKING_DIRECTORY ${DOC_PATH}/latex
         COMMENT "Создание документации ${MAIN_NAME} в формате pdf"
     )

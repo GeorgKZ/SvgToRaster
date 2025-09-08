@@ -1,5 +1,4 @@
-//#include <QtCore/QCoreApplication>
-#include <QtWidgets/QApplication>
+#include <QApplication>
 #include "bootstrap.h"
 #include "task.h"
 

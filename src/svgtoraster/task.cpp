@@ -5,8 +5,8 @@
  * <BR>
  */
 
-#include <QtGui/QIcon>
-#include <QtCore/QSize>
+#include <QIcon>
+#include <QSize>
 #include <QImageReader>
 #include <QImageWriter>
 #include "task.h"
@@ -53,7 +53,7 @@ int Task::parse_args(int argc, char **argv, int minargs)
     }
 
     /** 3 Обработать директивы в цикле, устанавливая значения управляющих переменных; */
-    for (int i = 0; i < args.get_arg_num(); ++i) {
+    for (size_t i = 0; i < args.get_arg_num(); ++i) {
         const QString& curr_flag = args.get_flag(i);
         if (curr_flag.compare("i") == 0) {
           const QStringList& parms = args.get_parameters_set(i);

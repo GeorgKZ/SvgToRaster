@@ -6,8 +6,8 @@
 #ifndef BOOTSTRAP_H
 #define BOOTSTRAP_H
 
-#include <QtCore/QtCore>
-#include <QtCore/QTranslator>
+#include <QtCore>
+#include <QTranslator>
 
 /**
  * \brief Объявление класса \ref bootstrap "bootstrap"

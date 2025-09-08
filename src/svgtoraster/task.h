@@ -6,7 +6,7 @@
 #ifndef TASK_H
 #define TASK_H
 
-#include <QtCore/QtCore>
+#include <QtCore>
 
 /**
  * \brief Объявление класса \ref Task "Task"

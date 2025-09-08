@@ -24,7 +24,7 @@ static const char* OSTYPE_ID[] = {
 
 static const QList<int> icns_sizes = { 64,    128,  256,  256,  512,  512, 1024,   32 };
 static const QList<int> icns_codes = { ic12, ic07, ic13, ic08, ic14, ic09, ic10, ic11 };
-static const int icns_size_num = icns_sizes.size();
+static const size_t icns_size_num = icns_sizes.size();
 
 
 /**
@@ -42,10 +42,11 @@ BYTES04_BE::BYTES04_BE(quint32 value) : m_value(value) {}
 
 BYTES04_BE::BYTES04_BE(const char *str)
 {
-    if (str[0] != '\0') m_value  = (((quint32)str[0]) << 24); else return;
-    if (str[1] != '\0') m_value |= (((quint32)str[1]) << 16); else return;
-    if (str[2] != '\0') m_value |= (((quint32)str[2]) <<  8); else return;
-    if (str[3] != '\0') m_value |= (((quint32)str[3]) <<  0);
+    m_value = 0;
+    if (str[0] != '\0') m_value |= ((static_cast<quint32>(str[0])) << 24); else return;
+    if (str[1] != '\0') m_value |= ((static_cast<quint32>(str[1])) << 16); else return;
+    if (str[2] != '\0') m_value |= ((static_cast<quint32>(str[2])) <<  8); else return;
+    if (str[3] != '\0') m_value |= ((static_cast<quint32>(str[3])) <<  0);
 }
 
 /**
@@ -100,10 +101,10 @@ QDataStream &operator>>(QDataStream &in, BYTES04_BE &b)
     quint8 b1, b2, b3, b4;
     in >> b4 >> b3 >> b2 >> b1;
     b.m_value =
-      (((quint32)b1) << 0)  |
-      (((quint32)b2) << 8)  |
-      (((quint32)b3) << 16) |
-      (((quint32)b4) << 24);
+      ((static_cast<quint32>(b1)) << 0)  |
+      ((static_cast<quint32>(b2)) << 8)  |
+      ((static_cast<quint32>(b3)) << 16) |
+      ((static_cast<quint32>(b4)) << 24);
     return in;
 }
 
@@ -190,7 +191,7 @@ int saveIcns(const QIcon &icon, const QString &filePath) {
      * * Для каждого размера растра:
      */
     QList<QByteArray> array_list(icns_size_num);
-    for (int i = 0; i < icns_size_num; ++i)
+    for (size_t i = 0; i < icns_size_num; ++i)
     {
         /**
          * * &nbsp;&nbsp;&nbsp;&nbsp;Создать изображение необходимого размера из исходного значка.
@@ -230,7 +231,7 @@ int saveIcns(const QIcon &icon, const QString &filePath) {
     /**
      * * Для каждого размера растра записать в поток заголовок ICNSDATA и битмап
      */
-    for (int i = 0; i < icns_size_num; ++i) {
+    for (size_t i = 0; i < icns_size_num; ++i) {
         ICNSDATA idata = { OSTYPE_ID[icns_codes[i]], sizeof(ICNSDATA) + array_list[i].size() };
         out << idata;
         out.writeRawData(array_list[i].constData(), array_list[i].size());

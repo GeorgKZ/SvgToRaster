@@ -72,8 +72,8 @@ QDataStream &operator>>(QDataStream &in, BYTES02_LE &b)
     quint8 b1, b2;
     in >> b1 >> b2;
     b.m_value =
-      (((quint32)b1) << 0)  |
-      (((quint32)b2) << 8);
+      ((static_cast<quint32>(b1)) << 0)  |
+      ((static_cast<quint32>(b2)) << 8);
     return in;
 }
 
@@ -142,10 +142,10 @@ QDataStream &operator>>(QDataStream &in, BYTES04_LE &b)
     quint8 b1, b2, b3, b4;
     in >> b1 >> b2 >> b3 >> b4;
     b.m_value =
-      (((quint32)b1) << 0)  |
-      (((quint32)b2) << 8)  |
-      (((quint32)b3) << 16) |
-      (((quint32)b4) << 24);
+      ((static_cast<quint32>(b1)) << 0)  |
+      ((static_cast<quint32>(b2)) << 8)  |
+      ((static_cast<quint32>(b3)) << 16) |
+      ((static_cast<quint32>(b4)) << 24);
     return in;
 }
 

@@ -190,19 +190,19 @@ typedef struct tagICNSDATA {
    * \brief Запись структуры \ref ICNSDATA "ICNSDATA" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
    * \param [in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
-   * \param [in] ihdr Структура \ref ICNSDATA "ICNSDATA", которая записывается в поток.
+   * \param [in] ihdr Структура \ref ICNSHDR "ICNSHDR", которая записывается в поток.
    * \return ссылка на поток, в который производится запись структуры.
    */
-  friend QDataStream &operator<<(QDataStream &out, const tagICNSHDR &idata);
+  friend QDataStream &operator<<(QDataStream &out, const tagICNSHDR &ihdr);
 
   /**
    * \brief Чтение структуры \ref ICNSDATA "ICNSDATA" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
    * \param [in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
-   * \param [out] ihdr Структура \ref ICNSDATA "ICNSDATA", которая читается из потока.
+   * \param [out] ihdr Структура \ref ICNSHDR "ICNSHDR", которая читается из потока.
    * \return ссылка на поток, из которого производится чтение структуры.
    */
-  friend QDataStream &operator>>(QDataStream &in, tagICNSHDR &idata);
+  friend QDataStream &operator>>(QDataStream &in, tagICNSHDR &ihdr);
 
 } ICNSDATA;
 
