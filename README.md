@@ -1,5 +1,7 @@
 [![License: GPL v3](doc/License_GPLv3.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Platforms: macOS, Windows, Linux](doc/Platform.svg)]()
+[![Framework: QT v6.X.X](doc/Qt6.svg)](https://www.qt.io/product/qt6)
+
 
 Введение
 ========
