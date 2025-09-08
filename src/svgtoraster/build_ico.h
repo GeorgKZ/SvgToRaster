@@ -3,7 +3,7 @@
  *
  * \brief Заголовочный файл с классами и функциями, необходимыми для преобразования
  * векторного изображения <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>
- * в растровый значок формата <ahref="https://ru.wikipedia.org/wiki/ICO_(%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82_%D1%84%D0%B0%D0%B9%D0%BB%D0%B0)">ICO</a> с несколькими битмапами различного размера.
+ * в растровый значок формата <a href="https://ru.wikipedia.org/wiki/ICO_(%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82_%D1%84%D0%B0%D0%B9%D0%BB%D0%B0)">ICO</a> с несколькими битмапами различного размера.
  */
 
 #ifndef BUILD_ICO_H

@@ -116,7 +116,7 @@ QDataStream &operator>>(QDataStream &in, BYTES04_BE &b)
 
 /**
  * \file
- * * \copybrief operator<<(QDataStream&, const tagICNSHDR&)
+ * * Запись структуры \ref ICNSHDR "ICNSHDR" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator<<(QDataStream &out, const tagICNSHDR &ihdr)
 {
@@ -128,7 +128,7 @@ QDataStream &operator<<(QDataStream &out, const tagICNSHDR &ihdr)
 
 /**
  * \file
- * * \copybrief operator>>(QDataStream&, tagICNSHDR&)
+ * * Чтение структуры \ref ICNSHDR "ICNSHDR" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator>>(QDataStream &in, tagICNSHDR &ihdr)
 {
@@ -146,7 +146,7 @@ QDataStream &operator>>(QDataStream &in, tagICNSHDR &ihdr)
 
 /**
  * \file
- * * \copybrief operator<<(QDataStream&, const tagICNSDATA&)
+ * * Запись структуры \ref ICNSDATA "ICNSDATA" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator<<(QDataStream &out, const tagICNSDATA &idata) {
     out <<
@@ -157,7 +157,7 @@ QDataStream &operator<<(QDataStream &out, const tagICNSDATA &idata) {
 
 /**
  * \file
- * * \copybrief operator>>(QDataStream&, tagICNSDATA&)
+ * * Чтение структуры \ref ICNSDATA "ICNSDATA" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator>>(QDataStream &in, tagICNSDATA &idata) {
     in >>

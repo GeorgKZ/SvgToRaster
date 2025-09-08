@@ -20,14 +20,34 @@ class Task : public QObject
 
 public:
 
+    /**
+     * \brief Конструктор класса \ref Task "Task"
+     *
+     * \param [in] argc количество аргументов командной строки
+     * \param [in] argv массив аргументов-строк командной строки
+     * \param [in] minargs минимально допустимое количество аргументов командной строки
+     * \param [in] parent указатель на экземпляр родительского класса
+     */
     Task(int argc, char **argv, int minargs, QObject *parent = nullptr);
 
 public slots:
 
+    /**
+     * \brief Выполнение полезной нагрузки класса
+     */
     void run();
 
 private:
 
+    /**
+     * \brief Разбор аргументов командной строки
+     *
+     * \param [in] argc количество аргументов командной строки
+     * \param [in] argv массив аргументов-строк командной строки
+     * \param [in] minargs минимально допустимое количество аргументов командной строки
+     * \retval 0 если разбор аргументов командной строки завершился успешно
+     * \retval -1 если разбор аргументов командной строки завершился с ошибкой
+     */
     int parse_args(int argc, char **argv, int minargs);
 
     /**

@@ -3,7 +3,7 @@
  *
  * \brief Файл с определениями функций, необходимыми для преобразования
  * векторного изображения <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>
- * в растровый значок формата <ahref="https://ru.wikipedia.org/wiki/ICO_(%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82_%D1%84%D0%B0%D0%B9%D0%BB%D0%B0)">ICO</a> с несколькими битмапами различного размера.
+ * в растровый значок формата <a href="https://ru.wikipedia.org/wiki/ICO_(%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82_%D1%84%D0%B0%D0%B9%D0%BB%D0%B0)">ICO</a> с несколькими битмапами различного размера.
  */
 
 #include <QFile>
@@ -157,7 +157,7 @@ QDataStream &operator>>(QDataStream &in, BYTES04_LE &b)
 
 /**
  * \file
- * * \copybrief operator<<(QDataStream&, const tagBITMAPINFOHEADER&)
+ * * Запись структуры \ref BITMAPINFOHEADER "BITMAPINFOHEADER" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator<<(QDataStream &out, const tagBITMAPINFOHEADER &ihdr)
 {
@@ -178,7 +178,7 @@ QDataStream &operator<<(QDataStream &out, const tagBITMAPINFOHEADER &ihdr)
 
 /**
  * \file
- * * \copybrief operator>>(QDataStream&, tagBITMAPINFOHEADER&)
+ * * Чтение структуры \ref BITMAPINFOHEADER "BITMAPINFOHEADER" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator>>(QDataStream &in, tagBITMAPINFOHEADER &ihdr)
 {
@@ -205,7 +205,7 @@ QDataStream &operator>>(QDataStream &in, tagBITMAPINFOHEADER &ihdr)
 
 /**
  * \file
- * * \copybrief operator<<(QDataStream&, const tagICONDIR&)
+ * * Запись структуры \ref ICONDIR "ICONDIR" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator<<(QDataStream &out, const tagICONDIR &icondir) {
     out <<
@@ -217,7 +217,7 @@ QDataStream &operator<<(QDataStream &out, const tagICONDIR &icondir) {
 
 /**
  * \file
- * * \copybrief operator>>(QDataStream&, tagICONDIR&)
+ * * Чтение структуры \ref ICONDIR "ICONDIR" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator>>(QDataStream &in, tagICONDIR &icondir) {
     in >>
@@ -235,7 +235,7 @@ QDataStream &operator>>(QDataStream &in, tagICONDIR &icondir) {
 
 /**
  * \file
- * * \copybrief operator<<(QDataStream&, const tagICONDIRENTRY&)
+ * * Запись структуры \ref ICONDIRENTRY "ICONDIRENTRY" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator<<(QDataStream &out, const tagICONDIRENTRY &icondirentry) {
     out <<
@@ -252,7 +252,7 @@ QDataStream &operator<<(QDataStream &out, const tagICONDIRENTRY &icondirentry) {
 
 /**
  * \file
- * * \copybrief operator>>(QDataStream&, tagICONDIRENTRY&)
+ * * Чтение структуры \ref ICONDIRENTRY "ICONDIRENTRY" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
  */
 QDataStream &operator>>(QDataStream &in, tagICONDIRENTRY &icondirentry) {
     in >>
