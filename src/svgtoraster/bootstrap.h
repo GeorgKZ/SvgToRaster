@@ -30,15 +30,15 @@ public:
     /**
      * \brief Установить локализацию интерфейса согласно языковому файлу
      *
-     * \param [in] translationFileName имя файла локализации с путём.
-     * \param [in,out] translator указатель на дескриптор локализации.
+     * \param[in] translationFileName имя файла локализации с путём.
+     * \param[in,out] translator указатель на дескриптор локализации.
      */
     static void setTranslator(const QString &translationFileName, QTranslator **translator);
 
     /**
      * \brief Установить локализацию интерфейса согласно указанному языку
      *
-     * \param [in] language строка--код языка локализации.
+     * \param[in] language строка--код языка локализации.
      */
     static void setAllTranslators(const QString &language);
 

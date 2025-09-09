@@ -1,11 +1,20 @@
-% Latex header for doxygen 1.9.8
+% Latex header for doxygen 1.14.0
   % Handle batch mode
   $latex_batchmode
 
   % to overcome problems with too many open files
   \let\mypdfximage\pdfximage\def\pdfximage{\immediate\mypdfximage}
 
-%%\pdfminorversion=7
+  \RequirePackage{iftex}
+  \ifLuaTeX
+    \directlua{pdf.setminorversion(7)}
+  \fi
+  \ifXeTeX
+    \special{pdf:minorversion 7}
+  \fi
+  \ifPDFTeX
+    \pdfminorversion=7
+  \fi
 
   % Set document class depending on configuration
 %%BEGIN COMPACT_LATEX
@@ -34,13 +43,22 @@
   \let\protected@wlog\@@protected@wlog
   \makeatother
   \IfFormatAtLeastTF{2016/01/01}{}{\usepackage{fixltx2e}} % for \textsubscript
-%%\IfFormatAtLeastTF{2015/01/01}{\pdfsuppresswarningpagegroup=1}{}
+  \ifPDFTeX
+    \IfFormatAtLeastTF{2015/01/01}{\pdfsuppresswarningpagegroup=1}{}
+  \fi
 
   \usepackage{doxygen}
+
   $extralatexstylesheet
 
   \usepackage{graphicx}
-  \usepackage[utf8]{inputenc}
+  \iftutex
+    \usepackage{fontspec}
+    \defaultfontfeatures{Ligatures={TeX}}
+    \usepackage{unicode-math}
+  \else
+    \usepackage[utf8]{inputenc}
+  \fi
   \usepackage{makeidx}
   \PassOptionsToPackage{warn}{textcomp}
   \usepackage{textcomp}
@@ -53,16 +71,29 @@
   \usepackage{CJKutf8}
   % ADDON end
 
-  % ADDON: Расширение mathext - до бабеля
-  % \usepackage{mathext}
   % ADDON: расширение babel с указанием используемых языков
   \usepackage[english, russian]{babel}
 
   % ADDON: Установка основного и моноширинного шрифта
-  \usepackage[scaled=.80]{helvet}
-  \usepackage{courier}
-  \renewcommand{\familydefault}{\sfdefault}
+%  \usepackage{helvet}
+%  \usepackage{courier}
+% \renewcommand{\familydefault}{\sfdefault}
   % ADDON end
+
+  % NLS support packages
+  $languagesupport
+
+  % Define default fonts
+  % Font selection
+%%BEGIN LATEX_FONTENC
+  \iftutex
+  \else
+    \usepackage[$latexfontenc]{fontenc}
+  \fi
+%%END LATEX_FONTENC
+
+  % set main and monospaced font
+  $latexfont
 
   \doxyallsectionsfont{%
     \fontseries{bc}\selectfont%
@@ -179,7 +210,7 @@
 
   % ToC, LoF, LoT, bibliography, and index
   % Indices & bibliography
-  \usepackage{natbib}
+  \usepackage[numbers]{natbib}
   \usepackage[titles]{tocloft}
   \setcounter{tocdepth}{3}
   % ADDON Установить глубину индексации разделов оглавления
@@ -201,16 +232,19 @@
   % Hyperlinks
 %%BEGIN PDF_HYPERLINKS
     % Hyperlinks (required, but should be loaded last)
-    \ifpdf
+    \ifPDFTeX
       \usepackage[pdftex,pagebackref=true]{hyperref}
     \else
-      \ifxetex
-        \usepackage[pagebackref=true]{hyperref}
+      \ifXeTeX
+        \usepackage[xetex,pagebackref=true]{hyperref}
       \else
-        \usepackage[ps2pdf,pagebackref=true]{hyperref}
+        \ifLuaTeX
+          \usepackage[luatex,pagebackref=true]{hyperref}
+        \else
+          \usepackage[ps2pdf,pagebackref=true]{hyperref}
+        \fi
       \fi
     \fi
-
     \hypersetup{%
       colorlinks=true,%
       linkcolor=blue,%
@@ -236,10 +270,7 @@
 
   % caption style definition
   \usepackage{caption}
-  % ADDON Удалить принудительные заголовки изображений
-  %\captionsetup{labelsep=space,justification=centering,font={bf},singlelinecheck=off,skip=4pt,position=top}
-  \captionsetup{labelformat=empty,labelsep=none,skip=0pt}
-  % ADDON end
+  \captionsetup{labelsep=space,justification=centering,font={bf},singlelinecheck=off,skip=4pt,position=top}
 
 
   % in page table of contents

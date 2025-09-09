@@ -45,14 +45,14 @@ class arg_parser {
   /** 
    * \brief Добавить новый аргумент, установив значение флага
    *
-   * \param [in] flag строка-флаг (ключевое слово)
+   * \param[in] flag строка-флаг (ключевое слово)
    */
   void add_new_flag(const char *flag);
 
   /** 
    * \brief Дополнить параметр последнего аргумента
    *
-   * \param [in] param строка-параметр
+   * \param[in] param строка-параметр
    */
   void add_new_param(const char *param);
 
@@ -66,8 +66,8 @@ class arg_parser {
   /** 
    * \brief Обработать командную строку
    *
-   * \param [in] cmdline массив строк аргументов командной строки
-   * \param [in] cmdnum количество аргументов командной строки
+   * \param[in] cmdline массив строк аргументов командной строки
+   * \param[in] cmdnum количество аргументов командной строки
    * \retval -1 если первый аргумент командной строки не является флагом (ключевым словом),
    * то есть не начинается с символов '--';
    * \retval 0 в случае успешного завершения.
@@ -77,7 +77,7 @@ class arg_parser {
   /** 
    * \brief Получить флаг указанного аргумента
    *
-   * \param [in] index номер аргумента
+   * \param[in] index номер аргумента
    * \return значение флага в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    */
   const QString& get_flag(size_t index) const;
@@ -85,7 +85,7 @@ class arg_parser {
   /** 
    * \brief Получить параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    *
-   * \param [in] index номер аргумента
+   * \param[in] index номер аргумента
    * \return параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    */
   const QString& get_parameters(size_t index) const;
@@ -93,7 +93,7 @@ class arg_parser {
   /** 
    * \brief Получить набор параметров указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>
    *
-   * \param [in] index номер аргумента
+   * \param[in] index номер аргумента
    * \return строку, содержащую параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>.
    */
   const QStringList& get_parameters_set(size_t index) const;

@@ -271,7 +271,7 @@ if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
 # Командный файл для запуска pdflatex с параметром
     set(CMD_RUN_LATEX "${MISC_PATH}/runlatex.bash")
 # Подготовить командный файл для запуска pdflatex с параметром
-    file(WRITE ${CMD_RUN_LATEX} "#!/bin/bash\n\npdflatex --shell-escape $1")
+    file(WRITE ${CMD_RUN_LATEX} "#!/bin/bash\n\npdflatex --shell-escape $1\n\nexit 0")
     execute_process(COMMAND chmod +x ${CMD_RUN_LATEX})
 
 elseif (CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
@@ -286,7 +286,7 @@ elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
 # Командный файл для запуска pdflatex с параметром
     set(CMD_RUN_LATEX "${MISC_PATH}/runlatex.zsh")
 # Подготовить командный файл для запуска pdflatex с параметром
-    file(WRITE ${CMD_RUN_LATEX} "#!/bin/zsh\n\npdflatex --shell-escape $1")
+    file(WRITE ${CMD_RUN_LATEX} "#!/bin/zsh\n\npdflatex --shell-escape $1\n\nexit 0")
     execute_process(COMMAND chmod +x ${CMD_RUN_LATEX})
 
 else()
@@ -899,7 +899,7 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_PROJECT_NUMBER          "${PROJECT_VERSION}")
     set(DOXYGEN_OUTPUT_DIRECTORY        "${DOC_PATH}")
     set(DOXYGEN_OUTPUT_LANGUAGE         "Russian")
-    set(DOXYGEN_STRIP_FROM_PATH         "src/")
+    set(DOXYGEN_STRIP_FROM_PATH         "${CMAKE_SOURCE_DIR}/")
     set(DOXYGEN_TAB_SIZE                "2")
     set(DOXYGEN_OPTIMIZE_OUTPUT_FOR_C   YES)
     set(DOXYGEN_LOOKUP_CACHE_SIZE       2)
@@ -955,7 +955,6 @@ if (DOXYGEN_FOUND)
       "${CMAKE_SOURCE_DIR}/TODO.md"
       "${CMAKE_SOURCE_DIR}/README.md"
       "${CMAKE_SOURCE_DIR}/src"
-#     WORKING_DIRECTORY ${SOURCES_PATH}
       COMMENT "Создание документации ${MAIN_NAME} в формате html"
     )
 
@@ -973,7 +972,7 @@ if (DOXYGEN_FOUND)
 
     # Формирование файла документации pdf при помощи doxygen
     add_custom_target(pdf_doc
-        make > ${DOC_PATH}/build_pdf.log
+        make ${CMD_TO_NUL}
         WORKING_DIRECTORY ${DOC_PATH}/latex
         COMMENT "Создание документации ${MAIN_NAME} в формате pdf"
     )

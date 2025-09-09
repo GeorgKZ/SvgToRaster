@@ -116,8 +116,8 @@ public:
   /**
    * \brief Запись структуры \ref BYTES04_BE "BYTES04_BE" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
-   * \param [in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
-   * \param [in] b Структура \ref BYTES04_BE "BYTES04_BE", которая записывается в поток.
+   * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
+   * \param[in] b Структура \ref BYTES04_BE "BYTES04_BE", которая записывается в поток.
    * \return ссылка на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const BYTES04_BE &b);
@@ -125,8 +125,8 @@ public:
   /**
    * \brief Чтение структуры \ref BYTES04_BE "BYTES04_BE" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
-   * \param [in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
-   * \param [out] b Структура \ref BYTES04_BE "BYTES04_BE", которая читается из потока.
+   * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
+   * \param[out] b Структура \ref BYTES04_BE "BYTES04_BE", которая читается из потока.
    * \return ссылка на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, BYTES04_BE &b);
@@ -154,8 +154,8 @@ typedef struct tagICNSHDR {
   /**
    * \brief Запись структуры \ref ICNSHDR "ICNSHDR" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
-   * \param [in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
-   * \param [in] ihdr Структура \ref ICNSHDR "ICNSHDR", которая записывается в поток.
+   * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
+   * \param[in] ihdr Структура \ref ICNSHDR "ICNSHDR", которая записывается в поток.
    * \return ссылка на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const tagICNSHDR &ihdr);
@@ -163,8 +163,8 @@ typedef struct tagICNSHDR {
   /**
    * \brief Чтение структуры \ref ICNSHDR "ICNSHDR" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
-   * \param [in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
-   * \param [out] ihdr Структура \ref ICNSHDR "ICNSHDR", которая читается из потока.
+   * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
+   * \param[out] ihdr Структура \ref ICNSHDR "ICNSHDR", которая читается из потока.
    * \return ссылка на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, tagICNSHDR &ihdr);
@@ -189,8 +189,8 @@ typedef struct tagICNSDATA {
   /**
    * \brief Запись структуры \ref ICNSDATA "ICNSDATA" в <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
-   * \param [in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
-   * \param [in] ihdr Структура \ref ICNSHDR "ICNSHDR", которая записывается в поток.
+   * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
+   * \param[in] ihdr Структура \ref ICNSHDR "ICNSHDR", которая записывается в поток.
    * \return ссылка на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const tagICNSHDR &ihdr);
@@ -198,8 +198,8 @@ typedef struct tagICNSDATA {
   /**
    * \brief Чтение структуры \ref ICNSDATA "ICNSDATA" из <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>
    *
-   * \param [in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
-   * \param [out] ihdr Структура \ref ICNSHDR "ICNSHDR", которая читается из потока.
+   * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
+   * \param[out] ihdr Структура \ref ICNSHDR "ICNSHDR", которая читается из потока.
    * \return ссылка на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, tagICNSHDR &ihdr);
@@ -212,8 +212,8 @@ typedef struct tagICNSDATA {
 /**
  * \brief Формирование и запись файла значка формата ICNS
  *
- * \param [in] icon векторный значок <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>, на основе которого будет создан растровый значок.
- * \param [in] filePath строка <a href="https://doc.qt.io/qt-6/qstring.html">QString</a>, содержащая путь и имя файла создаваемого растрового значка.
+ * \param[in] icon векторный значок <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>, на основе которого будет создан растровый значок.
+ * \param[in] filePath строка <a href="https://doc.qt.io/qt-6/qstring.html">QString</a>, содержащая путь и имя файла создаваемого растрового значка.
  * \retval 0 если значок успешно создан.
  * \retval -1 в случае ошибки.
  */
