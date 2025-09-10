@@ -1,5 +1,6 @@
 /**
  * \file
+ *
  * \brief Файл с определениями функций-членов класса \ref arg_parser "arg_parser"
  *
  * <BR>

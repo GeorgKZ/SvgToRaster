@@ -81,8 +81,8 @@
     </message>
     <message>
         <location filename="../task.cpp" line="155"/>
-        <source>output file size</source>
-        <translation>размер результирующего файла</translation>
+        <source>output bitmap sizes</source>
+        <translation>Размеры битмапов результирующего файла</translation>
     </message>
     <message>
         <location filename="../task.cpp" line="156"/>
@@ -92,7 +92,7 @@
     <message>
         <location filename="../task.cpp" line="157"/>
         <source>target PNG, ICO, ICNS file</source>
-        <translation>результирующий файл PNG, ICO, ICNS</translation>
+        <translation>Результирующий файл PNG, ICO, ICNS</translation>
     </message>
     <message>
         <location filename="../task.cpp" line="159"/>

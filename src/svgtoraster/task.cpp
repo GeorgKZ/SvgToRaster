@@ -1,5 +1,6 @@
 /**
  * \file
+ *
  * \brief Файл с определениями функций-членов класса \ref Task "Task"
  *
  * <BR>
@@ -152,7 +153,7 @@ void Task::run()
 void Task::print_help() {
   qInfo().noquote() << tr("USAGE:");
   qInfo().noquote() << "svgtoraster [--s <S>] --i <in_file> --o <out_file>";
-  qInfo().noquote() << "    <S>              -" << tr("output file size");
+  qInfo().noquote() << "    <S>              -" << tr("output bitmap sizes");
   qInfo().noquote() << "    <in_file>        -" << tr("source SVG file");
   qInfo().noquote() << "    <out_file>       -" << tr("target PNG, ICO, ICNS file");
 

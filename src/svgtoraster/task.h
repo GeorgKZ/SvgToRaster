@@ -1,5 +1,6 @@
 /**
  * \file
+ *
  * \brief Заголовочный файл с объявлением класса \ref Task "Task"
  */
 
@@ -33,7 +34,7 @@ public:
 public slots:
 
     /**
-     * \brief Выполнение полезной нагрузки класса
+     * \brief Слот выполнения полезной нагрузки класса
      */
     void run();
 
@@ -55,17 +56,32 @@ private:
      */
     void print_help();
 
+    /**
+     * \brief Имя исходного файла
+     */
     QString m_input_file;
 
+    /**
+     * \brief Имя результирующего файла
+     */
     QString m_output_file;
 
+    /**
+     * \brief Список требуемых размеров битмапов
+     */
     QList<int> m_bitmap_size;
 
+    /**
+     * \brief Код завершения оперрации разбора командной строки
+     */
     int m_parse_ok;
 
 
 signals:
 
+    /**
+     * \brief Сигнал завершения выполнения полезной нагрузки класса
+     */
     void finished();
 };
 

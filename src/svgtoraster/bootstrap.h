@@ -1,5 +1,6 @@
 /**
  * \file
+ *
  * \brief Заголовочный файл с объявлением класса \ref bootstrap "bootstrap"
  */
 

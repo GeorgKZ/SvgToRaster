@@ -81,7 +81,7 @@
     </message>
     <message>
         <location filename="../task.cpp" line="155"/>
-        <source>output file size</source>
+        <source>output bitmap sizes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

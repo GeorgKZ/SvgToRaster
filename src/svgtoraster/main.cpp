@@ -1,3 +1,9 @@
+/**
+ * \file
+ *
+ * \brief Головной файл, содержащий функцию main
+ */
+
 #include <QApplication>
 #include "bootstrap.h"
 #include "task.h"
@@ -7,6 +13,12 @@
  */
 #define MINARGS 3
 
+/**
+ * \brief Головная функция main
+ * \param[in] argc количество аргументов командной строки
+ * \param[in] argv массив строк аргументов командной строки
+ * \return код завершения программы.
+ */
 int main(int argc, char *argv[]) {
 
     /**

@@ -1,5 +1,6 @@
 /**
  * \file
+ *
  * \brief Файл с определениями функций-членов класса \ref bootstrap "bootstrap"
  *
  * <BR>
