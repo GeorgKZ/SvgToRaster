@@ -1,4 +1,4 @@
 #!/bin/zsh
 
 cd ../build_scripts
-cmake -P ./2_config_build.cmake
+cmake -P ./1_config.cmake
