@@ -7,7 +7,15 @@ include("${ROOT_DIR}/scripts/get_file_deps.cmake")
 
 # Функция, выполняющая установку во временную директорию
 # указанной библиотеки и её зависимостей
-function(install_library_with_deps NAME)
+function(install_library_with_deps NAME PROCESSED_LIST)
+
+    # Проверить, может эта библиотека уже обработана
+    list(FIND PROCESSED_LIST "${NAME}" INDEX)
+    if(NOT (INDEX EQUAL -1))
+        return()
+    endif()
+    list(APPEND PROCESSED_LIST ${NAME})
+    set(PROCESSED_LIST ${PROCESSED_LIST} PARENT_SCOPE)
 
     set(framework 0)
 
@@ -18,12 +26,12 @@ function(install_library_with_deps NAME)
 
     elseif(EXISTS "${QT_DIR}/../../../bin/${NAME}")
         set(PATH_TO_NAME "${QT_DIR}/../../../bin")
- #      message(STATUS "FOUND Qt library ${NAME}")
+#       message(STATUS "FOUND Qt library ${NAME}")
 
     # Проверить, может это фреймворк из указанного Qt
     elseif(EXISTS "${QT_DIR}/../../${NAME}.framework")
         set(PATH_TO_NAME "${QT_DIR}/../..")
-  #     message(STATUS "FOUND Qt framework ${NAME}")
+#       message(STATUS "FOUND Qt framework ${NAME}")
         set(framework 1)
 
     # Проверить, может это библиотека приложения
@@ -32,7 +40,7 @@ function(install_library_with_deps NAME)
 #       message(STATUS "FOUND application library ${NAME}")
 
     # !!!
-    # Проверить, может это библиотека приложения
+    # Проверить, может это системная библиотека приложения
     elseif((EXISTS "/lib/${NAME}") OR (EXISTS "/lib/x86_64-linux-gnu/${NAME}"))
 #       message(STATUS "FOUND system library ${NAME}")
         return()
@@ -40,6 +48,7 @@ function(install_library_with_deps NAME)
     # Проверить, может такая библиотека уже найдена, тогда ничего не делать
     elseif((EXISTS "${FOUND_DEPS_PATH}/${NAME}") OR (EXISTS "${FOUND_DEPS_PATH}/${NAME}.framework"))
 #       message(STATUS "SKIPPED founded library ${NAME}")
+        return(PROPAGATE PROCESSED_LIST)
         return()
 
     else()
@@ -81,7 +90,8 @@ function(install_library_with_deps NAME)
         # Повотрить процедуру для файла, на который указывает эта сылка.
         file(READ_SYMLINK ${PATH_WITH_NAME} SYM_FILE)
         get_filename_component(SYM_FILE_NAME "${SYM_FILE}" NAME)
-        install_library_with_deps("${SYM_FILE_NAME}")
+        install_library_with_deps("${SYM_FILE_NAME}" "${PROCESSED_LIST}")
+        set(PROCESSED_LIST ${PROCESSED_LIST} PARENT_SCOPE)
         return()
     endif()
 
@@ -96,9 +106,16 @@ function(install_library_with_deps NAME)
 
     # Перебрать все зависимости, для каждой повторить процедуру
     foreach(FILE ${FOUND_DEPS})
-        install_library_with_deps("${FILE}")
+        install_library_with_deps("${FILE}" "${PROCESSED_LIST}")
     endforeach()
+
+    set(PROCESSED_LIST ${PROCESSED_LIST} PARENT_SCOPE)
 endfunction()
+
+
+
+# Список обработанных библиотек
+set(PROCESSED_LIST "")
 
 # Прочитать из файла список файлов, для которых ищется завивимость
 file(READ "${MISC_PATH}/${ARGUMENT}" LIST)
@@ -107,7 +124,7 @@ foreach(F ${LIST})
     get_prerequisites("${F}" FOUND_DEPS)
 
     foreach(FILE ${FOUND_DEPS})
-        install_library_with_deps("${FILE}")
+        install_library_with_deps("${FILE}" "${PROCESSED_LIST}")
     endforeach()
 
 endforeach()
