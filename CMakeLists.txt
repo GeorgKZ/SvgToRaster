@@ -181,9 +181,6 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${DOC_PATH})
 # Прочие директории и пути к файлам, помещаемые в переменные
 ##############################################################################
 
-# Путь к директории с изображениями для Doxygen
-#!!! set(DOXY_IMAGES "${CMAKE_SOURCE_DIR}/screenshots;${CMAKE_SOURCE_DIR}/doc/images;${CMAKE_SOURCE_DIR}/wiki/images")
-
 # Путь к директории с переводами
 set(TRANSLATE_PATH "${BUILD_PATH}/translations")
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${TRANSLATE_PATH})
@@ -635,10 +632,20 @@ set(CMAKE_MESSAGE_LOG_LEVEL "${CMAKE_LOGGING_LEVEL}" CACHE STRING "Уровен�
 # Устанавливается заданием параметра cmake, например cmake --log-level=DEBUG
 
 ##############################################################################
-# Создание файлов-значков (до компоновки исполняемого файла приложения)
+# Сборка и установка субмодуля SvgToRaster
+# (выполняется только при наличии исходного значка)
 ##############################################################################
 
-# Создание файлов-значков только при наличии исходного значка
+if((DEFINED CUSTOM_SVG_ICON_FILE) AND (EXISTS ${CUSTOM_SVG_ICON_FILE}))
+    include(scripts/build_ext_binary.cmake)
+    build_ext_binary("SvgToRaster")
+endif()
+
+##############################################################################
+# Создание файлов-значков до компоновки исполняемого файла приложения
+# (выполняется только при наличии исходного значка)
+##############################################################################
+
 if((DEFINED CUSTOM_SVG_ICON_FILE) AND (EXISTS ${CUSTOM_SVG_ICON_FILE}))
 
     # Если сборка предназначена для выполнения под Windows,
@@ -826,7 +833,9 @@ endforeach(PLUGIN)
 # Обработка компонентов (библиотеки, скрипты, исполняемый файл)
 ##############################################################################
 
-add_subdirectory(src/svgtoraster)
+foreach(MODULE_PATH ${PROJECT_MODULES_LIST})
+    add_subdirectory("src/${MODULE_PATH}")
+endforeach(MODULE_PATH)
 
 ##############################################################################
 # Упаковка
@@ -922,7 +931,9 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_WARN_LOGFILE            "${DOC_PATH}/warnings.log")
     set(DOXYGEN_FILE_PATTERNS           *.h *.hxx *.cpp *.md)
 #   set(DOXYGEN_EXAMPLE_PATH            "${SOURCES_PATH}")
-#   set(DOXYGEN_IMAGE_PATH              ${DOXY_IMAGES})
+    if(DEFINED CUSTOM_IMAGES)
+        set(DOXYGEN_IMAGE_PATH              ${CUSTOM_IMAGES})
+    endif()
     set(DOXYGEN_USE_MDFILE_AS_MAINPAGE  "${CMAKE_SOURCE_DIR}/README.md")
     set(DOXYGEN_ALPHABETICAL_INDEX      YES)
     set(DOXYGEN_HTML_STYLESHEET         "${CMAKE_SOURCE_DIR}/doc/stylesheet.css")
@@ -930,11 +941,15 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_ENUM_VALUES_PER_LINE    1)
     set(DOXYGEN_HTML_FORMULA_FORMAT     svg)
     set(DOXYGEN_FORMULA_FONTSIZE        12)
-    set(DOXYGEN_USE_MATHJAX             NO)
-#   set(DOXYGEN_MATHJAX_VERSION         MathJax_3)
-#   set(DOXYGEN_MATHJAX_FORMAT          chtml)
-#   set(DOXYGEN_MATHJAX_RELPATH         "../../../mathjax")
-#   set(DOXYGEN_MATHJAX_EXTENSIONS      require ams mathtools textcomp unicode)
+    if(DEFINED CUSTOM_MATHJAX)
+        set(DOXYGEN_USE_MATHJAX             YES)
+        set(DOXYGEN_MATHJAX_VERSION         MathJax_3)
+        set(DOXYGEN_MATHJAX_FORMAT          chtml)
+        set(DOXYGEN_MATHJAX_RELPATH         "../../../mathjax")
+        set(DOXYGEN_MATHJAX_EXTENSIONS      ${CUSTOM_MATHJAX})
+    else()
+        set(DOXYGEN_USE_MATHJAX             NO)
+    endif()
     set(DOXYGEN_GENERATE_LATEX          YES)
     set(DOXYGEN_USE_PDFLATEX            YES)
     set(DOXYGEN_LATEX_CMD_NAME          ${CMD_RUN_LATEX})
