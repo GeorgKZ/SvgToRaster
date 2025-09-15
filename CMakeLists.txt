@@ -258,8 +258,6 @@ endif()
 
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
 
-# Команда перенаправления потока в нуль
-    set(CMD_TO_NUL >/dev/null 2>&1)
 # Командный файл для запуска pdflatex с параметром
     set(CMD_RUN_LATEX "${MISC_PATH}/runlatex.bash")
 # Подготовить командный файл для запуска pdflatex с параметром
@@ -268,13 +266,8 @@ if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
 
 elseif (CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
 
-# Команда перенаправления потока в нуль
-    set(CMD_TO_NUL >NUL 2>&1)
-
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
 
-# Команда перенаправления потока в нуль
-    set(CMD_TO_NUL >/dev/null 2>&1)
 # Командный файл для запуска pdflatex с параметром
     set(CMD_RUN_LATEX "${MISC_PATH}/runlatex.zsh")
 # Подготовить командный файл для запуска pdflatex с параметром
@@ -519,11 +512,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     # which point to directories outside the build tree to the install RPATH
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
-    # Путь для установки файла лицензии в установочном пакете
-    set(INST_LIC_PATH "share/doc/${PROJECT_NAME_LOWERCASE}")
+    # Путь для документации в установочном пакете
+    set(INST_DOC_PATH "share/doc/${PROJECT_NAME_LOWERCASE}")
 
     # Путь к файлу лицензии относительно исполняемого файла
-    set(REL_LIC_DIR "../${INST_LIC_PATH}")
+    set(REL_LIC_DIR "../${INST_DOC_PATH}")
 
     # Путь для установки плюгинов приложения в установочном пакете
     set(INST_PLUG_DIR "share/${PROJECT_NAME_LOWERCASE}/plugins")
@@ -540,8 +533,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 # Если сборка предназначена для выполнения под MacOS / OS X
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 
-    # Путь для установки файла лицензии в установочном пакете
-    set(INST_LIC_PATH "${BUNDLE_RESOURCE_PATH}")
+    # Путь для документации в установочном пакете
+    set(INST_DOC_PATH "${BUNDLE_RESOURCE_PATH}")
 
     # Путь к файлу лицензии относительно исполняемого файла
     set(REL_LIC_DIR "../../../${BUNDLE_RESOURCE_PATH}")
@@ -561,8 +554,8 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 # Если сборка предназначена для выполнения под Windows
 elseif((CMAKE_SYSTEM_NAME STREQUAL "Windows") OR (CMAKE_SYSTEM_NAME STREQUAL "MSYS"))
 
-    # Путь для установки файла лицензии в установочном пакете
-    set(INST_LIC_PATH ".")
+    # Путь для документации в установочном пакете
+    set(INST_DOC_PATH ".")
 
     # Путь к файлу лицензии относительно исполняемого файла
     set(REL_LIC_DIR ".")
@@ -724,7 +717,7 @@ set(CMAKE_INSTALL_MESSAGE LAZY)
 # Установить файл лицензии
 message(DEBUG "Установить файл лицензии")
 install(FILES ${CMAKE_SOURCE_DIR}/LICENSE
-  DESTINATION ${INST_LIC_PATH}
+  DESTINATION ${INST_DOC_PATH}
 )
 
 # Установка значков при наличии исходного значка
@@ -871,7 +864,7 @@ if ((EXISTS ${PVS_STUDIO_ANALYZER}) AND (EXISTS ${PVS_STUDIO_CONVERTER}))
         ANALYZE "${PROJECT_NAME_LOWERCASE}"
         MODE GA;OP;CS;64
         LOG ${BUILD_PATH}/pvs_report.txt
-#       CONVERTER_ARGS -d V112,V122,V550,V601,V2014
+        CONVERTER_ARGS ${CUSTOM_PVS_ARGS}
         BIN ${PVS_STUDIO_ANALYZER}
         CONVERTER ${PVS_STUDIO_CONVERTER}
     )
@@ -952,7 +945,7 @@ if (DOXYGEN_FOUND)
     endif()
     set(DOXYGEN_GENERATE_LATEX          YES)
     set(DOXYGEN_USE_PDFLATEX            YES)
-    set(DOXYGEN_LATEX_CMD_NAME          ${CMD_RUN_LATEX})
+    set(DOXYGEN_LATEX_CMD_NAME          "pdflatex")#${CMD_RUN_LATEX})
     set(DOXYGEN_EXTRA_PACKAGES          "{amsmath, verbatimbox, svg}")
     set(DOXYGEN_LATEX_HEADER            "${CMAKE_SOURCE_DIR}/doc/header.tex")
     set(DOXYGEN_LATEX_EXTRA_STYLESHEET  "${CMAKE_SOURCE_DIR}/doc/doxygen.sty")
@@ -985,16 +978,22 @@ if (DOXYGEN_FOUND)
           -DFILENAME=warnings.log
           -P "${CMAKE_SOURCE_DIR}/scripts/remove_zerofile.cmake"
         WORKING_DIRECTORY ${DOC_PATH}
-        COMMENT "Удаление файлов нулевой длины"
+        COMMENT "Удаление файла warnings.log нулевой длины"
         VERBATIM
     )
     add_dependencies(html_doc html_doc_proc)
 
     # Формирование файла документации pdf при помощи doxygen
     add_custom_target(pdf_doc
-        make ${CMD_TO_NUL}
+      COMMAND ${CMAKE_COMMAND}
+        -DDOC_PATH=${DOC_PATH}
+        -DINST_DOC_PATH=${CMAKE_INSTALL_PREFIX}/${INST_DOC_PATH}
+        -DINST_DOC_FILE=${PROJECT_NAME_LOWERCASE}.pdf
+        -P "${CMAKE_SOURCE_DIR}/scripts/produce_pdf.cmake"
         WORKING_DIRECTORY ${DOC_PATH}/latex
         COMMENT "Создание документации ${MAIN_NAME} в формате pdf"
+        VERBATIM
     )
     add_dependencies(pdf_doc html_doc)
+
 endif(DOXYGEN_FOUND)

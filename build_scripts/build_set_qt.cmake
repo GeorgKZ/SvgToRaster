@@ -9,10 +9,10 @@ cmake_minimum_required(VERSION 3.9...3.28)
       set(QT_ROOT "/opt/qt660" CACHE INTERNAL "")
   # Для Linux
   elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
-      set(QT_ROOT "/opt/qt691" CACHE INTERNAL "")
+      set(QT_ROOT "/opt/qt692" CACHE INTERNAL "")
   # Для Windows
   elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-      set(QT_ROOT "C:/QT_691" CACHE INTERNAL "")
+      set(QT_ROOT "C:/QT_692" CACHE INTERNAL "")
   endif()
 
   if(NOT DEFINED QT_ROOT)

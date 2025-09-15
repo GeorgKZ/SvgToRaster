@@ -26,8 +26,11 @@ set(PROJECT_MODULES_LIST
 # Путь к директории с изображениями для Doxygen
 #set(CUSTOM_IMAGES "")
 
-#  Использовать MathJax, использовать расширения
+# Использовать MathJax, использовать расширения
 #set(CUSTOM_MATHJAX require ams mathtools textcomp unicode)
+
+# Аргументы анализатора PVS-Studio
+#set(CUSTOM_PVS_ARGS "-d V112,V122,V550,V601,V2014")
 
 ##############################################################################
 # Настройки Qt
