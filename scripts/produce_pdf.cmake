@@ -6,6 +6,14 @@
 # INST_DOC_FILE - имя устанавливаемого файла документации
 ##############################################################################
 
+# Удалить файл warnings.log, если он нулевой длины
+if(EXISTS "${DOC_PATH}/warnings.log")
+    file(SIZE "${DOC_PATH}/warnings.log" FILE_SIZE)
+    if(FILE_SIZE EQUAL 0)
+        file(REMOVE "${DOC_PATH}/warnings.log")
+    endif()
+endif()
+
 # Выполнить создание файла документации pdf
 execute_process(
   WORKING_DIRECTORY "${DOC_PATH}/latex"
@@ -19,15 +27,9 @@ if(NOT result EQUAL 0)
 endif()
 
 # При отсутствии создать директорию установки документации
-file(MAKE_DIRECTORY "${INST_DOC_PATH}")
+if(NOT EXISTS "${INST_DOC_PATH}")
+    file(MAKE_DIRECTORY "${INST_DOC_PATH}")
+endif()
 
 # Скопировать файл документации pdf в директорию установки
-execute_process(
-  COMMAND ${CMAKE_COMMAND} -E copy "${DOC_PATH}/latex/refman.pdf" "${INST_DOC_PATH}/${INST_DOC_FILE}"
-  RESULT_VARIABLE result
-  OUTPUT_VARIABLE output
-  ERROR_VARIABLE  output_error
-)
-if(NOT result EQUAL 0)
-  message(FATAL_ERROR "Ошибка выполнения скрипта produce_pdf: ${output_error}")
-endif()
+file(COPY_FILE "${DOC_PATH}/latex/refman.pdf" "${INST_DOC_PATH}/manual.pdf")

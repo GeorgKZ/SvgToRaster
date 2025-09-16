@@ -963,7 +963,7 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_MAX_DOT_GRAPH_DEPTH     1000)
     set(DOXYGEN_VERBATIM_HEADERS        NO)
 
-    # Формирование файлов документации html при помощи doxygen
+    # Формирование файлов документации HTML при помощи Doxygen
     doxygen_add_docs(html_doc_proc
       "${CMAKE_SOURCE_DIR}/README.md"
       "${CMAKE_SOURCE_DIR}/TODO.md"
@@ -971,19 +971,19 @@ if (DOXYGEN_FOUND)
       COMMENT "Создание документации ${MAIN_NAME} в формате html"
     )
 
-    # Удаление файла warnings.log, если он нулевой длины
+    # Установка документации HTML
     add_custom_target(html_doc
-        # Команда удаления файла warnings.log нулевой длины
-        ${CMAKE_COMMAND}
-          -DFILENAME=warnings.log
-          -P "${CMAKE_SOURCE_DIR}/scripts/remove_zerofile.cmake"
-        WORKING_DIRECTORY ${DOC_PATH}
-        COMMENT "Удаление файла warnings.log нулевой длины"
+      COMMAND ${CMAKE_COMMAND}
+        -DDOC_PATH=${DOC_PATH}
+        -DINST_DOC_PATH=${CMAKE_INSTALL_PREFIX}/${INST_DOC_PATH}
+        -DSOURCE_DOC_DIR=${CMAKE_SOURCE_DIR}/doc
+        -P "${CMAKE_SOURCE_DIR}/scripts/produce_html.cmake"
+        COMMENT "Установка документации в формате HTML"
         VERBATIM
     )
     add_dependencies(html_doc html_doc_proc)
 
-    # Формирование файла документации pdf при помощи doxygen
+    # Формирование и установка файла документации pdf
     add_custom_target(pdf_doc
       COMMAND ${CMAKE_COMMAND}
         -DDOC_PATH=${DOC_PATH}
@@ -991,9 +991,9 @@ if (DOXYGEN_FOUND)
         -DINST_DOC_FILE=${PROJECT_NAME_LOWERCASE}.pdf
         -P "${CMAKE_SOURCE_DIR}/scripts/produce_pdf.cmake"
         WORKING_DIRECTORY ${DOC_PATH}/latex
-        COMMENT "Создание документации ${MAIN_NAME} в формате pdf"
+        COMMENT "Создание документации в формате pdf"
         VERBATIM
     )
-    add_dependencies(pdf_doc html_doc)
+    add_dependencies(pdf_doc html_doc_proc)
 
 endif(DOXYGEN_FOUND)

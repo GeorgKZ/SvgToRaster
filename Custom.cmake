@@ -24,7 +24,7 @@ set(PROJECT_MODULES_LIST
 )
 
 # Путь к директории с изображениями для Doxygen
-#set(CUSTOM_IMAGES "")
+#set(CUSTOM_IMAGES "${CMAKE_SOURCE_DIR}/doc")
 
 # Использовать MathJax, использовать расширения
 #set(CUSTOM_MATHJAX require ams mathtools textcomp unicode)

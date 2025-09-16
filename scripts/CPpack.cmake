@@ -32,7 +32,7 @@ elseif ((CMAKE_SYSTEM_NAME STREQUAL "Windows") OR (CMAKE_SYSTEM_NAME STREQUAL "M
 
     set(CPACK_GENERATOR
 # Для IFW необходим binarycreator
-#       "IFW;NSIS;ZIP"
+#       "IFW"
         "NSIS" 
         "ZIP"
     )
@@ -44,10 +44,14 @@ endif()
 
 ##############################################################################
 # Настойки, общие для всех типов установочных пакетов
+# https://cmake.org/cmake/help/latest/module/CPack.html
 ##############################################################################
 
 # Имя для установочного пакета, по умолчанию PROJECT_NAME
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+
+# Имя поставщика
+set(CPACK_PACKAGE_VENDOR "${PROJECT_VENDOR}")
 
 # Директория, в которой будет производиться упаковка
 set(CPACK_PACKAGE_DIRECTORY "${BUILD_PATH}/packaging")
@@ -57,20 +61,33 @@ set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 
-# Описание приложения
+# Описание приложения (для экрана приветствия)
 set(CPACK_PACKAGE_DESCRIPTION ${PROJECT_DESCRIPTION})
 
-# Краткое описание приложения
+# Текстовый файл с описанием приложения, если отсутствует,
+# используется значение CPACK_PACKAGE_DESCRIPTION
+# CPACK_PACKAGE_DESCRIPTION_FILE
+
+# Краткое описание приложения (буквально два-три слова)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_DESCRIPTION})
 
-# Имя поставщика
-set(CPACK_PACKAGE_VENDOR "${PROJECT_VENDOR}")
+# Домашняя страница пакета (по умолчанию CMAKE_PROJECT_HOMEPAGE_URL)
+set(CPACK_PACKAGE_HOMEPAGE_URL "${CMAKE_PROJECT_HOMEPAGE_URL}")
 
-# Контактные данные поставщика установочного пакета
-set(CPACK_PACKAGE_CONTACT "${PROJECT_MAINTAINER}")
+# Имя файла установочного пакета без расширения
+# PACK_PACKAGE_FILE_NAME
 
 # Директория целевой среды выполненния, в которую будет выполнена установка
 set(CPACK_PACKAGE_INSTALL_DIRECTORY ${PROJECT_NAME_LOWERCASE}-${CMAKE_PROJECT_VERSION})
+
+# Изображение для установщика с графическим интерфейсом
+# CPACK_PACKAGE_ICON
+
+# Алгоритм, который будет использован для расчёта контрольной суммы пакета,
+# будет указан в файле с именем ${CPACK_PACKAGE_FILE_NAME}.${CPACK_PACKAGE_CHECKSUM}
+# CPACK_PACKAGE_CHECKSUM
+
+# CPACK_PROJECT_CONFIG_FILE
 
 # Лицензия, которая будет встроена в установочный пакет (для WIX необходимо расширение .txt)
 file(CREATE_LINK
@@ -89,12 +106,20 @@ set(CPACK_RESOURCE_FILE_README ${MISC_PATH}/readme.txt)
 #set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_SOURCE_DIR}/Description.txt)
 #set(CPACK_RESOURCE_FILE_WELCOME ${CMAKE_SOURCE_DIR}/Welcome.txt)
 
+# CPACK_MONOLITHIC_INSTALL
+# CPACK_OUTPUT_CONFIG_FILE
+# CPACK_PACKAGE_EXECUTABLES
+# CPACK_STRIP_FILES
+
 # Переменные CPACK_... будут записаны в файлы конфигурации как есть, т.е.
 # никакие управляющий символы не будут обработаны
 set(CPACK_VERBATIM_VARIABLES YES)
 
 # Количество потоков, которые будут задействованы при сжатии установщика
 set(CPACK_THREADS 4)
+
+# Контактные данные поставщика установочного пакета
+set(CPACK_PACKAGE_CONTACT "${PROJECT_MAINTAINER}")
 
 
 #if (APPLE)
@@ -192,7 +217,7 @@ set(CPACK_DEBIAN_COMPRESSION_ARCHIVE gnutar)
 set(CPACK_DEBIAN_COMPRESSION_TYPE gzip)
 
 # Приоритет установки (required, important, standard, optional, extra)
-# По умолчанию необязательно - optional
+# По умолчанию "необязательно" - optional
 set(CPACK_DEBIAN_PACKAGE_PRIORITY optional)
 
 # Домашняя страница пакета (по умолчанию CMAKE_PROJECT_HOMEPAGE_URL)
@@ -228,34 +253,56 @@ set(CPACK_DMG_FORMAT UDZO)
 # При этом нет необходимости использования CPACK_DMG_DS_STORE, так как файл .DS_Store будет создан скриптом.
 # CPACK_DMG_DS_STORE_SETUP_SCRIPT
 
-# Path to an image file to be used as the background. This file will be copied to .background/background.<ext>, where <ext> is the original image file extension. The background image is installed into the image before CPACK_DMG_DS_STORE_SETUP_SCRIPT is executed or CPACK_DMG_DS_STORE is installed. By default no background image is set.
+# Path to an image file to be used as the background. This file will be copied
+# to .background/background.<ext>, where <ext> is the original image file extension.
+# The background image is installed into the image before CPACK_DMG_DS_STORE_SETUP_SCRIPT
+# is executed or CPACK_DMG_DS_STORE is installed. By default no background image is set.
 # CPACK_DMG_BACKGROUND_IMAGE
 
 # По умолчанию (OFF) включать символическую ссылку на директорию /Applications в образ диска.
 # При установке ON ссылка не включается в образ.
 set(CPACK_DMG_DISABLE_APPLICATIONS_SYMLINK OFF)
 
-# Control whether CPACK_RESOURCE_FILE_LICENSE, if set to a non-default value, is used as the license agreement provided when mounting the DMG. If CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE is not set, cpack(1) defaults to off.
-# In a CMake project that uses the CPack module to generate CPackConfig.cmake, CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE must be explicitly enabled by the project to activate the SLA. See policy CMP0133.
+# Control whether CPACK_RESOURCE_FILE_LICENSE, if set to a non-default value,
+# is used as the license agreement provided when mounting the DMG.
+# If CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE is not set, cpack(1) defaults to off.
+# In a CMake project that uses the CPack module to generate CPackConfig.cmake,
+# CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE must be explicitly enabled by the project
+# to activate the SLA. See policy CMP0133.
 # CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE
 
-# Directory where license and menu files for different languages are stored. Setting this causes CPack to look for a <language>.menu.txt and <language>.license.txt or <language>.license.rtf file for every language defined in CPACK_DMG_SLA_LANGUAGES. If both this variable and CPACK_RESOURCE_FILE_LICENSE are set, CPack will only look for the menu files and use the same license file for all languages. If both <language>.license.txt and <language>.license.rtf exist, the .txt file will be used.
+# Directory where license and menu files for different languages are stored.
+# Setting this causes CPack to look for a <language>.menu.txt and <language>.license.txt
+# or <language>.license.rtf file for every language defined in CPACK_DMG_SLA_LANGUAGES.
+# If both this variable and CPACK_RESOURCE_FILE_LICENSE are set, CPack will only look
+# for the menu files and use the same license file for all languages.
+# If both <language>.license.txt and <language>.license.rtf exist, the .txt file will be used.
 # CPACK_DMG_SLA_DIR
 
-# Languages for which a license agreement is provided when mounting the generated DMG. A menu file consists of 9 lines of text. The first line is is the name of the language itself, uppercase, in English (e.g. German). The other lines are translations of the following strings:
+# Languages for which a license agreement is provided when mounting the generated DMG.
+# A menu file consists of 9 lines of text. The first line is is the name of the language
+# itself, uppercase, in English (e.g. German). The other lines are translations of the
+# following strings:
 # CPACK_DMG_SLA_LANGUAGES
 
 # Формат файловой системы (по умолчанию HFS+):
 # Common values are APFS and HFS+.
-# CPACK_DMG_FILESYSTEM
+set(CPACK_DMG_FILESYSTEM HFS+)
 
-# Path to the hdiutil(1) command used to operate on disk image files on macOS. This variable can be used to override the automatically detected command (or specify its location if the auto-detection fails to find it).
+# Path to the hdiutil command used to operate on disk image files on macOS.
+# This variable can be used to override the automatically detected command
+# (or specify its location if the auto-detection fails to find it).
 # CPACK_COMMAND_HDIUTIL
 
-# Path to the SetFile(1) command used to set extended attributes on files and directories on macOS. This variable can be used to override the automatically detected command (or specify its location if the auto-detection fails to find it).
+# Path to the SetFile command used to set extended attributes on files
+# and directories on macOS. This variable can be used to override
+# the automatically detected command (or specify its location if
+# the auto-detection fails to find it).
 # CPACK_COMMAND_SETFILE
 
-# Path to the Rez(1) command used to compile resources on macOS. This variable can be used to override the automatically detected command (or specify its location if the auto-detection fails to find it).
+# Path to the Rez command used to compile resources on macOS.
+# This variable can be used to override the automatically detected command
+# (or specify its location if the auto-detection fails to find it).
 # CPACK_COMMAND_REZ
 
 ##############################################################################
@@ -276,10 +323,14 @@ set(CPACK_DMG_DISABLE_APPLICATIONS_SYMLINK OFF)
 set(CPACK_NSIS_INSTALL_ROOT "C:\\Program Files")
 
 # Значок (*.ico) для установки пакета
-set(CPACK_NSIS_MUI_ICON "${ICON_FILE}")
+if(DEFINED ICONS_PATH)
+    set(CPACK_NSIS_MUI_ICON "${ICONS_PATH}/icon.ico")
+endif()
 
 # Значок (*.ico) для удаления пакета
-set(CPACK_NSIS_MUI_UNIICON "${ICON_FILE}")
+if(DEFINED ICONS_PATH)
+    set(CPACK_NSIS_MUI_UNIICON "${ICONS_PATH}/icon.ico")
+endif()
 
 # Не документировано
 #set(CPACK_NSIS_INSTALLER_MUI_ICON_CODE
@@ -436,7 +487,10 @@ set(CPACK_RPM_PACKAGE_VENDOR ${CPACK_PACKAGE_VENDOR})
 # https://cmake.org/cmake/help/latest/cpack_gen/wix.html
 ##############################################################################
 
-set(CPACK_WIX_PRODUCT_ICON "${ICON_FILE}")
+if(DEFINED ICONS_PATH)
+    set(CPACK_WIX_PRODUCT_ICON "${ICONS_PATH}/icon.ico")
+endif()
+
 set(CPACK_WIX_UPGRADE_GUID "E6A093A5-83DE-47FA-B669-1DE0102BE92A")
 set(CPACK_WIX_LIGHT_EXTRA_FLAGS "-dcl:high") # set high compression
 

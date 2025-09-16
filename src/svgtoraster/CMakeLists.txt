@@ -47,46 +47,52 @@ if ((CMAKE_SYSTEM_NAME STREQUAL "Windows") OR (CMAKE_SYSTEM_NAME STREQUAL "MSYS"
         set(ICON_RESOURCE_STRING "IDI_ICON1 ICON DISCARDABLE \"${ICONS_PATH}/icon.ico\"\n\n")
     endif()
 
-    # Создать файл ресурса по шаблону
-    file(WRITE
-      ${MISC_PATH}/${MAIN_NAME}.rc
+    set(RC_CONTENT
+      "${ICON_RESOURCE_STRING}\
+#include <windows.h>\n\
+\n\
+#define VER_FILEVERSION          ${PROJECT_VERSION_MAJOR}, ${PROJECT_VERSION_MINOR}, ${PROJECT_VERSION_PATCH}\n\
+#define VER_FILEVERSION_STR      \"${PROJECT_VERSION}\"\n\
+#define VER_PRODUCTVERSION       VER_FILEVERSION\n\
+#define VER_PRODUCTVERSION_STR   VER_FILEVERSION_STR\n\
+#define VER_FILEDESCRIPTION_STR  \"${PROJECT_DESCRIPTION} ${TARGET_BIT_WIDTH}-bit\"\n\
+#define VER_INTERNALNAME_STR     \"${MAIN_NAME}\"\n\
+#define VER_LEGALCOPYRIGHT_STR   \"\"\n\
+#define VER_ORIGINALFILENAME_STR \"${MAIN_NAME}.exe\"\n\
+#define VER_PRODUCTNAME_STR      \"${CMAKE_PROJECT_NAME} ${TARGET_BIT_WIDTH}-bit for Win7, Win8, Win10, Win11\"\n\
+\n\
+VS_VERSION_INFO VERSIONINFO\n\
+FILEVERSION     VER_FILEVERSION,0\n\
+PRODUCTVERSION  VER_PRODUCTVERSION,0\n\
+BEGIN\n\
+    BLOCK \"StringFileInfo\"\n\
+    BEGIN\n\
+        BLOCK \"041904E3\"\n\
+        BEGIN\n\
+            VALUE \"FileDescription\",    VER_FILEDESCRIPTION_STR \"\\0\"\n\
+            VALUE \"FileVersion\",        VER_FILEVERSION_STR \"\\0\"\n\
+            VALUE \"InternalName\",       VER_INTERNALNAME_STR \"\\0\"\n\
+            VALUE \"LegalCopyright\",     VER_LEGALCOPYRIGHT_STR \"\\0\"\n\
+            VALUE \"OriginalFilename\",   VER_ORIGINALFILENAME_STR \"\\0\"\n\
+            VALUE \"ProductName\",        VER_PRODUCTNAME_STR \"\\0\"\n\
+            VALUE \"ProductVersion\",     VER_PRODUCTVERSION_STR \"\\0\"\n\
+        END\n\
+    END\n\
+\n\
+    BLOCK \"VarFileInfo\"\n\
+    BEGIN\n\
+        VALUE \"Translation\", 0x419, 1251\n\
+    END\n\
+END"
+    )
 
-      "${ICON_RESOURCE_STRING}"
-      "#include <windows.h>\n"
-      "\n"
-      "#define VER_FILEVERSION          ${PROJECT_VERSION_MAJOR}, ${PROJECT_VERSION_MINOR}, ${PROJECT_VERSION_PATCH}\n"
-      "#define VER_FILEVERSION_STR      \"${PROJECT_VERSION}\"\n"
-      "#define VER_PRODUCTVERSION       VER_FILEVERSION\n"
-      "#define VER_PRODUCTVERSION_STR   VER_FILEVERSION_STR\n"
-      "#define VER_FILEDESCRIPTION_STR  \"${PROJECT_DESCRIPTION} ${TARGET_BIT_WIDTH}-bit\"\n"
-      "#define VER_INTERNALNAME_STR     \"${MAIN_NAME}\"\n"
-      "#define VER_LEGALCOPYRIGHT_STR   \"\"\n"
-      "#define VER_ORIGINALFILENAME_STR \"${MAIN_NAME}.exe\"\n"
-      "#define VER_PRODUCTNAME_STR      \"${CMAKE_PROJECT_NAME} ${TARGET_BIT_WIDTH}-bit for Win7, Win8, Win10, Win11\"\n"
-      "\n"
-      "VS_VERSION_INFO VERSIONINFO\n"
-      "FILEVERSION     VER_FILEVERSION,0\n"
-      "PRODUCTVERSION  VER_PRODUCTVERSION,0\n"
-      "BEGIN\n"
-      "    BLOCK \"StringFileInfo\"\n"
-      "    BEGIN\n"
-      "        BLOCK \"041904E3\"\n"
-      "        BEGIN\n"
-      "            VALUE \"FileDescription\",    VER_FILEDESCRIPTION_STR \"\\0\"\n"
-      "            VALUE \"FileVersion\",        VER_FILEVERSION_STR \"\\0\"\n"
-      "            VALUE \"InternalName\",       VER_INTERNALNAME_STR \"\\0\"\n"
-      "            VALUE \"LegalCopyright\",     VER_LEGALCOPYRIGHT_STR \"\\0\"\n"
-      "            VALUE \"OriginalFilename\",   VER_ORIGINALFILENAME_STR \"\\0\"\n"
-      "            VALUE \"ProductName\",        VER_PRODUCTNAME_STR \"\\0\"\n"
-      "            VALUE \"ProductVersion\",     VER_PRODUCTVERSION_STR \"\\0\"\n"
-      "        END\n"
-      "    END\n"
-      "\n"
-      "    BLOCK \"VarFileInfo\"\n"
-      "    BEGIN\n"
-      "        VALUE \"Translation\", 0x419, 1251\n"
-      "    END\n"
-      "END"
+    # Создать файл ресурса по шаблону
+    file(CONFIGURE OUTPUT ${MISC_PATH}/${MAIN_NAME}.rc
+      CONTENT
+      "${RC_CONTENT}"
+      ESCAPE_QUOTES
+      @ONLY
+      NEWLINE_STYLE WIN32
     )
 
     # Путь к файлу ресурсов для сборки исполняемого файла Windows
