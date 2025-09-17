@@ -641,6 +641,19 @@ endif()
 
 if((DEFINED CUSTOM_SVG_ICON_FILE) AND (EXISTS ${CUSTOM_SVG_ICON_FILE}))
 
+    # Файлы PNG, которые должны быть созданы
+    set(PNG_ICONS
+      "${ICONS_PATH}/icon_1024.png"
+      "${ICONS_PATH}/icon_512.png"
+      "${ICONS_PATH}/icon_256.png"
+      "${ICONS_PATH}/icon_128.png"
+      "${ICONS_PATH}/icon_64.png"
+      "${ICONS_PATH}/icon_48.png"
+      "${ICONS_PATH}/icon_32.png"
+      "${ICONS_PATH}/icon_24.png"
+      "${ICONS_PATH}/icon_16.png"
+    )
+
     # Если сборка предназначена для выполнения под Windows,
     # необходим файл ICO с битмапами 16x16, 24x24, 32x32, 48x48, 64x64, 128x128, 256x256
     # Если сборка предназначена для выполнения под Linux,
@@ -648,18 +661,22 @@ if((DEFINED CUSTOM_SVG_ICON_FILE) AND (EXISTS ${CUSTOM_SVG_ICON_FILE}))
     # Если сборка предназначена для выполнения под MacOS / OS X,
     # необходим файл *.icns
 
-    # Цель, представляющая создание файлов-значков
-    add_custom_target(MULTIPLE_ICONS
+    # Команда создания файлов-значков
+    add_custom_command(
+      OUTPUT ${PNG_ICONS}
       COMMAND ${CMAKE_COMMAND}
         -DSVGTORASTER_HINT=${BUILD_PATH}/external/SvgToRaster/install
         -DSOURCE_SVG=${CUSTOM_SVG_ICON_FILE}
         -DICONS_PATH=${ICONS_PATH}
         -P "${CMAKE_SOURCE_DIR}/scripts/build_icons.cmake"
-       COMMENT "Создание файлов-значков"
-       VERBATIM
+      # Зависимость от сборки субмодуля SvgToRaster
+      DEPENDS SvgToRaster
+      COMMENT "Создание файлов-значков"
+      VERBATIM
     )
-    # Зависимость от сборки субмодуля SvgToRaster
-    add_dependencies(MULTIPLE_ICONS SvgToRaster)
+    # Цель, зависимая от значков PNG
+    add_custom_target(MULTIPLE_ICONS ALL DEPENDS ${PNG_ICONS})
+
 endif()
 
 ##############################################################################
@@ -938,7 +955,7 @@ if (DOXYGEN_FOUND)
         set(DOXYGEN_USE_MATHJAX             YES)
         set(DOXYGEN_MATHJAX_VERSION         MathJax_3)
         set(DOXYGEN_MATHJAX_FORMAT          chtml)
-        set(DOXYGEN_MATHJAX_RELPATH         "../../../mathjax")
+        set(DOXYGEN_MATHJAX_RELPATH         "./")
         set(DOXYGEN_MATHJAX_EXTENSIONS      ${CUSTOM_MATHJAX})
     else()
         set(DOXYGEN_USE_MATHJAX             NO)
@@ -977,6 +994,7 @@ if (DOXYGEN_FOUND)
         -DDOC_PATH=${DOC_PATH}
         -DINST_DOC_PATH=${CMAKE_INSTALL_PREFIX}/${INST_DOC_PATH}
         -DSOURCE_DOC_DIR=${CMAKE_SOURCE_DIR}/doc
+        -DMATH_PATH=${CMAKE_SOURCE_DIR}/submodules/MathJax
         -P "${CMAKE_SOURCE_DIR}/scripts/produce_html.cmake"
         COMMENT "Установка документации в формате HTML"
         VERBATIM

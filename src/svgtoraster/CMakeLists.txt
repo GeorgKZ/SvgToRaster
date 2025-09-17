@@ -182,7 +182,8 @@ endforeach(lib)
 file(GLOB UI "${CMAKE_CURRENT_SOURCE_DIR}/*.ui")
 
 # Зависимости исполняемого файла приложения
-qt_add_executable(${MAIN_NAME}
+qt_add_executable(${MAIN_NAME} MANUAL_FINALIZATION
+  WIN32
   MACOSX_BUNDLE
   ${SOURCE_FILE_LIST}
   ${SOURCE_HEADERS_LIST}
@@ -241,7 +242,7 @@ foreach(L ${QT_LANG})
 endforeach(L)
 
 # Добавить переводы-ресурсы к ресурсам исполняемого файла
-qt6_add_resources(${MAIN_NAME} "translations"
+qt_add_resources(${MAIN_NAME} "translations"
   PREFIX "/translations"
   BIG_RESOURCES
   BASE ${TRANSLATE_PATH}
@@ -268,7 +269,7 @@ foreach(L ${QT_LANG})
 endforeach(L)
 
 # Добавить системные переводы-ресурсы к ресурсам исполняемого файла
-qt6_add_resources(${MAIN_NAME} "system_translations"
+qt_add_resources(${MAIN_NAME} "system_translations"
   PREFIX "/system_translations"
   BIG_RESOURCES
   BASE ${QT_TBASE}
@@ -298,6 +299,8 @@ endif()
 if((DEFINED CUSTOM_SVG_ICON_FILE) AND (EXISTS ${CUSTOM_SVG_ICON_FILE}))
     add_dependencies(${MAIN_NAME} MULTIPLE_ICONS)
 endif()
+
+qt_finalize_target(${MAIN_NAME})
 
 ##############################################################################
 # Формирование набора зависимостей
