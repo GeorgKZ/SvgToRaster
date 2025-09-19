@@ -1,0 +1,96 @@
+<svg
+   width="80"
+   height="20" 
+   xmlns="http://www.w3.org/2000/svg">
+  <title>Windows</title>
+  <linearGradient
+     id="s"
+     x2="0"
+     y2="100%">
+    <stop
+        id="stop1"
+        offset="0"
+        stop-color="#bbb"
+        stop-opacity=".1"/>
+    <stop
+        id="stop2"
+        offset="1"
+        stop-opacity=".1"/>
+  </linearGradient>
+  <clipPath
+     id="r">
+     <rect
+        id="rect_clip"
+        width="80"
+        height="20"
+        rx="3"
+        fill="#ffffff"/>
+  </clipPath>
+  <g
+     id="clip1"
+     clip-path="url(#r)">
+    <rect
+       id="rect_left"
+       width="25"
+       height="20"
+       fill="#555"/>
+    <rect
+       id="rect_right"
+       x="25"
+       width="55"
+       height="20"
+       fill="#08C"/>
+    <rect
+       id="rect_gradient"
+       width="85"
+       height="20"
+       fill="url(#s)"/>
+  </g>
+  <g
+     id="texts"
+     fill="#ffffff"
+     text-anchor="start"
+     font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+     text-rendering="geometricPrecision"
+     font-size="110">
+    <text
+       id="shadow"
+       x="285"
+       y="150"
+       transform="scale(.1)"
+       fill="#010101"
+       fill-opacity=".3"
+       textLength="480">Windows</text>
+    <text
+       id="text"
+       x="275"
+       y="140"
+       transform="scale(.1)"
+       fill="#ffffff"
+       textLength="480">Windows</text>
+  </g>
+  <g
+     id="winup"
+     transform="matrix(0.17,0,0,0.17,-3.5,-7.5)">
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke-width:5"
+       d="M 45,98 V 69 l 37,-5 v 34 z"
+       id="path1" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke-width:5"
+       d="M 85,98 V 63.5 L 135,56 v 42 z"
+       id="path2" />
+  </g>
+  <g
+     id="windn"
+     transform="matrix(0.17,0,0,-0.17,-3.5,26.5)">
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke-width:5"
+       d="M 45,98 V 69 l 37,-5 v 34 z"
+       id="path3" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke-width:5"
+       d="M 85,98 V 63.5 L 135,56 v 42 z"
+       id="path4" />
+  </g>
+</svg>

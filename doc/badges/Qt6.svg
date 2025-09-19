@@ -1,11 +1,9 @@
 <svg
-   width="200"
+   width="96"
    height="20" 
-   role="img"
-   aria-label="Platform"
    xmlns="http://www.w3.org/2000/svg">
   <title
-      id="title1">Platform</title>
+      id="title1">Qt6</title>
   <linearGradient
      id="s"
      x2="0"
@@ -24,7 +22,7 @@
      id="r">
      <rect
         id="rect1"
-        width="200"
+        width="96"
         height="20"
         rx="3"
         fill="#ffffff"/>
@@ -34,59 +32,57 @@
      clip-path="url(#r)">
     <rect
        id="rect2"
-       width="52"
+       width="68"
        height="20"
        fill="#555"/>
     <rect
        id="rect3"
-       x="52"
-       width="148"
+       x="68"
+       width="28"
        height="20"
-       fill="#7e7ec6"/>
+       fill="#40B040"/>
     <rect
        id="rect4"
-       width="200"
+       width="96"
        height="20"
        fill="url(#s)"/>
   </g>
   <g
      id="texts"
-     fill="#fff"
+     fill="#ffffff"
      text-anchor="middle"
      font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
      text-rendering="geometricPrecision"
      font-size="110">
     <text
-       aria-hidden="true"
-       id="text10"
-       x="275"
+       id="text1"
+       x="345"
        y="150"
        transform="scale(.1)"
        fill="#010101"
        fill-opacity=".3"
-       textLength="460">Platform</text>
+       textLength="650">Framework</text>
     <text
-       id="text11"
-       x="265"
+       id="text2"
+       x="335"
        y="140"
        transform="scale(.1)"
-       fill="#fff"
-       textLength="460">Platform</text>
+       fill="#ffffff"
+       textLength="650">Framework</text>
     <text
-       id="text12"
-       aria-hidden="true"
-       x="1260"
+       id="text3"
+       x="825"
        y="150"
        transform="scale(.1)"
        fill="#010101"
        fill-opacity=".3"
-       textLength="1350">macOS | Windows | Linux</text>
+       textLength="210">Qt 6</text>
     <text
-       id="text13"
-       x="1250"
+       id="text4"
+       x="815"
        y="140"
        transform="scale(.1)"
-       fill="#fff"
-       textLength="1350">macOS | Windows | Linux</text>
+       fill="#ffffff"
+       textLength="210">Qt 6</text>
   </g>
 </svg>

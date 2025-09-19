@@ -24,7 +24,7 @@ endif()
 file(COPY "${DOC_PATH}/html/" DESTINATION "${INST_DOC_PATH}/manual")
 
 # Скопировать бейджи в директорию установки документации html
-file(COPY "${SOURCE_DOC_DIR}/" DESTINATION "${INST_DOC_PATH}/manual/doc" FILES_MATCHING PATTERN "*.svg" )
+file(COPY "${SOURCE_DOC_DIR}/badges/" DESTINATION "${INST_DOC_PATH}/manual/doc/badges" FILES_MATCHING PATTERN "*.svg" )
 
 if(EXISTS "${MATH_PATH}")
     # Скопировать директорию MathJax в директорию установки документации html
