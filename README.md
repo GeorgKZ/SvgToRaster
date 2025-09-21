@@ -1,5 +1,5 @@
 [![CMake Build Matrix](https://github.com/GeorgKZ/SvgToRaster/actions/workflows/build_cmake.yml/badge.svg)](https://github.com/GeorgKZ/Candle/actions/workflows/build_cmake.yml)
-[![License: GPL v3](doc/License_GPLv3.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: GPL v3](doc/badges/License_GPLv3.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Platform Windows](doc/badges/Windows.svg)](https://support.microsoft.com/ru-ru/windows)
 [![Platform debian](doc/badges/debian.svg)](https://www.debian.org/)
 [![Platform macOS](doc/badges/macOS.svg)](https://www.apple.com/os/macos/)
