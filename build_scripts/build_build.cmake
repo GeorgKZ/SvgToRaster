@@ -9,6 +9,15 @@
       set(CMAKE_BLD "--config ${CONFIG}")
   endif()
 
+  file(REMOVE "${BUILDDIR}/log_build.txt")
+  file(REMOVE "${BUILDDIR}/log_build_errors.txt")
+  file(REMOVE "${BUILDDIR}/log_install.txt")
+  file(REMOVE "${BUILDDIR}/log_install_errors.txt")
+  file(REMOVE "${BUILDDIR}/log_spack.txt")
+  file(REMOVE "${BUILDDIR}/log_spack_errors.txt")
+  file(REMOVE "${BUILDDIR}/log_pack.txt")
+  file(REMOVE "${BUILDDIR}/log_pack_errors.txt")
+
   # Выполнить построение исполняемого файла
   execute_process(
     COMMAND ${CMAKE_COMMAND}

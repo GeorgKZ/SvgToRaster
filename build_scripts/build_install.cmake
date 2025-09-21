@@ -9,6 +9,13 @@ cmake_minimum_required(VERSION 3.9...3.28)
       set(CMAKE_INSTALL_CONFIG "--config ${CONFIG}")
   endif()
 
+  file(REMOVE "${BUILDDIR}/log_install.txt")
+  file(REMOVE "${BUILDDIR}/log_install_errors.txt")
+  file(REMOVE "${BUILDDIR}/log_spack.txt")
+  file(REMOVE "${BUILDDIR}/log_spack_errors.txt")
+  file(REMOVE "${BUILDDIR}/log_pack.txt")
+  file(REMOVE "${BUILDDIR}/log_pack_errors.txt")
+
   # Выполнить установку
   execute_process(
     COMMAND ${CMAKE_COMMAND}

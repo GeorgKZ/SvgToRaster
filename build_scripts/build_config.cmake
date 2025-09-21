@@ -23,6 +23,17 @@ cmake_minimum_required(VERSION 3.9...3.28)
       set(CMAKE_CNF "-D CMAKE_BUILD_TYPE:STRING=${CONFIG}")
   endif()
 
+  file(REMOVE "${BUILDDIR}/log_config.txt")
+  file(REMOVE "${BUILDDIR}/log_config_errors.txt")
+  file(REMOVE "${BUILDDIR}/log_build.txt")
+  file(REMOVE "${BUILDDIR}/log_build_errors.txt")
+  file(REMOVE "${BUILDDIR}/log_install.txt")
+  file(REMOVE "${BUILDDIR}/log_install_errors.txt")
+  file(REMOVE "${BUILDDIR}/log_spack.txt")
+  file(REMOVE "${BUILDDIR}/log_spack_errors.txt")
+  file(REMOVE "${BUILDDIR}/log_pack.txt")
+  file(REMOVE "${BUILDDIR}/log_pack_errors.txt")
+
   # Выполнить конфигурирование
   execute_process(
     COMMAND ${CMAKE_COMMAND}
