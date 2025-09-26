@@ -191,7 +191,7 @@ qt_add_executable(${MAIN_NAME} MANUAL_FINALIZATION
   ${RESOURCES_DEP}
 )
 
-# Директории с включаемыми файлами
+# Директории, относительно которых можно указывать пути к включаемым файлам
 target_include_directories(${MAIN_NAME}
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 )
