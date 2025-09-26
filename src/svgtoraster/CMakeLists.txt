@@ -222,7 +222,7 @@ foreach(L ${QT_LANG})
     add_custom_command(
       OUTPUT ${TS_FILE}
       COMMAND ${LUPDATE_CMD} ${TS_SOURCES} -silent -source-language en_US -target-language ${L} -ts ${TS_FILE}
-      COMMENT "lupdate ${TS_FILE}"
+      COMMENT "lupdate ${MAIN_NAME}_${LANG_F}.ts"
       DEPENDS ${TS_SOURCES}
     )
 
@@ -231,7 +231,7 @@ foreach(L ${QT_LANG})
     add_custom_command(
       OUTPUT ${QM_FILE}
       COMMAND ${LRELEASE_CMD} ${TS_FILE} -silent -qm ${QM_FILE}
-      COMMENT "lrelease ${TS_FILE}"
+      COMMENT "lrelease ${MAIN_NAME}_${LANG_F}.ts"
       DEPENDS ${TS_FILE}
     )
 
