@@ -1,6 +1,5 @@
 /**
  * \file
- *
  * \brief Заголовочный файл с объявлением класса \ref arg_parser "arg_parser",
  * предназначенного для разбора командной строки 
  */
@@ -13,48 +12,47 @@
 
 /**
  * \brief Класс, реализующий простой разбор командной строки, состоящей из конструкций
- * ("аргументов") типа "--flag [param ...]"
+ * ("аргументов") типа флаг/параметры "--flag [param ...]"
+ * \details Флаг предваряют два символа минус ('-'), а не один, так как параметром флага
+ * может являться отрицательное число, также начинающееся с символа минус.
  */
 class arg_parser {
 
   private:
 
   /**
-   * \brief Класс, реализующий вспомогательную структуру из двух строк ---
-   * флага (ключевого слова) и параметров
+   * \brief Класс, реализующий вспомогательную структуру из \ref arg_parser::argument::flag "флага" (ключевого слова)
+   * и <a href="https://doc.qt.io/qt-6/qlist.html">списка</a> \ref arg_parser::argument::parameters "параметров"
    */
   class argument {
 
     public:
 
-    /** \brief Ключевое слово для параметров в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a> */
+    /** \brief Флаг (ключевое слово) для параметров в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a> */
     QString flag;
 
-    /** \brief <a href="https://doc.qt.io/qt-6/qlist.html">Список</a> параметры по отдельности */
+    /** \brief <a href="https://doc.qt.io/qt-6/qstringlist.html">Список</a> параметров--<a href="https://doc.qt.io/qt-6/qstring.html">строк</a> */
     QStringList parameters;
-
-    /** \brief Параметры в виде одной <a href="https://doc.qt.io/qt-6/qstring.html">строки</a> */
-    QString str_parameters;
   };
 
   /** 
-   * \brief <a href="https://doc.qt.io/qt-6/qlist.html">Список</a> разобранных аргументов
+   * \brief <a href="https://doc.qt.io/qt-6/qlist.html">Список</a> разобранных \ref arg_parser::argument "аргументов"
    */
   QList<argument> args;
 
   /** 
-   * \brief Добавить новый аргумент, установив значение флага
+   * \brief Добавить новый \ref arg_parser::argument "аргумент", установив значение \ref arg_parser::argument::flag "флага"
    *
-   * \param[in] flag строка-флаг (ключевое слово)
+   * \param[in] flag <a href="https://doc.qt.io/qt-6/qstring.html">строка</a>, содержащая флаг (ключевое слово)
    */
-  void add_new_flag(const char *flag);
+  void add_new_flag(const QString &flag);
 
   /** 
-   * \brief Дополнить параметр последнего аргумента
+   * \brief Дополнить \ref arg_parser::argument::parameters "параметр" последнего \ref arg_parser::argument "аргумента"
    *
-   * \param[in] param строка-параметр
+   * \param[in] param <a href="https://doc.qt.io/qt-6/qstring.html">строка</a>, содержащая параметр
    */
-  void add_new_param(const char *param);
+  void add_new_param(const QString &param);
 
   public:
 
@@ -75,35 +73,35 @@ class arg_parser {
   int process_cmdline(const char *cmdline[], int cmdnum);
 
   /** 
-   * \brief Получить флаг указанного аргумента
+   * \brief Получить \ref arg_parser::argument::flag "флаг" указанного \ref arg_parser::argument "аргумента"
    *
-   * \param[in] index номер аргумента
-   * \return значение флага в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
+   * \param[in] index номер (индекс) \ref argument "аргумента"
+   * \return значение \ref arg_parser::argument::flag "флага" указанного \ref argument "аргумента" в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    */
-  const QString& get_flag(size_t index) const;
+  const QString& get_flag(qsizetype index) const;
 
   /** 
-   * \brief Получить параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
+   * \brief Получить \ref arg_parser::argument::parameters "параметры" указанного \ref arg_parser::argument "аргумента" в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
    *
-   * \param[in] index номер аргумента
-   * \return параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstring.html">строки</a>.
+   * \param[in] index номер (индекс) \ref argument "аргумента"
+   * \return \ref arg_parser::argument::parameters "параметры" указанного \ref arg_parser::argument "аргумента" через пробел, объединённые в <a href="https://doc.qt.io/qt-6/qstring.html">строку</a>.
    */
-  const QString& get_parameters(size_t index) const;
+  QString get_parameters(qsizetype index) const;
 
   /** 
-   * \brief Получить набор параметров указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>
+   * \brief Получить набор \ref arg_parser::argument::parameters "параметров" указанного \ref arg_parser::argument "аргумента" в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>
    *
-   * \param[in] index номер аргумента
-   * \return строку, содержащую параметры указанного аргумента в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>.
+   * \param[in] index номер (индекс) \ref argument "аргумента"
+   * \return arg_parser::argument::parameters "параметры" указанного \ref arg_parser::argument "аргумента" в виде <a href="https://doc.qt.io/qt-6/qstringlist.html">списка строк</a>.
    */
-  const QStringList& get_parameters_set(size_t index) const;
+  const QStringList& get_parameters_set(qsizetype index) const;
 
   /** 
-   * \brief Получить количество аргументов
+   * \brief Получить количество \ref arg_parser::argument "аргументов"
    *
-   * \return количество аргументов
+   * \return количество \ref arg_parser::argument "аргументов"
    */
-  size_t get_arg_num() const;
+  qsizetype get_arg_num() const;
 };
 
 #endif // ARG_PARSER_H

@@ -1,6 +1,5 @@
 /**
  * \file
- *
  * \brief Заголовочный файл с классами и функциями, необходимыми для преобразования
  * векторного изображения <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>
  * в растровый значок формата <a href="https://en.wikipedia.org/wiki/Apple_Icon_Image_format">ICNS</a> с несколькими битмапами различного размера.
@@ -134,7 +133,7 @@ public:
    * \brief Оператор присваивания.
    *
    * param [in] value Значение, присваиваемое экземпляру класса.
-   * \return ссылка на экземпляр класса.
+   * \return ссылку на экземпляр класса.
    */
   BYTES04_BE &operator=(quint32 value);
 
@@ -142,7 +141,7 @@ public:
    * \brief Оператор сложения.
    *
    * param [in] value Значение, прибавляемое к значению экземпляру класса.
-   * \return ссылка на экземпляр класса.
+   * \return ссылку на экземпляр класса.
    */
   BYTES04_BE &operator+=(quint32 value);
 
@@ -158,7 +157,7 @@ public:
    *
    * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
    * \param[in] b Структура \ref BYTES04_BE "BYTES04_BE", которая записывается в поток.
-   * \return ссылка на поток, в который производится запись структуры.
+   * \return ссылку на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const BYTES04_BE &b);
 
@@ -167,7 +166,7 @@ public:
    *
    * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
    * \param[out] b Структура \ref BYTES04_BE "BYTES04_BE", которая читается из потока.
-   * \return ссылка на поток, из которого производится чтение структуры.
+   * \return ссылку на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, BYTES04_BE &b);
 
@@ -196,7 +195,7 @@ typedef struct tagICNSHDR {
    *
    * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
    * \param[in] ihdr Структура \ref ICNSHDR "ICNSHDR", которая записывается в поток.
-   * \return ссылка на поток, в который производится запись структуры.
+   * \return ссылку на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const tagICNSHDR &ihdr);
 
@@ -205,7 +204,7 @@ typedef struct tagICNSHDR {
    *
    * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
    * \param[out] ihdr Структура \ref ICNSHDR "ICNSHDR", которая читается из потока.
-   * \return ссылка на поток, из которого производится чтение структуры.
+   * \return ссылку на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, tagICNSHDR &ihdr);
 
@@ -231,7 +230,7 @@ typedef struct tagICNSDATA {
    *
    * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
    * \param[in] ihdr Структура \ref ICNSHDR "ICNSHDR", которая записывается в поток.
-   * \return ссылка на поток, в который производится запись структуры.
+   * \return ссылку на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const tagICNSHDR &ihdr);
 
@@ -240,7 +239,7 @@ typedef struct tagICNSDATA {
    *
    * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
    * \param[out] ihdr Структура \ref ICNSHDR "ICNSHDR", которая читается из потока.
-   * \return ссылка на поток, из которого производится чтение структуры.
+   * \return ссылку на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, tagICNSHDR &ihdr);
 
@@ -258,5 +257,14 @@ typedef struct tagICNSDATA {
  * \retval -1 в случае ошибки.
  */
 int saveIcns(const QIcon &icon, const QString &filePath);
+
+/**
+ * \brief Сжатие последовательности байт по алгоритму ARGB
+ *
+ * \param[in] data входная последовательность байт.
+ * \return последовательность байт, сжатую по алгоритму ARGB.
+ */
+QByteArray compressARGB(const QByteArray& data);
+
 
 #endif // BUILD_ICNS_H

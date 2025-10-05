@@ -1,9 +1,6 @@
 /**
  * \file
- *
  * \brief Файл с определениями функций-членов класса \ref bootstrap "bootstrap"
- *
- * <BR>
  */
 
 #include "bootstrap.h"
@@ -48,9 +45,9 @@ void bootstrap::init()
      * Алгоритм:
      */
 
-#ifdef Q_OS_WINDOWS
+#if defined(Q_OS_WINDOWS) || defined(__DOXYGEN__)
     /**
-     * * Если программа запущена в консоли, разрешить консольный вывод.
+     * 1 Если программа запущена в консоли Windows, разрешить консольный вывод.
      */
     auto stdout_type = GetFileType(GetStdHandle(STD_OUTPUT_HANDLE));
     if (stdout_type == FILE_TYPE_UNKNOWN) {
@@ -62,17 +59,17 @@ void bootstrap::init()
 #endif
 
     /**
-     * * Установить свой обработчик отладочных/информационных/предупреждающих/аварийных
+     * 2 Установить свой обработчик отладочных/информационных/предупреждающих/аварийных
      * сообщений [qDebug()](https://doc.qt.io/qt-6/qtlogging.html#qDebug),
      * [qInfo()](https://doc.qt.io/qt-6/qtlogging.html#qInfo),
      * [qWarning()](https://doc.qt.io/qt-6/qtlogging.html#qWarning),
      * [qCritical()](https://doc.qt.io/qt-6/qtlogging.html#qCritical),
-     * [qFatal()](https://doc.qt.io/qt-6/qtlogging.html#qFatal)
+     * [qFatal()](https://doc.qt.io/qt-6/qtlogging.html#qFatal).
      */
     m_originalMessageHandler = qInstallMessageHandler(myMessageOutput);
 
     /**
-     * * Установить локализацию согласно указанному в файле конфигурации языку.
+     * 3 Установить локализацию согласно указанному в файле конфигурации языку.
      */
     QString locale = QLocale::system().name().left(2);
 
@@ -89,14 +86,14 @@ void bootstrap::myMessageOutput(QtMsgType type, const QMessageLogContext &contex
      */
 
     /**
-     * * Создать поток типа [QTextStream](https://doc.qt.io/qt-6/qtextstream.html)
+     * 1 Создать поток типа [QTextStream](https://doc.qt.io/qt-6/qtextstream.html)
      * для стандартного вывода.
      */
     QTextStream tsTextStream(stdout);
 
     /**
-     * * Вывести в созданный поток информацию о сообщении. Она может быть дополнительно
-     * оформлена шаблоном, указанном в переменной окружения QT_MESSAGE_PATTERN.
+     * 2 Вывести в созданный поток информацию о сообщении. Она может быть дополнительно
+     * оформлена шаблоном, указанном в переменной окружения [QT_MESSAGE_PATTERN](https://doc.qt.io/qt-6/qtlogging.html#qInstallMessageHandler).
      */
     tsTextStream << qFormatLogMessage(type, context, msg) << Qt::endl;
 }
@@ -109,24 +106,24 @@ void bootstrap::setTranslator(const QString &translationFileName, QTranslator **
     /**
      * Алгоритм:
      *
-     * * Создать новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
+     * 1 Создать новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
      */
     QTranslator* new_translator = new QTranslator();
 
     /**
-     * * Загрузить указанный аргументом \ref bootstrap::setTranslator(const QString &, QTranslator **) "translationFileName"
+     * 2 Загрузить указанный аргументом \ref bootstrap::setTranslator(const QString &, QTranslator **) "translationFileName"
      * файл локализации.
      */
     if (!new_translator->load(translationFileName)) {
         /**
-         * * В случае неудачи удалить новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
+         * &nbsp;&nbsp;&nbsp;&nbsp;2.1 В случае неудачи удалить новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
          */
         qCritical().noquote() << tr("Error loading translation file") << translationFileName;
         delete new_translator;
     } else {
 
         /**
-         * * В случае успеха удалить предыдущий [транслятор](https://doc.qt.io/qt-6/qtranslator.html),
+         * &nbsp;&nbsp;&nbsp;&nbsp;2.2 В случае успеха удалить предыдущий [транслятор](https://doc.qt.io/qt-6/qtranslator.html),
          * переданный в аргументе-указателе \ref bootstrap::setTranslator(const QString &, QTranslator **) "translator",
          * сохранить под этим указателем новый.
          */
@@ -135,7 +132,7 @@ void bootstrap::setTranslator(const QString &translationFileName, QTranslator **
         *translator = new_translator;
 
         /**
-         * * Установить новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
+         * &nbsp;&nbsp;&nbsp;&nbsp;2.3 Установить новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
          */
         qApp->installTranslator(*translator);
         qDebug().noquote() << tr("Translation file '") << translationFileName << tr("' loaded and installed");
@@ -154,7 +151,7 @@ void bootstrap::setAllTranslators(const QString &language) {
     QString translationFileName;
 
     /**
-     * * Установить файлы локализации приложения.
+     * 1 Установить файлы локализации приложения.
      */
     translationFileName = ":/translations/svgtoraster_" + language + ".qm";
     if (QFile::exists(translationFileName)) {
@@ -164,7 +161,7 @@ void bootstrap::setAllTranslators(const QString &language) {
     }
 
     /**
-     * * Установить файлы локализации [Qt](https://doc.qt.io/qt-6/).
+     * 2 Установить файлы локализации [Qt](https://doc.qt.io/qt-6/).
      */
     translationFileName = ":/system_translations/qtbase_" + language + ".qm";
     if (QFile::exists(translationFileName)) {

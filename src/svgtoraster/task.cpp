@@ -1,9 +1,6 @@
 /**
  * \file
- *
  * \brief Файл с определениями функций-членов класса \ref Task "Task"
- *
- * <BR>
  */
 
 #include <QIcon>
@@ -23,38 +20,41 @@
 
 /**
  * \file
- * * \copybrief Task::Task(int, char **, int, QObject *)
+ * * \copybrief Task::Task(int, char **, QObject *)
  */
-Task::Task(int argc, char **argv, int minargs, QObject *parent) : QObject(parent)
+Task::Task(int argc, char **argv, QObject *parent) : QObject(parent)
 {
-    m_parse_ok = parse_args(argc, argv, minargs);
+    m_parse_ok = parse_args(argc, argv);
 }
 
 /**
  * \file
- * * \copybrief Task::parse_args(int, char **, int)
+ * * \copybrief Task::parse_args(int, char **)
  */
-int Task::parse_args(int argc, char **argv, int minargs)
+int Task::parse_args(int argc, char **argv)
 {
+    /** Алгоритм: */
 
-    /** 1 Проверить наличие минимально допустимого количества аргументов программы; */
-    if (argc < minargs) {
-        if (argc > 1) {
-            qCritical().noquote() << tr("Command line format error: the number of arguments is less than") << minargs - 1;
-        }
-        print_help();
-        return -1;
-    }
-
-    /** 2 Сформировать список директив и их параметров из аргументов командной строки; */
     arg_parser args;
-    if (args.process_cmdline(const_cast<const char**>(argv), argc)) { //-V201
-        qCritical().noquote() << tr("Command line format error: the first argument '") << argv[1] << tr("' is not a flag");
-        return -1;
+
+    /** 1 Сформировать список директив и их параметров из аргументов командной строки; */
+    int err_parse = args.process_cmdline(const_cast<const char**>(argv), argc);
+
+    /** 2 Проверить ошибку отсутствия аргументов программы */
+    if (err_parse == -2) {
+        print_help();
+        return err_parse;
+    /** 3 Проверить ошибки разбора командной строки */
+    } else if (err_parse == -1) {
+        qCritical().noquote() << tr("Command line format error: the first argument '") << args.get_flag(0) << tr("' is not a flag");
+        return err_parse;
+    }  else if (err_parse == -3) {
+        qCritical().noquote() << tr("Command line format error: the first argument '") << args.get_flag(0) << tr("' is empty flag");
+        return err_parse;
     }
 
-    /** 3 Обработать директивы в цикле, устанавливая значения управляющих переменных; */
-    for (size_t i = 0; i < args.get_arg_num(); ++i) {
+    /** 4 Обработать директивы в цикле, устанавливая значения управляющих переменных; */
+    for (qsizetype i = 0; i < args.get_arg_num(); ++i) {
         const QString& curr_flag = args.get_flag(i);
         if (curr_flag.compare("i") == 0) {
           const QStringList& parms = args.get_parameters_set(i);
@@ -98,7 +98,7 @@ int Task::parse_args(int argc, char **argv, int minargs)
         }
     }
 
-    return 0;
+    return err_parse;
 }
 
 /**
@@ -157,6 +157,6 @@ void Task::print_help() {
   qInfo().noquote() << "    <in_file>        -" << tr("source SVG file");
   qInfo().noquote() << "    <out_file>       -" << tr("target PNG, ICO, ICNS file");
 
-  qDebug().noquote() << tr("Supported input formats:") << QImageReader::supportedImageFormats();
-  qDebug().noquote() << tr("Supported output formats:") << QImageWriter::supportedImageFormats();
+  // qDebug().noquote() << tr("Supported input formats:") << QImageReader::supportedImageFormats();
+  // qDebug().noquote() << tr("Supported output formats:") << QImageWriter::supportedImageFormats();
 }

@@ -4,17 +4,13 @@
 <context>
     <name>Task</name>
     <message>
-        <location filename="../task.cpp" line="43"/>
-        <source>Command line format error: the number of arguments is less than</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../task.cpp" line="49"/>
         <location filename="../task.cpp" line="52"/>
         <source>Command line format error: the first argument &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="52"/>
+        <location filename="../task.cpp" line="49"/>
         <source>&apos; is not a flag</source>
         <translation type="unfinished"></translation>
     </message>
@@ -40,6 +36,11 @@
         <location filename="../task.cpp" line="76"/>
         <location filename="../task.cpp" line="85"/>
         <source>Command line format error: missing parameter after the</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../task.cpp" line="52"/>
+        <source>&apos; is empty flag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -108,18 +109,18 @@
 <context>
     <name>bootstrap</name>
     <message>
-        <location filename="../bootstrap.cpp" line="124"/>
-        <location filename="../bootstrap.cpp" line="163"/>
+        <location filename="../bootstrap.cpp" line="121"/>
+        <location filename="../bootstrap.cpp" line="160"/>
         <source>Error loading translation file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bootstrap.cpp" line="141"/>
+        <location filename="../bootstrap.cpp" line="138"/>
         <source>Translation file &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bootstrap.cpp" line="141"/>
+        <location filename="../bootstrap.cpp" line="138"/>
         <source>&apos; loaded and installed</source>
         <translation type="unfinished"></translation>
     </message>

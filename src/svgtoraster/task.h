@@ -1,6 +1,5 @@
 /**
  * \file
- *
  * \brief Заголовочный файл с объявлением класса \ref Task "Task"
  */
 
@@ -26,10 +25,9 @@ public:
      *
      * \param[in] argc количество аргументов командной строки
      * \param[in] argv массив аргументов-строк командной строки
-     * \param[in] minargs минимально допустимое количество аргументов командной строки
      * \param[in] parent указатель на экземпляр родительского класса
      */
-    Task(int argc, char **argv, int minargs, QObject *parent = nullptr);
+    Task(int argc, char **argv, QObject *parent = nullptr);
 
 public slots:
 
@@ -45,11 +43,10 @@ private:
      *
      * \param[in] argc количество аргументов командной строки
      * \param[in] argv массив аргументов-строк командной строки
-     * \param[in] minargs минимально допустимое количество аргументов командной строки
      * \retval 0 если разбор аргументов командной строки завершился успешно
      * \retval -1 если разбор аргументов командной строки завершился с ошибкой
      */
-    int parse_args(int argc, char **argv, int minargs);
+    int parse_args(int argc, char **argv);
 
     /**
      * \brief Вывод справки о программе

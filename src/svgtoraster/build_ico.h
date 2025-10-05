@@ -1,6 +1,5 @@
 /**
  * \file
- *
  * \brief Заголовочный файл с классами и функциями, необходимыми для преобразования
  * векторного изображения <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>
  * в растровый значок формата <a href="https://ru.wikipedia.org/wiki/ICO_(%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82_%D1%84%D0%B0%D0%B9%D0%BB%D0%B0)">ICO</a> с несколькими битмапами различного размера.
@@ -53,7 +52,7 @@ public:
    * \brief Оператор присваивания.
    *
    * param [in] value Значение, присваиваемое экземпляру класса.
-   * \return ссылка на экземпляр класса.
+   * \return ссылку на экземпляр класса.
    */
   BYTES02_LE &operator=(quint16 value);
 
@@ -61,7 +60,7 @@ public:
    * \brief Оператор сложения.
    *
    * param [in] value Значение, прибавляемое к значению экземпляру класса.
-   * \return ссылка на экземпляр класса.
+   * \return ссылку на экземпляр класса.
    */
   BYTES02_LE &operator+=(quint16 value);
 
@@ -77,7 +76,7 @@ public:
    *
    * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
    * \param[in] b Структура \ref BYTES02_LE "BYTES02_LE", которая записывается в поток.
-   * \return ссылка на поток, в который производится запись структуры.
+   * \return ссылку на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const BYTES02_LE &b);
 
@@ -86,7 +85,7 @@ public:
    *
    * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
    * \param[out] b Структура \ref BYTES02_LE "BYTES02_LE", которая читается из потока.
-   * \return ссылка на поток, из которого производится чтение структуры.
+   * \return ссылку на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, BYTES02_LE &b);
 
@@ -118,7 +117,7 @@ public:
    * \brief Оператор присваивания.
    *
    * param [in] value Значение, присваиваемое экземпляру класса.
-   * \return ссылка на экземпляр класса.
+   * \return ссылку на экземпляр класса.
    */
   BYTES04_LE &operator=(quint32 value);
 
@@ -126,7 +125,7 @@ public:
    * \brief Оператор сложения.
    *
    * param [in] value Значение, прибавляемое к значению экземпляру класса.
-   * \return ссылка на экземпляр класса.
+   * \return ссылку на экземпляр класса.
    */
   BYTES04_LE &operator+=(quint32 value);
 
@@ -142,7 +141,7 @@ public:
    *
    * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
    * \param[in] b Структура \ref BYTES04_LE "BYTES04_LE", которая записывается в поток.
-   * \return ссылка на поток, в который производится запись структуры.
+   * \return ссылку на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const BYTES04_LE &b);
 
@@ -151,7 +150,7 @@ public:
    *
    * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
    * \param[out] b Структура \ref BYTES04_LE "BYTES04_LE", которая читается из потока.
-   * \return ссылка на поток, из которого производится чтение структуры.
+   * \return ссылку на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, BYTES04_LE &b);
 
@@ -228,7 +227,7 @@ typedef struct tagBITMAPINFOHEADER {
    *
    * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
    * \param[in] ihdr Структура \ref BITMAPINFOHEADER "BITMAPINFOHEADER", которая записывается в поток.
-   * \return ссылка на поток, в который производится запись структуры.
+   * \return ссылку на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const tagBITMAPINFOHEADER &ihdr);
 
@@ -237,7 +236,7 @@ typedef struct tagBITMAPINFOHEADER {
    *
    * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
    * \param[out] ihdr Структура \ref BITMAPINFOHEADER "BITMAPINFOHEADER", которая читается из потока.
-   * \return ссылка на поток, из которого производится чтение структуры.
+   * \return ссылку на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, tagBITMAPINFOHEADER &ihdr);
 
@@ -305,7 +304,7 @@ typedef struct tagICONDIR {
    *
    * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
    * \param[in] icondir Структура \ref ICONDIR "ICONDIR", которая записывается в поток.
-   * \return ссылка на поток, в который производится запись структуры.
+   * \return ссылку на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const tagICONDIR &icondir);
 
@@ -314,7 +313,7 @@ typedef struct tagICONDIR {
    *
    * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
    * \param[out] icondir Структура \ref ICONDIR "ICONDIR", которая читается из потока.
-   * \return ссылка на поток, из которого производится чтение структуры.
+   * \return ссылку на поток, из которого производится чтение структуры.
    */
   friend QDataStream &operator>>(QDataStream &in, tagICONDIR &icondir);
 
@@ -375,7 +374,7 @@ typedef struct tagICONDIRENTRY {
    *
    * \param[in] out Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, в который производится запись структуры.
    * \param[in] icondirentry Структура \ref ICONDIRENTRY "ICONDIRENTRY", которая записывается в поток.
-   * \return ссылка на поток, в который производится запись структуры.
+   * \return ссылку на поток, в который производится запись структуры.
    */
   friend QDataStream &operator<<(QDataStream &out, const tagICONDIRENTRY &icondirentry);
 
@@ -384,7 +383,7 @@ typedef struct tagICONDIRENTRY {
    *
    * \param[in] in Поток <a href="https://doc.qt.io/qt-6/qdatastream.html">QDataStream</a>, из которого производится чтение структуры.
    * \param[out] icondirentry Структура \ref ICONDIRENTRY "ICONDIRENTRY", которая читается из потока.
-   * \return ссылка на поток, из которого производится чтение структуры.
+   * \return ссылку на поток, из которого производится чтение структуры.
    */
 friend QDataStream &operator>>(QDataStream &in, tagICONDIRENTRY &icondirentry);
 

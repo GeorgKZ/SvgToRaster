@@ -322,32 +322,32 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
     for (const QImage &image : images) {
 
         /**
-         * * &nbsp;&nbsp;&nbsp;&nbsp;Сформировать заголовок ICONDIR, установив значения полей:
+         * * Сформировать заголовок ICONDIR, установив значения полей:
          */
         ICONDIRENTRY iinfo = { };
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ширина изображения в точках, 0 означает ширину 256 точек или более */
+        /** * Ширина изображения в точках, 0 означает ширину 256 точек или более */
         iinfo.iiWidth = static_cast<quint8>(image.width() > 255 ? 0 : image.width());
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Высота изображения в точках, 0 означает высоту 256 точек или более */
+        /** * Высота изображения в точках, 0 означает высоту 256 точек или более */
         iinfo.iiHeight = static_cast<quint8>(image.height() > 255 ? 0 : image.height());
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Указывает количество цветов в палитре изображения. Для полноцветных значков 0 */
+        /** * Указывает количество цветов в палитре изображения. Для полноцветных значков 0 */
         iinfo.iiColors = 0;    
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Определяет количество плоскостей. Может быть 0 или 1. */
+        /** * Определяет количество плоскостей. Может быть 0 или 1. */
         iinfo.iiPlanes = 1;           
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Определяет количество битов на пиксель. Может быть 0 или больше. */
+        /** * Определяет количество битов на пиксель. Может быть 0 или больше. */
         iinfo.iiBpp = BITS_IN_BYTE * RGBA_SIZE;
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Указывает размер растра в байтах: размер цветовой матрицы */
+        /** * Указывает размер растра в байтах: размер цветовой матрицы */
         iinfo.iiSize += static_cast<quint32>(image.width() * image.height() * RGBA_SIZE);
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;плюс размер матрицы прозрачности */
+        /** * плюс размер матрицы прозрачности */
         iinfo.iiSize += static_cast<quint32>(image.height() * ((image.width() / BITS_IN_BYTE + (BMP_BYTE_ALIGN-1))/BMP_BYTE_ALIGN*BMP_BYTE_ALIGN));
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;плюс размер заголовка */
+        /** * плюс размер заголовка */
         iinfo.iiSize += static_cast<quint32>(sizeof(BITMAPINFOHEADER));
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Указывает абсолютное смещение структуры BITMAPINFOHEADER в файле */
+        /** * Указывает абсолютное смещение структуры BITMAPINFOHEADER в файле */
         iinfo.iiOffset = offset + static_cast<quint32>(sizeof(ICONDIRENTRY)) * iheader.ihCount;
 
         offset += iinfo.iiSize;
 
         /**
-         * * &nbsp;&nbsp;&nbsp;&nbsp;Записать в файл заголовок ICONDIR.
+         * * Записать в файл заголовок ICONDIR.
          */
         out << iinfo;
     }
@@ -357,24 +357,24 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
      */
     for (const QImage &image : images) {
         /**
-         * * &nbsp;&nbsp;&nbsp;&nbsp;Сформировать заголовок BITMAPINFOHEADER, установив значения полей:
+         * * Сформировать заголовок BITMAPINFOHEADER, установив значения полей:
          */
         BITMAPINFOHEADER ibih = { };
         ibih.biSize = sizeof(BITMAPINFOHEADER);
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Размер по горизонтали соответствует размеру формируемого растра */
+        /** * Размер по горизонтали соответствует размеру формируемого растра */
         ibih.biWidth = static_cast<qint32>(image.width());
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Размер по вертикали удвоен (два растра --- растр цветности и растр прозрачности) */
+        /** * Размер по вертикали удвоен (два растра --- растр цветности и растр прозрачности) */
         ibih.biHeight = static_cast<qint32>(image.height()) * 2;
         ibih.biPlanes = 1;
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;На один пиксел приходится четыре восьмибитных канала */
+        /** * На один пиксел приходится четыре восьмибитных канала */
         ibih.biBitCount = BITS_IN_BYTE * RGBA_SIZE;
         ibih.biCompression = BI_RGB;
     
-        /** * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Размер в байтах строки растра прозрачности, дополнен до кратности строки 4 байтам; */
+        /** * Размер в байтах строки растра прозрачности, дополнен до кратности строки 4 байтам; */
         int horsize = ((image.width() / BITS_IN_BYTE + (BMP_BYTE_ALIGN - 1)) / BMP_BYTE_ALIGN * BMP_BYTE_ALIGN);
     
         /**
-         * * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Размер состоит из размера растра цветности b-g-r-alpha (автоматически размер строки кратен 4 байтам)
+         * * Размер состоит из размера растра цветности b-g-r-alpha (автоматически размер строки кратен 4 байтам)
          * и размера битового растра прозрачности.
          */
         ibih.biSizeImage = static_cast<quint32>(image.width() * image.height() * RGBA_SIZE);
@@ -386,12 +386,12 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
         ibih.biClrImportant = 0;
     
         /**
-         * * &nbsp;&nbsp;&nbsp;&nbsp;Записать в файл заголовок BITMAPINFOHEADER;
+         * * Записать в файл заголовок BITMAPINFOHEADER;
          */
         out << ibih;
   
         /**
-         * * &nbsp;&nbsp;&nbsp;&nbsp;Заполнить буфер растра цветности масштабированным изображением размером image.width() * image.height() * RGBA_SIZE;
+         * * Заполнить буфер растра цветности масштабированным изображением размером image.width() * image.height() * RGBA_SIZE;
          */
         for (int h = image.height() - 1; h >= 0; --h)
         {
@@ -414,12 +414,12 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
         }
   
         /**
-         * * &nbsp;&nbsp;&nbsp;&nbsp;Для используемого формата растра цветности данные битового растра прозрачности (бит на точку)
+         * * Для используемого формата растра цветности данные битового растра прозрачности (бит на точку)
          * не используются, но для совместимости они должны быть заполнены по правилу: 
          *
-         * * &nbsp;&nbsp;&nbsp;&nbsp;pixel = (screen AND mask_matrix) XOR color_matrix
+         * * pixel = (screen AND mask_matrix) XOR color_matrix
          *
-         * * &nbsp;&nbsp;&nbsp;&nbsp;То есть для прозрачных точек необходимо заменить точку цветового растра на чёрную
+         * * То есть для прозрачных точек необходимо заменить точку цветового растра на чёрную
          * и поставить точку растра прозрачности, равную единице, а для непрозрачных точек
          * сохранить цветную точку цветового растра и поставить нулевую точку растра прозрачности.
          */
@@ -430,7 +430,7 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
                 int bitmask = 1;
                 for (int b = 0; b < BITS_IN_BYTE; ++b) {
                     /**
-                     * * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Условие, когда точка обозначается прозрачной в растре прозрачности:
+                     * * Условие, когда точка обозначается прозрачной в растре прозрачности:
                      * или она лежит за пределами цветового растра, или она обозначена прозрачной
                      * в альфа-канатле цветового растра.
                      */
