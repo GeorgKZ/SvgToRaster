@@ -65,20 +65,21 @@
   \usepackage[nointegrals]{wasysym}
   \usepackage{ifxetex}
 
-  % ADDON: Указать требуемые кодировки и пакеты для них
+% ADDON: Указать требуемые кодировки и пакеты для них
   \usepackage[LGR,T2A,T1]{fontenc}
   \usepackage[cjkjis]{ucs}
   \usepackage{CJKutf8}
-  % ADDON end
+% ADDON end
 
-  % ADDON: расширение babel с указанием используемых языков
+% ADDON: расширение babel с указанием используемых языков
   \usepackage[english, russian]{babel}
+% ADDON end
 
-  % ADDON: Установка основного и моноширинного шрифта
-%  \usepackage{helvet}
-%  \usepackage{courier}
-% \renewcommand{\familydefault}{\sfdefault}
-  % ADDON end
+% ADDON: Установка основного и моноширинного шрифта
+%   \usepackage{helvet}
+%   \usepackage{courier}
+%   \renewcommand{\familydefault}{\sfdefault}
+% ADDON end
 
   % NLS support packages
   $languagesupport
@@ -117,17 +118,20 @@
   \usepackage{geometry}
   \geometry{%
     $papertype,%
+    top=2.5cm,%
+    bottom=2.5cm,%
+    left=2.5cm,%
+    right=2.5cm%
+  }
 % ADDON поля страницы
-%   top=2.5cm,%
-%   bottom=2.5cm,%
-%   left=2.5cm,%
-%   right=2.5cm%
+  \usepackage{geometry}
+  \geometry{%
     top=2.0cm,%
     bottom=2.0cm,%
     left=1.5cm,%
     right=0.5cm%
-% ADDON end
   }
+% ADDON end
   \usepackage{changepage}
 
   % Allow a bit of overflow to go unnoticed by other means
@@ -135,32 +139,41 @@
   \hfuzz=15pt
   \hbadness=750
   \setlength{\emergencystretch}{15pt}
-% ADDON: Установка абзацного отступа 9.5mm
-%  \setlength{\parindent}{0cm}
-  \setlength{\parindent}{9.5mm}
+  \setlength{\parindent}{0cm}
 % ADDON: убрать интервал между абзацами
 % \newcommand{\doxynormalparskip}{\setlength{\parskip}{3ex plus 2ex minus 2ex}}
   \newcommand{\doxynormalparskip}{\setlength{\parskip}{0ex plus 0ex minus 0ex}}
+% ADDON end
   \newcommand{\doxytocparskip}{\setlength{\parskip}{1ex plus 0ex minus 0ex}}
   \doxynormalparskip
   % Redefine paragraph/subparagraph environments, using sectsty fonts
   \makeatletter
+%  \renewcommand{\paragraph}{%
+%      \@startsection{paragraph}{4}{0ex}{-1.0ex}{1.0ex}{%
+%      \normalfont\normalsize\bfseries\SS@parafont%
+%    }%
+%  }
+% ADDON: Установка абзацного отступа 9.5mm для параграфа 4 уровня,
+% разрешить отступ для текста после заголовка
   \renewcommand{\paragraph}{%
-    % ADDON: Установка абзацного отступа 9.5mm
-    % \@startsection{paragraph}{4}{0ex}{-1.0ex}{1.0ex}{%
     \@startsection{paragraph}{4}{9.5mm}{1.0ex}{1.0ex}{%
-    % ADDON end
       \normalfont\normalsize\bfseries\SS@parafont%
     }%
   }
+% ADDON end
+%  \renewcommand{\subparagraph}{%
+%      \@startsection{subparagraph}{5}{0ex}{-1.0ex}{1.0ex}{%
+%      \normalfont\normalsize\bfseries\SS@subparafont%
+%    }%
+%  }
+% ADDON: Установка абзацного отступа 9.5mm для подпараграфа 5 уровня,
+% разрешить отступ для текста после заголовка
   \renewcommand{\subparagraph}{%
-    % ADDON: Установка абзацного отступа 9.5mm
-    % \@startsection{subparagraph}{5}{0ex}{-1.0ex}{1.0ex}{%
-    \@startsection{subparagraph}{5}{9.5mm}{1.0ex}{1.0ex}{%
-    % ADDON end
+      \@startsection{subparagraph}{5}{9.5mm}{1.0ex}{1.0ex}{%
       \normalfont\normalsize\bfseries\SS@subparafont%
     }%
   }
+% ADDON end
   \makeatother
 
   \makeatletter
@@ -186,15 +199,11 @@
     \renewcommand{\headrulewidth}{0pt}
   }
 
-  % ADDON: Установка абзацного отступа 9.5mm
-  \setlength{\parindent}{9.5mm}
-  % ADDON end
-
-  % ADDON: Установить высоту для исключения ошибки:
-  % Package Fancyhdr Warning: \headheight is too small (12.0pt): 
-  % Make it at least 12.90004pt.
+% ADDON: Установить высоту для исключения ошибки:
+% Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+% Make it at least 12.90004pt.
   \setlength{\headheight}{13pt}
-  % ADDON end
+% ADDON end
 
   \pagestyle{fancyplain}
 
@@ -213,10 +222,10 @@
   \usepackage[numbers]{natbib}
   \usepackage[titles]{tocloft}
   \setcounter{tocdepth}{3}
-  % ADDON Установить глубину индексации разделов оглавления
-  %\setcounter{secnumdepth}{5}
+  \setcounter{secnumdepth}{5}
+% ADDON Установить глубину индексации разделов оглавления
   \setcounter{secnumdepth}{1}
-  % ADDON end
+% ADDON end
 
   % creating indexes
   $makeindex
@@ -262,11 +271,11 @@
     \newpage{\pagestyle{empty}\cleardoublepage}%
   }
 
-  % ADDON: Убрать индексы глобальной нумерации перед объектами
+% ADDON: Убрать индексы глобальной нумерации перед объектами
   \makeatletter
   \renewcommand{\@seccntformat}[1]{}
   \makeatother
-  % ADDON end
+% ADDON end
 
   % caption style definition
   \usepackage{caption}

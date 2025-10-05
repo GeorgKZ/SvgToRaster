@@ -1,5 +1,15 @@
+\htmlonly
+<script type="text/javascript">
+window.onload = addIndent;
+</script>
+\endhtmlonly
+\latexonly
+\setlength{\parindent}{9.5mm} 
+\endlatexonly
+
 [![CMake Build Matrix](https://github.com/GeorgKZ/SvgToRaster/actions/workflows/build_cmake.yml/badge.svg)](https://github.com/GeorgKZ/Candle/actions/workflows/build_cmake.yml)
 [![License: GPL v3](doc/badges/License_GPLv3.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Build system](doc/badges/CMake.svg)](https://cmake.org)
 [![Platform Windows](doc/badges/Windows.svg)](https://support.microsoft.com/ru-ru/windows)
 [![Platform debian](doc/badges/debian.svg)](https://www.debian.org/)
 [![Platform macOS](doc/badges/macOS.svg)](https://www.apple.com/os/macos/)
@@ -76,29 +86,34 @@ svgtoraster --s 256 128 64 48 32 24 16 --i icon.svg --o icon.ico
 Требования для сборки из исходных текстов:
 ------------------------------------------
 * Qt 6.X.X для используемого компилятора
-* Компилятор GCC, Clang в случае сборки для среды Linux
+* Компилятор GCC или Clang в случае сборки для среды Linux
 * Компилятор Microsoft Visual Studio 2022 в случае сборки для среды Windows
 * Компилятор Clang в случае сборки для среды Mac OS
-* Cmake весии 3.9 и более новой
+* CMake весии 3.9 и более новой
 * Ninja весии 1.X и более новой (только при использовании данного генератора)
 
 Cборка программы "SvgToRaster"
 ===================================
 
-В директории Build_scripts расположены скрипты Cmake для выполнения разлиных
+В директории build_scripts расположены скрипты CMake для выполнения разлиных
 этапов сборки, а в директории build_commands командные файлы для Windows, Linux
-и macOS, вызывающие эти скрипты.
+и macOS, вызывающие эти скрипты:
 
 ```
 0_load_qt - загрузка и установка Qt
-1_clean_config - конфигурация с предварительной очисткой директории конфигурации 
-1_config - конфигурация
+1_clean_config - конфигурация CMake с предварительной очисткой директории конфигурации 
+1_config - конфигурация CMake
 2_build - сборка исполняемого файла
 3_install - формирование установочного набора (с необходимыми зависимостями)
-4_run - тестовый запуск
+4_run - запуск тестовых примеров
+4_run_valgrind - запуск тестовых примеров под контролем Valgrind
 5_build-docs_html - сборка документации в формате HTML (директория с файлами)
 5_build-docs_pdf - сборка документации в формате PDF (один файл)
 5_pack_distrib - сборка установочного пакета программы
 5_pack_sources - сборка архива с исходными текстами
 6_check_pvs - выполнение статического анализа исходных текстов при помощи PVS Studio
 ```
+
+\latexonly
+\setlength{\parindent}{0mm} 
+\endlatexonly

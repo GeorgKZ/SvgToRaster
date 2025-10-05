@@ -2468,7 +2468,7 @@ details[open]>summary::before {
 
 /* ADDON: абзацный отступ текста и заголовков */
 p {
-  text-indent: 45px;
+  text-indent: 0px;
   margin-top: 0px;
   margin-bottom: 0px;
 }

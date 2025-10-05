@@ -552,17 +552,11 @@
 
 % Used by tables
 \newcommand{\PBS}[1]{\let\temp=\\#1\let\\=\temp}%
-
-%% ADDON
-
-%%\newenvironment{TabularC}[1]%
-%%{\tabulinesep=1mm
-%%\begin{longtabu*}spread 0pt [c]{*#1{|X[-1]}|}}%
-%%{\end{longtabu*}\par}%
-
 \newenvironment{TabularC}[1]%
+% ADDON
 {\setlength{\tmplength}{\linewidth/(#1)-\tabcolsep*2-\arrayrulewidth*(#1+1)/(#1)}\par\begin{longtable}{*{#1}{|p{\the\tmplength}}|}}%
 {\end{longtable}\par}%
+% ADDON end
 
 \newenvironment{TabularNC}[1]%
 {\begin{tabu}spread 0pt [l]{*#1{|X[-1]}|}}%
@@ -689,79 +683,98 @@
 \def\toclevel@paragraph{8}
 \def\toclevel@subparagraph{9}
 
-% ADDON: Разрешить отступ и для первого параграфа секции, подсекции и т.д.,
-% установить отступ для заголовки секции
 %\newcommand\doxysection{\@startsection {section}{1}{\z@}%
 %                                     {-3.5ex \@plus -1ex \@minus -.2ex}%
 %                                     {2.3ex \@plus.2ex}%
 %                                     {\raggedright\normalfont\Large\bfseries}}
+% ADDON: Разрешить отступ и для первого параграфа секции 1 уровня
+% установить отступ для заголовка секции 9.5mm вместо нуля
+% \centering в стиле будет центрировать заголовок
 \newcommand\doxysection{\@startsection {section}{1}{9.5mm}%
-                                     { 3.5ex \@plus  1ex \@minus  .2ex}%
+                                     {3.5ex \@plus 1ex \@minus .2ex}%
                                      {2.3ex \@plus.2ex}%
                                      {\raggedright\normalfont\Large\bfseries}}
 %\newcommand\doxysubsection{\@startsection{subsection}{2}{\z@}%
 %                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
 %                                     {1.5ex \@plus .2ex}%
 %                                     {\raggedright\normalfont\large\bfseries}}
+% ADDON: Разрешить отступ и для первого параграфа подсекции 2 уровня
+% установить отступ для заголовка секции 9.5mm вместо нуля
 \newcommand\doxysubsection{\@startsection{subsection}{2}{9.5mm}%
-                                     { 3.25ex\@plus  1ex \@minus  .2ex}%
+                                     {3.25ex\@plus 1ex \@minus .2ex}%
                                      {1.5ex \@plus .2ex}%
                                      {\raggedright\normalfont\large\bfseries}}
-\newcommand\doxysubsubsection{\@startsection{subsubsection}{3}{\z@}%
-%                                    {-3.25ex\@plus -1ex \@minus -.2ex}%
-                                     { 3.25ex\@plus  1ex \@minus  .2ex}%
+%\newcommand\doxysubsubsection{\@startsection{subsubsection}{3}{\z@}%
+%                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+%                                     {1.5ex \@plus .2ex}%
+%                                     {\raggedright\normalfont\normalsize\bfseries}}
+% ADDON: Разрешить отступ и для первого параграфа подподсекции 3 уровня
+% установить отступ для заголовка секции 9.5mm вместо нуля
+\newcommand\doxysubsubsection{\@startsection{subsubsection}{3}{9.5mm}%
+                                     {3.25ex\@plus 1ex \@minus .2ex}%
                                      {1.5ex \@plus .2ex}%
                                      {\raggedright\normalfont\normalsize\bfseries}}
 % ADDON: Сделать параграф подразделом для subsubsubsection
+% ADDON: Разрешить отступ и для первого параграфа подподподсекции 4 уровня
+% установить отступ для заголовка секции 9.5mm вместо нуля
 %\newcommand\doxysubsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
 %                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
 %                                     {1.5ex \@plus .2ex}%
 %                                     {\raggedright\normalfont\normalsize\bfseries}}
 \newcommand\doxysubsubsubsection{\@startsection{subsubsubsection}{4}{9.5mm}%
-                                     { 3.25ex\@plus  1ex \@minus  .2ex}%
+                                     {3.25ex\@plus 1ex \@minus .2ex}%
                                      {1.5ex \@plus .2ex}%
                                      {\raggedright\normalfont\normalsize\bfseries}}
 %\newcommand\doxysubsubsubsubsection{\@startsection{subsubsubsubsection}{5}{\z@}%
 %                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
 %                                     {1.5ex \@plus .2ex}%
 %                                     {\raggedright\normalfont\normalsize\bfseries}}
+% ADDON: Разрешить отступ и для первого параграфа секции 5 уровня
+% установить отступ для заголовка секции 9.5mm вместо нуля
 \newcommand\doxysubsubsubsubsection{\@startsection{subsubsubsubsection}{5}{9.5mm}%
-                                     { 3.25ex\@plus  1ex \@minus  .2ex}%
+                                     {3.25ex\@plus 1ex \@minus .2ex}%
                                      {1.5ex \@plus .2ex}%
                                      {\raggedright\normalfont\normalsize\bfseries}}
 %\newcommand\doxysubsubsubsubsubsection{\@startsection{subsubsubsubsubsection}{6}{\z@}%
 %                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
 %                                     {1.5ex \@plus .2ex}%
 %                                     {\raggedright\normalfont\normalsize\bfseries}}
+% ADDON: Разрешить отступ и для первого параграфа секции 6 уровня,
+% установить отступ для заголовка секции 9.5mm вместо нуля
 \newcommand\doxysubsubsubsubsubsection{\@startsection{subsubsubsubsubsection}{6}{9.5mm}%
-                                     { 3.25ex\@plus  1ex \@minus  .2ex}%
+                                     {3.25ex\@plus 1ex \@minus .2ex}%
                                      {1.5ex \@plus .2ex}%
                                      {\raggedright\normalfont\normalsize\bfseries}}
 %\newcommand\doxysubsubsubsubsubsubsection{\@startsection{subsubsubsubsubsubsection}{7}{\z@}%
 %                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
 %                                     {1.5ex \@plus .2ex}%
 %                                     {\raggedright\normalfont\normalsize\bfseries}}
+% ADDON: Разрешить отступ и для первого параграфа секции 7 уровня,
+% установить отступ для заголовка секции 9.5mm вместо нуля
 \newcommand\doxysubsubsubsubsubsubsection{\@startsection{subsubsubsubsubsubsection}{7}{9.5mm}%
-                                     { 3.25ex\@plus  1ex \@minus  .2ex}%
+                                     {3.25ex\@plus 1ex \@minus .2ex}%
                                      {1.5ex \@plus .2ex}%
                                      {\raggedright\normalfont\normalsize\bfseries}}
 %\newcommand\doxyparagraph{\@startsection{paragraph}{8}{\z@}%
 %                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
 %                                     {1.5ex \@plus .2ex}%
 %                                     {\raggedright\normalfont\normalsize\bfseries}}
+% ADDON: Разрешить отступ и для первого параграфа параграфа 8 уровня,
+% оставить отступ для заголовка параграфа 0.
 \newcommand\doxyparagraph{\@startsection{paragraph}{8}{\z@}%
-                                     { 3.25ex\@plus  1ex \@minus  .2ex}%
+                                     {3.25ex\@plus 1ex \@minus .2ex}%
                                      {1.5ex \@plus .2ex}%
                                      {\raggedright\normalfont\normalsize\bfseries}}
 %\newcommand\doxysubparagraph{\@startsection{subparagraph}{9}{\parindent}%
 %                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
 %                                     {1.5ex \@plus .2ex}%
 %                                     {\raggedright\normalfont\normalsize\bfseries}}    
+% ADDON: Разрешить отступ и для первого параграфа подпараграфа 9 уровня,
+% отступ для заголовка параграфа согласно установленному \setlength
 \newcommand\doxysubparagraph{\@startsection{subparagraph}{9}{\parindent}%
                                      {3.25ex\@plus 1ex \@minus .2ex}%
                                      {1.5ex \@plus .2ex}%
                                      {\raggedright\normalfont\normalsize\bfseries}}    
-                                  
 \newcommand\l@subsubsubsection{\@dottedtocline{4}{10.0em}{7.8em}}
 \newcommand\l@subsubsubsubsection{\@dottedtocline{5}{13.0em}{9.4em}}
 \newcommand\l@subsubsubsubsubsection{\@dottedtocline{6}{15.0em}{11em}}
