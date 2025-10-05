@@ -70,7 +70,11 @@ void arg_parser::add_new_flag(const QString &flag) {
   argument new_arg;
   new_arg.flag = flag;
   if (flag.startsWith("--")) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
     new_arg.flag.slice(2);
+#else
+    new_arg.flag = new_arg.flag.sliced(2);
+#endif
   }
   args += new_arg;
 }

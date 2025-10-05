@@ -96,14 +96,12 @@
         <translation>Результирующий файл PNG, ICO, ICNS</translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="160"/>
         <source>Supported input formats:</source>
-        <translation>Поддерживаемые форматы исходного файла</translation>
+        <translation type="vanished">Поддерживаемые форматы исходного файла</translation>
     </message>
     <message>
-        <location filename="../task.cpp" line="161"/>
         <source>Supported output formats:</source>
-        <translation>Поддерживаемые форматы результирующего файла</translation>
+        <translation type="vanished">Поддерживаемые форматы результирующего файла</translation>
     </message>
 </context>
 <context>

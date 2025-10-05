@@ -95,16 +95,6 @@
         <source>target PNG, ICO, ICNS file</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../task.cpp" line="160"/>
-        <source>Supported input formats:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../task.cpp" line="161"/>
-        <source>Supported output formats:</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>bootstrap</name>
