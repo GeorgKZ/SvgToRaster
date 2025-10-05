@@ -1,6 +1,7 @@
 ##############################################################################
 # Скрипт создания и установки файла документации pdf
 # Аргументы:
+# SRC_DOC_PATH
 # DOC_PATH - директория для собираемых файлов документации
 # INST_DOC_PATH - директория для устанавливаемых файлов документации
 # INST_DOC_FILE - имя устанавливаемого файла документации
@@ -12,6 +13,10 @@ if(EXISTS "${DOC_PATH}/warnings.log")
     if(FILE_SIZE EQUAL 0)
         file(REMOVE "${DOC_PATH}/warnings.log")
     endif()
+endif()
+
+if(EXISTS "${SRC_DOC_PATH}/images")
+    file(COPY "${SRC_DOC_PATH}/images" DESTINATION "${DOC_PATH}/latex")
 endif()
 
 # Выполнить создание файла документации pdf

@@ -1,5 +1,5 @@
 ##############################################################################
-# Минимально необходимая для нормальной работы версия cmake, Qt
+# Минимально необходимая для нормальной работы версия CMake
 ##############################################################################
 
 cmake_minimum_required(VERSION 3.9...3.28)
@@ -153,37 +153,39 @@ set(QT_PLUGIN_PATH "${QT_DIR}/../../../plugins")
 
 # Директория для результирующих бинарных файлов
 set(BIN_PATH "${BUILD_PATH}/bin")
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${BIN_PATH})
+file(MAKE_DIRECTORY "${BIN_PATH}")
 
 # Директория для промежуточных файлов
 set(MISC_PATH "${BUILD_PATH}/misc")
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${MISC_PATH})
+file(MAKE_DIRECTORY "${MISC_PATH}")
 
 # Директория для файлов, для которых будут искаться зависимости
 set(FIND_DEPS_PATH "${MISC_PATH}/find_deps")
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${FIND_DEPS_PATH})
+file(MAKE_DIRECTORY "${FIND_DEPS_PATH}")
 
 # Директория найденных зависимостей
 set(FOUND_DEPS_PATH "${MISC_PATH}/found_deps")
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${FOUND_DEPS_PATH})
+file(MAKE_DIRECTORY "${FOUND_DEPS_PATH}")
 
 # Директория для файлов с изображениями значка только при наличии исходного значка
 if((DEFINED CUSTOM_SVG_ICON_FILE) AND (EXISTS ${CUSTOM_SVG_ICON_FILE}))
     set(ICONS_PATH "${BUILD_PATH}/icons")
-    execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${ICONS_PATH})
+    file(MAKE_DIRECTORY "${ICONS_PATH}")
 endif()
 
 # Директория для документации приложения
 set(DOC_PATH "${BUILD_PATH}/docs")
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${DOC_PATH})
+file(MAKE_DIRECTORY "${DOC_PATH}")
 
 ##############################################################################
 # Прочие директории и пути к файлам, помещаемые в переменные
 ##############################################################################
 
-# Путь к директории с переводами
-set(TRANSLATE_PATH "${BUILD_PATH}/translations")
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${TRANSLATE_PATH})
+if(DEFINED QT_LANG)
+    # Путь к директории с переводами
+    set(TRANSLATE_PATH "${BUILD_PATH}/translations")
+    file(MAKE_DIRECTORY "${TRANSLATE_PATH}")
+endif()
 
 ##############################################################################
 # Пути к файлам lupdate, lrelease
@@ -259,6 +261,7 @@ endif()
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
 
 # Командный файл для запуска pdflatex с параметром
+# (необходимо для вставки файлов svg в создаваемый pdf)
     set(CMD_RUN_LATEX "${MISC_PATH}/runlatex.bash")
 # Подготовить командный файл для запуска pdflatex с параметром
     file(WRITE ${CMD_RUN_LATEX} "#!/bin/bash\n\npdflatex --shell-escape $1\n\nexit 0")
@@ -269,6 +272,7 @@ elseif (CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
 
 # Командный файл для запуска pdflatex с параметром
+# (необходимо для вставки файлов svg в создаваемый pdf)
     set(CMD_RUN_LATEX "${MISC_PATH}/runlatex.zsh")
 # Подготовить командный файл для запуска pdflatex с параметром
     file(WRITE ${CMD_RUN_LATEX} "#!/bin/zsh\n\npdflatex --shell-escape $1\n\nexit 0")
@@ -612,17 +616,17 @@ cmake_language(GET_MESSAGE_LOG_LEVEL CMAKE_LOGGING_LEVEL)
 set(CMAKE_MESSAGE_LOG_LEVEL "${CMAKE_LOGGING_LEVEL}" CACHE STRING "Уровень журналирования")
 # Существуют следующие уровни выводимых сообщений:
 # FATAL_ERROR - серьёзная ошибка, вызывающая полную остановку сборки;
-# SEND_ERROR - серьёзная ошибка, вызывающая остановку сборки без остановки выполнения скрипта Cmake;
+# SEND_ERROR - серьёзная ошибка, вызывающая остановку сборки без остановки выполнения скрипта CMake;
 # WARNING - предупреждение;
 # AUTHOR_WARNING - предупреждение разработчика;
-# DEPRECATION - ошибка или предупреждение об использовании устаревшей функции Cmake;
+# DEPRECATION - ошибка или предупреждение об использовании устаревшей функции CMake;
 # NOTICE - важное сообщение, выводимое на устройство stderr;
 # STATUS - краткое важное сообщение (это уровень по умолчанию);
 # VERBOSE - подробная информация об особенностях сборки;
 # DEBUG - подробная информация, необходимая только разработчику;
 # TRACE - сообщение о ходе сборки для точного отслеживания процесса.
 # Выводятся сообщения от указанного уровня (включая) и выше.
-# Устанавливается заданием параметра cmake, например cmake --log-level=DEBUG
+# Устанавливается заданием параметра CMake, например cmake --log-level=DEBUG
 
 ##############################################################################
 # Сборка и установка субмодуля SvgToRaster
@@ -712,17 +716,21 @@ if (CMAKE_BUILD_TYPE)
     message(STATUS "Конфигурация ${CMAKE_BUILD_TYPE}")
 endif()
 
-message(STATUS "Qt версии ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
-if (DEFINED QT_HOST_PATH) 
-    message(STATUS "Будет использован Qt, расположенный в '${QT_HOST_PATH}'")
+if (DEFINED USE_QT) 
+    message(STATUS "Qt версии ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
+    if (DEFINED QT_HOST_PATH) 
+        message(STATUS "Будет использован Qt, расположенный в '${QT_HOST_PATH}'")
+    endif()
 endif()
 
 message(STATUS "##############################################################################")
 
-# Создавать заголовочные файлы для файлов *.ui
-set(CMAKE_AUTOUIC ON)
-# Использовать метаобъектный компилятор
-set(CMAKE_AUTOMOC ON)
+if (DEFINED USE_QT) 
+    # Создавать заголовочные файлы для файлов *.ui
+    set(CMAKE_AUTOUIC ON)
+    # Использовать метаобъектный компилятор
+    set(CMAKE_AUTOMOC ON)
+endif()
 
 ##############################################################################
 # Формирование установочного набора
@@ -947,6 +955,7 @@ if (DOXYGEN_FOUND)
     set(DOXYGEN_USE_MDFILE_AS_MAINPAGE  "${CMAKE_SOURCE_DIR}/README.md")
     set(DOXYGEN_ALPHABETICAL_INDEX      YES)
     set(DOXYGEN_HTML_STYLESHEET         "${CMAKE_SOURCE_DIR}/doc/stylesheet.css")
+    set(DOXYGEN_HTML_HEADER             "${CMAKE_SOURCE_DIR}/doc/header.htm")
     set(DOXYGEN_GENERATE_TREEVIEW       YES)
     set(DOXYGEN_ENUM_VALUES_PER_LINE    1)
     set(DOXYGEN_HTML_FORMULA_FORMAT     svg)
@@ -962,7 +971,7 @@ if (DOXYGEN_FOUND)
     endif()
     set(DOXYGEN_GENERATE_LATEX          YES)
     set(DOXYGEN_USE_PDFLATEX            YES)
-    set(DOXYGEN_LATEX_CMD_NAME          "pdflatex")#${CMD_RUN_LATEX})
+    set(DOXYGEN_LATEX_CMD_NAME          ${CMD_RUN_LATEX})
     set(DOXYGEN_EXTRA_PACKAGES          "{amsmath, verbatimbox, svg}")
     set(DOXYGEN_LATEX_HEADER            "${CMAKE_SOURCE_DIR}/doc/header.tex")
     set(DOXYGEN_LATEX_EXTRA_STYLESHEET  "${CMAKE_SOURCE_DIR}/doc/doxygen.sty")
@@ -1004,6 +1013,7 @@ if (DOXYGEN_FOUND)
     # Формирование и установка файла документации pdf
     add_custom_target(pdf_doc
       COMMAND ${CMAKE_COMMAND}
+        -DSRC_DOC_PATH=${CMAKE_SOURCE_DIR}/doc
         -DDOC_PATH=${DOC_PATH}
         -DINST_DOC_PATH=${CMAKE_INSTALL_PREFIX}/${INST_DOC_PATH}
         -DINST_DOC_FILE=${PROJECT_NAME_LOWERCASE}.pdf

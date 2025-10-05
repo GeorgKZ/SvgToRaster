@@ -1,3 +1,13 @@
+##############################################################################
+# Настройка требуемой версии CMake
+##############################################################################
+#
+  cmake_minimum_required(VERSION 3.9...3.28)
+#
+##############################################################################
+# Настройка списка зеркал с архивами Qt
+##############################################################################
+#
 # Список зеркал с архивами Qt
 set(qt_mirrors
   "mirror.yandex.ru/mirrors/qt.io"
@@ -16,17 +26,30 @@ set(qt_mirrors
   "ftp.jaist.ac.jp/pub/qtproject"
   "tp1.nluug.nl/languages/qt"
 )
-# Требуемая версия Qt
+#
+##############################################################################
+# Настройка требуемой версии Qt
+##############################################################################
+#
 set(qt_version "6.9.2")
+#
+##############################################################################
+# Настройки для отладочного режима
+##############################################################################
 #
 # Возможность проверить скрипт без загрузки архивов
 # set(DEBUG_DRY_RUN 1)
 # Вывод отладочных сообщений
 # set(CMAKE_MESSAGE_LOG_LEVEL "DEBUG")
 #
+##############################################################################
+# Настройка в зависимости от требуемой ОС
+##############################################################################
+#
 # Получить версию Qt без точек (только цифры)
 string(REPLACE "." "" qt_version_dotless "${qt_version}")
-# Настроиться на дистрибутив для требуемой OC
+#
+# Windows x86
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
     set(ARCH_PATH "T:/archive")
     set(url_os "windows_x86")
@@ -37,24 +60,28 @@ if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
 #   set(compiler_id "win64_mingw")
 #   set(compiler_id "win64_llvm_mingw")
     set(qt_dir "C:/QT_${qt_version_dotless}")
+# Windows arm64
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND 0)
     set(ARCH_PATH "T:/archive")
     set(url_os "windows_arm64")
     set(compiler_id1 "msvc2022_arm64")
     set(compiler_id "win64_msvc2022_arm64")
     set(qt_dir "C:/QT_${qt_version_dotless}")
+# Linux x86
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
     set(ARCH_PATH "/var/tmp/archive")
     set(url_os "linux_x64")
     set(compiler_id1 "gcc_64")
     set(compiler_id "linux_gcc_64")
     set(qt_dir "/opt/qt${qt_version_dotless}")
+# Linux arm64
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND 0)
     set(ARCH_PATH "/var/tmp/archive")
     set(url_os "linux_arm64")
     set(compiler_id1 "arm_64")
     set(compiler_id "linux_arm_64")
     set(qt_dir "/opt/qt${qt_version_dotless}")
+# macOS / OS X
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
     set(ARCH_PATH "/tmp/archive")
     set(url_os "mac_x64")
@@ -74,7 +101,10 @@ if (NOT DEBUG_DRY_RUN)
     file(MAKE_DIRECTORY "${qt_dir}")
 endif()
 #
-# Пробовать загружать последовательно с каждого зеркала
+##############################################################################
+# Последовательные попытки загружать последовательно с каждого зеркала
+##############################################################################
+#
 foreach(mirror ${qt_mirrors})
     set(qt_base_url "https://${mirror}/online/qtsdkrepository/${url_os}/desktop/qt${qt_major_version}_${qt_version_dotless}/qt${qt_major_version}_${qt_version_dotless}")
     #

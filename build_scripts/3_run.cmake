@@ -1,3 +1,7 @@
+##############################################################################
+# Настройка требуемой версии CMake
+##############################################################################
+
   cmake_minimum_required(VERSION 3.9...3.28)
 
 ##############################################################################
@@ -7,7 +11,7 @@
   include(build_set_builddir.cmake)
 
 ##############################################################################
-# Настройка шаблона журналирования
+# Настройка шаблона журналирования для Qt
 ##############################################################################
 
   # Вывод всех сообщений с указанием даты, времени, файла, строки
@@ -25,170 +29,78 @@
   set(ENV{QT_MESSAGE_PATTERN} "${MESSAGE_PATTERN_DEBUG}")
 
 ##############################################################################
-# Запуск программы
+# Тестовые запуски программы
 ##############################################################################
 
-  file(REMOVE "${BUILDDIR}/log_run.txt")
-  file(REMOVE "${BUILDDIR}/log_run_errors.txt")
+  set(TEST_RESULTS "${BUILDDIR}/test_results")
+  file(MAKE_DIRECTORY "${TEST_RESULTS}")
+
+  include(../Custom.cmake)
+
+  # Имя проекта, приведённое к нижнему регистру
+  string(TOLOWER ${CUSTOM_PROJECT_NAME} PROJECT_NAME_LOWERCASE)
+
+  # Настройки Valgrind
+  if(DEFINED USE_VALGRIND) 
+      # Настройки Valgrind
+      # set(VALGRIND_LEAKS --leak-check=full --show-leak-kinds=all --leak-resolution=high)
+      # set(VALGRIND_UNDEFS --undef-value-errors=yes --track-origins=yes)
+      set(VALGRIND_MAIN valgrind --show-error-list=yes --keep-debuginfo=yes ${VALGRIND_LEAKS} ${VALGRIND_UNDEFS})
+  endif()
 
   # Вывод информации о работе с плюгинами Qt
   # set(ENV{QT_DEBUG_PLUGINS} 1)
 
   # для Windows
   if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-
-      # Выполнить приложение
-      execute_process(
-        COMMAND "cmd" "/c"
-        ${BUILDDIR}/install/svgtoraster.exe
-        --s 256 128 64 48 32 24 16
-        --i ../Candle/icons/icon.svg
-        --o ${BUILDDIR}/icon.ico
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE  output_error
-        ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
-      )
-      if (result EQUAL 0)
-          message(STATUS "Run: Создание значка ICO успешно завершено.")
-      else()
-          message(FATAL_ERROR "Run: Создание значка ICO завершено с ошибкой ${result}. Выход.")
-      endif()
-
-      # Выполнить приложение
-      execute_process(
-        COMMAND "cmd" "/c"
-        ${BUILDDIR}/install/svgtoraster.exe
-        --s 16 32 64 128 256 512 1024
-        --i ../Candle/icons/icon.svg
-        --o ${BUILDDIR}/icon.icns
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE  output_error
-        ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
-      )
-      if (result EQUAL 0)
-          message(STATUS "Run: Создание значка ICNS успешно завершено.")
-      else()
-          message(FATAL_ERROR "Run: Создание значка ICNS завершено с ошибкой ${result}. Выход.")
-      endif()
-
-      # Выполнить приложение
-      execute_process(
-        COMMAND "cmd" "/c"
-        ${BUILDDIR}/install/svgtoraster.exe
-        --i ../Candle/icons/icon.svg
-        --o ${BUILDDIR}/icon.png
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE  output_error
-        ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
-      )
-      if (result EQUAL 0)
-          message(STATUS "Run: Создание значка PNG успешно завершено.")
-      else()
-          message(FATAL_ERROR "Run: Создание значка PNG завершено с ошибкой ${result}. Выход.")
-      endif()
-
+      set(CMD_PREFIX "cmd" "/c")
   # для MacOS
   elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-
-      # Выполнить приложение
-      execute_process(
-        COMMAND open -a ${BUILDDIR}/install/svgtoraster.app
-        --stdout ${BUILDDIR}/log_run.txt
-        --args
-        --s 256 128 64 48 32 24 16
-        --i ../Candle/icons/icon.svg
-        --o ${BUILDDIR}/icon.ico
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE  output_error
-        ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
-      )
-      if (result EQUAL 0)
-          message(STATUS "Run: Создание значка ICO успешно завершено.")
+      set(CMD_PREFIX open -a)
+      if(DEFINED USE_QT)
+          set(CMD_POSTFIX --stdout ${BUILDDIR}/log_run.txt --args)
       else()
-          message(FATAL_ERROR "Run: Создание значка ICO завершено с ошибкой ${result}. Выход.")
+          set(CMD_POSTFIX --args)
       endif()
-
-      # Выполнить приложение
-      execute_process(
-        COMMAND open -a ${BUILDDIR}/install/svgtoraster.app
-        --stdout ${BUILDDIR}/log_run.txt
-        --args
-        --i ../Candle/icons/icon.svg
-        --o ${BUILDDIR}/icon.png
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE  output_error
-        ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
-      )
-      if (result EQUAL 0)
-          message(STATUS "Run: Создание значка PNG успешно завершено.")
-      else()
-          message(FATAL_ERROR "Run: Создание значка PNG завершено с ошибкой ${result}. Выход.")
-      endif()
-
   # для Linux
   elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+      set(CMD_PREFIX ${VALGRIND_MAIN})
+      set(CMD_PATH "/bin")
+  endif()
 
-      # Выполнить приложение
+  # Перебрать все тестовые последовательности
+  list(LENGTH TEST_ARGUMENTS_LIST LEN)
+  math(EXPR LEN "${LEN} - 1")
+  foreach(index1 RANGE 0 ${LEN} 2)
+      math(EXPR index2 "${index1} + 1") 
+      math(EXPR num "${index1} / 2") 
+      # Получить строку комментария для теста
+      list(GET TEST_ARGUMENTS_LIST ${index1} CMNT)
+      # Получить строку аргументов для теста
+      list(GET TEST_ARGUMENTS_LIST ${index2} ARG)
+      # Комментарий
+      message(STATUS "${CMNT}")
+      # Выполнить команду
       execute_process(
-        COMMAND ${BUILDDIR}/install/bin/svgtoraster
-        --s 256 128 64 48 32 24 16
-        --i ../Candle/icons/icon.svg
-        --o ${BUILDDIR}/icon.ico
+        COMMAND ${CMD_PREFIX} ${BUILDDIR}/install${CMD_PATH}/${PROJECT_NAME_LOWERCASE} ${CMD_POSTFIX} ${ARG}
         RESULT_VARIABLE result
         OUTPUT_VARIABLE output
         ERROR_VARIABLE  output_error
-        ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
       )
-      if (result EQUAL 0)
-          message(STATUS "Run: Создание значка ICO успешно завершено.")
-      else()
-          message(FATAL_ERROR "Run: Создание значка ICO завершено с ошибкой ${result}. Выход.")
+
+      file(REMOVE "${BUILDDIR}/log_run_${num}.txt")
+      file(REMOVE "${BUILDDIR}/log_run_${num}_errors.txt")
+
+      if(NOT "^^${output}" STREQUAL "^^")
+          file(WRITE "${BUILDDIR}/log_run_${num}.txt" "${output}")
+      endif()
+      if(NOT "^^${output_error}" STREQUAL "^^")
+          file(WRITE "${BUILDDIR}/log_run_${num}_errors.txt" "${output_error}")
       endif()
 
-      # Выполнить приложение
-      execute_process(
-        COMMAND ${BUILDDIR}/install/bin/svgtoraster
-#        --s 16 32 64 128 256 512 1024
-        --s 16
-        --i ../Candle/icons/icon.svg
-        --o ${BUILDDIR}/icon.icns
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE  output_error
-        ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
-      )
       if (result EQUAL 0)
-          message(STATUS "Run: Создание значка ICNS успешно завершено.")
+          message(STATUS "Run: Выполнение успешно завершено.")
       else()
-          message(FATAL_ERROR "Run: Создание значка ICNS завершено с ошибкой ${result}. Выход.")
+          message(STATUS "Run: Выполнение завершено с ошибкой ${result}.")
       endif()
-
-      # Выполнить приложение
-      execute_process(
-        COMMAND ${BUILDDIR}/install/bin/svgtoraster
-        --i ../Candle/icons/icon.svg
-        --o ${BUILDDIR}/icon.png
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE  output_error
-        ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
-      )
-      if (result EQUAL 0)
-          message(STATUS "Run: Создание значка PNG успешно завершено.")
-      else()
-          message(FATAL_ERROR "Run: Создание значка PNG завершено с ошибкой ${result}. Выход.")
-      endif()
-
-  endif()
-
-  if(NOT "^^${output}" STREQUAL "^^")
-      file(WRITE "${BUILDDIR}/log_run.txt" "${output}")
-  endif()
-  if(NOT "^^${output_error}" STREQUAL "^^")
-      file(WRITE "${BUILDDIR}/log_run_errors.txt" "${output_error}")
-  endif()
+  endforeach(index1)
