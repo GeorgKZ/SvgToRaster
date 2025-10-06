@@ -7,7 +7,6 @@
 
 #include <QFile>
 #include <QBuffer>
-//#include <QDebug>
 #include "build_icns.h"
 
 /**

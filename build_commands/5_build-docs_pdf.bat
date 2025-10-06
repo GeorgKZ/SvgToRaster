@@ -2,5 +2,5 @@
 
 CD ..\build_scripts
 CHCP 65001 > NUL
-cmake -P 4_build-docs_pdf.cmake
+cmake -P 5_build-docs_pdf.cmake
 CHCP 866 > NUL

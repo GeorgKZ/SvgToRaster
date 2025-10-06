@@ -4,5 +4,5 @@ CALL "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build
 
 CD ..\build_scripts
 CHCP 65001 > NUL
-cmake -P 4_pack_distrib.cmake
+cmake -P 5_pack_distrib.cmake
 CHCP 866 > NUL

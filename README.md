@@ -1,21 +1,27 @@
-\htmlonly
-<script type="text/javascript">
-window.onload = addIndent;
-</script>
-\endhtmlonly
-\latexonly
-\setlength{\parindent}{9.5mm} 
-\endlatexonly
-
 [![CMake Build Matrix](https://github.com/GeorgKZ/SvgToRaster/actions/workflows/build_cmake.yml/badge.svg)](https://github.com/GeorgKZ/Candle/actions/workflows/build_cmake.yml)
+
 [![License: GPL v3](doc/badges/License_GPLv3.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Build system](doc/badges/CMake.svg)](https://cmake.org)
+
 [![Language: C++](doc/badges/C++.svg)](https://ru.wikipedia.org/wiki/C%2B%2B)
+
+[![Language: CMake](doc/badges/CMake.svg)](https://cmake.org)
+
+[![Compiler: GNU GCC](doc/badges/GNU_GCC.svg)](https://gcc.gnu.org)
+
+[![Compiler: Visual_Studio](doc/badges/Visual_Studio.svg)](https://visualstudio.microsoft.com)
+
+[![Compiler: MinGW](doc/badges/MinGW.svg)](https://www.mingw-w64.org)
+
 [![Platform Windows](doc/badges/Windows.svg)](https://support.microsoft.com/ru-ru/windows)
+
 [![Platform debian](doc/badges/debian.svg)](https://www.debian.org/)
+
 [![Platform macOS](doc/badges/macOS.svg)](https://www.apple.com/os/macos/)
+
 [![Framework Qt v6.X.X](doc/badges/Qt6.svg)](https://www.qt.io/product/qt6)
 
+\htmlonly <script type="text/javascript">window.onload = addIndent;</script>\endhtmlonly
+\latexonly \setlength{\parindent}{9.5mm} \endlatexonly
 
 Введение
 ========
@@ -102,7 +108,7 @@ Cборка программы "SvgToRaster"
 
 ```
 0_load_qt - загрузка и установка Qt
-1_clean_config - конфигурация CMake с предварительной очисткой директории конфигурации 
+1_clean - очистка директории конфигурации CMake
 1_config - конфигурация CMake
 2_build - сборка исполняемого файла
 3_install - формирование установочного набора (с необходимыми зависимостями)
@@ -115,6 +121,4 @@ Cборка программы "SvgToRaster"
 6_check_pvs - выполнение статического анализа исходных текстов при помощи PVS Studio
 ```
 
-\latexonly
-\setlength{\parindent}{0mm} 
-\endlatexonly
+\latexonly \setlength{\parindent}{0mm} \endlatexonly

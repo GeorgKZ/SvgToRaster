@@ -45,7 +45,7 @@
           endif()
       endif()
       # Установить директорию сборки
-      set(BUILDDIR "${ROOTDIR}/build_svgtoraster" CACHE INTERNAL "")
+      set(BUILDDIR "${ROOTDIR}/build_svgtoraster")
   elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
       # Установить корневую директорию сборки
       set(ROOTDIR "T:")
@@ -59,10 +59,10 @@
   endif()
 
   # Установить директорию сборки
-  set(BUILDDIR "${ROOTDIR}/build_${PROJ_NAME}" CACHE INTERNAL "Build directory")
+  set(BUILDDIR "${ROOTDIR}/build_${PROJ_NAME}")
 
   # Установить директорию сборки для файлов CMAKE
-  set(CMAKEDIR "${BUILDDIR}/cmake" CACHE INTERNAL "Cmake files directory")
+  set(CMAKEDIR "${BUILDDIR}/cmake")
 
   # Сохранить директории в переменных окружения
   set(ENV{BUILDDIR} "${BUILDDIR}")

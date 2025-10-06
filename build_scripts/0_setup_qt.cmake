@@ -31,7 +31,7 @@ set(qt_mirrors
 # Настройка требуемой версии Qt
 ##############################################################################
 #
-set(qt_version "6.9.2")
+set(qt_version "6.9.3")
 #
 ##############################################################################
 # Настройки для отладочного режима
@@ -53,19 +53,28 @@ string(REPLACE "." "" qt_version_dotless "${qt_version}")
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
     set(ARCH_PATH "T:/archive")
     set(url_os "windows_x86")
-    set(compiler_id1 "msvc2022_64")
-#   set(compiler_id1 "mingw_64")
-#   set(compiler_id1 "llvm-mingw_64")
-    set(compiler_id "win64_msvc2022_64")
-#   set(compiler_id "win64_mingw")
-#   set(compiler_id "win64_llvm_mingw")
+#
+    if(DEFINED MINGW64)
+        set(compiler_id "win64_mingw")
+        set(compiler_id1 "mingw_64")
+    elseif(DEFINED LLVM_MINGW64)
+        set(compiler_id "win64_llvm_mingw")
+        set(compiler_id1 "llvm-mingw_64")
+    elseif(DEFINED CROSS_ARM64)
+        set(compiler_id "win64_msvc2022_64_cross_compiled")
+        set(compiler_id1 "msvc2022_arm64")
+    else()
+        set(compiler_id "win64_msvc2022_64")
+        set(compiler_id1 "msvc2022_64")
+    endif()
+#
     set(qt_dir "C:/QT_${qt_version_dotless}")
 # Windows arm64
-elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND 0)
+elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND (DEFINED ARM64))
     set(ARCH_PATH "T:/archive")
     set(url_os "windows_arm64")
-    set(compiler_id1 "msvc2022_arm64")
     set(compiler_id "win64_msvc2022_arm64")
+    set(compiler_id1 "msvc2022_arm64")
     set(qt_dir "C:/QT_${qt_version_dotless}")
 # Linux x86
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
@@ -75,7 +84,7 @@ elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
     set(compiler_id "linux_gcc_64")
     set(qt_dir "/opt/qt${qt_version_dotless}")
 # Linux arm64
-elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND 0)
+elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND (DEFINED ARM64))
     set(ARCH_PATH "/var/tmp/archive")
     set(url_os "linux_arm64")
     set(compiler_id1 "arm_64")

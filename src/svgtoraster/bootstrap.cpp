@@ -73,6 +73,7 @@ void bootstrap::init()
      */
     QString locale = QLocale::system().name().left(2);
 
+    qDebug().noquote() << "Locale:" << locale;
     setAllTranslators(locale);
 }
 
@@ -95,7 +96,10 @@ void bootstrap::myMessageOutput(QtMsgType type, const QMessageLogContext &contex
      * 2 Вывести в созданный поток информацию о сообщении. Она может быть дополнительно
      * оформлена шаблоном, указанном в переменной окружения [QT_MESSAGE_PATTERN](https://doc.qt.io/qt-6/qtlogging.html#qInstallMessageHandler).
      */
-    tsTextStream << qFormatLogMessage(type, context, msg) << Qt::endl;
+    QString output = qFormatLogMessage(type, context, msg);
+    if (!output.isEmpty()) {
+        tsTextStream << output << Qt::endl;
+    }
 }
 
 /**
@@ -135,7 +139,7 @@ void bootstrap::setTranslator(const QString &translationFileName, QTranslator **
          * &nbsp;&nbsp;&nbsp;&nbsp;2.3 Установить новый [транслятор](https://doc.qt.io/qt-6/qtranslator.html).
          */
         qApp->installTranslator(*translator);
-        qDebug().noquote() << tr("Translation file '") << translationFileName << tr("' loaded and installed");
+        qDebug().noquote() << tr("Translation file") << translationFileName << tr("loaded and installed");
     }
 }
 

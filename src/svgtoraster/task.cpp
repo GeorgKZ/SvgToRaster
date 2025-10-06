@@ -46,10 +46,10 @@ int Task::parse_args(int argc, char **argv)
         return err_parse;
     /** 3 Проверить ошибки разбора командной строки */
     } else if (err_parse == -1) {
-        qCritical().noquote() << tr("Command line format error: the first argument '") << args.get_flag(0) << tr("' is not a flag");
+        qCritical().noquote() << tr("Command line format error: the first argument") << args.get_flag(0) << tr("is not a flag");
         return err_parse;
     }  else if (err_parse == -3) {
-        qCritical().noquote() << tr("Command line format error: the first argument '") << args.get_flag(0) << tr("' is empty flag");
+        qCritical().noquote() << tr("Command line format error: the first argument") << args.get_flag(0) << tr("is empty flag");
         return err_parse;
     }
 
@@ -65,7 +65,7 @@ int Task::parse_args(int argc, char **argv)
           m_input_file = args.get_parameters(i);
 
           if (!QFile::exists(m_input_file)) {
-              qCritical().noquote() << tr("Error: the specified '") <<  m_input_file << tr("' source file is missing");
+              qCritical().noquote() << tr("Error: the specified") <<  m_input_file << tr("source file is missing");
               return -1;
           }
           continue;
@@ -93,11 +93,24 @@ int Task::parse_args(int argc, char **argv)
           continue;
 
         } else {
-            qCritical().noquote() << tr("Command line format error: unknown '") << args.get_flag(i) << tr("' flag");
+            qCritical().noquote() << tr("Command line format error: unknown") << args.get_flag(i) << tr("flag");
             return -1;
         }
     }
 
+    /** 5 Проверить ошибку отсутствия исходного файла в командной строке; */
+    if (m_input_file.isEmpty())
+    {
+        qCritical().noquote() << tr("The source file is not specified");
+        return -1;
+    }
+
+    /** 5 Проверить ошибку отсутствия результирующего файла в командной строке; */
+    if (m_output_file.isEmpty())
+    {
+        qCritical().noquote() << tr("The target file is not specified");
+        return -1;
+    }
     return err_parse;
 }
 
@@ -125,19 +138,19 @@ void Task::run()
             {
                 if (saveIco(icon, m_output_file, m_bitmap_size) != 0)
                 {
-                    qCritical() << tr("Cannot open output file '") << m_output_file << tr("' for writing");
+                    qCritical() << tr("Cannot open output file") << m_output_file << tr("for writing");
                 }
             } else if (QFileInfo(m_output_file).suffix().compare("icns", Qt::CaseInsensitive) == 0)
             {
                 if (saveIcns(icon, m_output_file) != 0)
                 {
-                    qCritical() << tr("Cannot open output file '") << m_output_file << tr("' for writing");
+                    qCritical() << tr("Cannot open output file") << m_output_file << tr("for writing");
                 }
             } else {
                 QImage image = icon.pixmap(QSize(m_bitmap_size[0], m_bitmap_size[0])).toImage();
                 if (!image.save(m_output_file))
                 {
-                    qCritical() << tr("Cannot save output file '") << m_output_file << "'";
+                    qCritical() << tr("Cannot save output file") << m_output_file;
                 }
             }
         }
@@ -156,7 +169,6 @@ void Task::print_help() {
   qInfo().noquote() << "    <S>              -" << tr("output bitmap sizes");
   qInfo().noquote() << "    <in_file>        -" << tr("source SVG file");
   qInfo().noquote() << "    <out_file>       -" << tr("target PNG, ICO, ICNS file");
-
-  // qDebug().noquote() << tr("Supported input formats:") << QImageReader::supportedImageFormats();
-  // qDebug().noquote() << tr("Supported output formats:") << QImageWriter::supportedImageFormats();
+  qDebug().noquote() << tr("Supported input formats:") << QImageReader::supportedImageFormats();
+  qDebug().noquote() << tr("Supported output formats:") << QImageWriter::supportedImageFormats();
 }

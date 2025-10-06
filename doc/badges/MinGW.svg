@@ -1,0 +1,76 @@
+<svg
+   width="123"
+   height="20" 
+   xmlns="http://www.w3.org/2000/svg">
+  <title>Compiler: MinGW</title>
+  <linearGradient id="gradient"
+     x2="0"
+     y2="100%">
+    <stop
+        offset="0"
+        stop-color="#B0B0B0"
+        stop-opacity=".1"/>
+    <stop
+        offset="1"
+        stop-opacity=".3"/>
+  </linearGradient>
+  <clipPath id="clippath">
+     <rect id="rect_clip"
+        width="123"
+        height="20"
+        rx="3"
+        fill="#FFFFFF"/>
+  </clipPath>
+  <g
+     clip-path="url(#clippath)">
+    <rect id="rect_left"
+       width="60"
+       height="20"
+       fill="#505050"/>
+    <rect id="rect_right"
+       x="60"
+       width="63"
+       height="20"
+       fill="#9090B0"/>
+    <rect id="rect_gradient"
+       width="123"
+       height="20"
+       fill="url(#gradient)"/>
+  </g>
+  <g id="texts"
+     fill="#FFFFFF"
+     text-anchor="start"
+     font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+     text-rendering="geometricPrecision"
+     font-size="11">
+    <text id="text_left_shadow"
+       x="4.0"
+       y="15.0"
+       fill="#010101"
+       fill-opacity=".3">Compiler</text>
+    <text id="text_left"
+       x="3.0"
+       y="14.0"
+       fill="#FFFFFF">Compiler</text>
+    <text id="text_right_shadow"
+       x="82"
+       y="11"
+       fill="#404040"
+       fill-opacity=".3">MinGW</text>
+    <text id="text_right"
+       x="81"
+       y="10"
+       fill="#000000">MinGW</text>
+  </g>
+  <g id="mingw_logo"
+     transform="matrix(0.13,0,0,0.13,58,-0.7)">
+       <rect transform="rotate(-45)" x="-32.024" y="65.054" width="32.529" height="32.529" fill="#71b21f"/>
+       <rect transform="rotate(-45)" x="-72.49" y="105.52" width="32.529" height="32.529" fill="#71b21f"/>
+       <rect transform="rotate(-45)" x="-32.024" y="105.52" width="32.529" height="32.529"/>
+       <rect transform="rotate(-45)" x="8.4423" y="65.054" width="32.529" height="32.529"/>
+       <rect transform="rotate(-45)" x="8.4423" y="105.52" width="32.529" height="32.529" fill="#71b21f"/>
+       <rect transform="rotate(-45)" x="48.908" y="105.52" width="32.529" height="32.529"/>
+       <rect transform="rotate(-45)" x="-32.024" y="145.99" width="32.529" height="32.529" fill="#71b21f"/>
+       <rect transform="rotate(-45)" x="8.4423" y="145.99" width="32.529" height="32.529"/>
+  </g>
+</svg>

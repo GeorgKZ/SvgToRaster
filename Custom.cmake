@@ -68,11 +68,21 @@ set(QT_LANG "en_US;ru_RU")
 
   # Список комментариев и аргументов
   set(TEST_ARGUMENTS_LIST
+    "Запуск без аргументов"
+    ""
+    "Запуск с неправильным флагом"
+    "--x 123 --i ../tests/my icon.svg --o ${TEST_RESULTS}/no result.png"
+    "Запуск без указания результирующего файла"
+    "--i ../tests/my icon.svg"
+    "Запуск с несуществующим исходным файлом"
+    "--i ../tests/not my icon.svg --o ${TEST_RESULTS}/no result.png"
+    "Запуск без указания исходного файла"
+    "--o ${TEST_RESULTS}/no result.png"
     "Создание значка ICO"
-    "--s 256 128 64 48 32 24 16 --i ../tests/icon.svg --o ${TEST_RESULTS}/icon.ico"
+    "--s 256 128 64 48 32 24 16 --i ../tests/my icon.svg --o ${TEST_RESULTS}/icon ico.ico"
     "Создание значка ICNS"
 #    --s 16 16@2x 32 32@2x 128 128@2x 256 256@2x 512 512@2x
-    "--s 16 --i ../tests/icon.svg --o ${TEST_RESULTS}/icon.icns"
+    "--s 16 --i ../tests/my icon.svg --o ${TEST_RESULTS}/icon icns.icns"
     "Создание значка PNG"
-    "--i ../tests/icon.svg --o ${TEST_RESULTS}/icon.png"
+    "--i ../tests/my icon.svg --o ${TEST_RESULTS}/icon png.png"
   )

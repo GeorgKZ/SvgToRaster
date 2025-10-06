@@ -18,7 +18,7 @@
 
   # Установить конфигурацию для не мультиконфигурационного варианта этапа конфигурирования
   if( (NOT DEFINED MULTICONFIG) OR (MULTICONFIG EQUAL 0) )
-      set(CMAKE_CNF "-D CMAKE_BUILD_TYPE:STRING=${CONFIG}")
+      set(CMAKE_CNF "-DCMAKE_BUILD_TYPE:STRING=${CONFIG}")
   endif()
 
   file(REMOVE "${BUILDDIR}/log_config.txt")
