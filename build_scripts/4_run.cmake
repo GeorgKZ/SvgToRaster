@@ -26,7 +26,7 @@
   set(MESSAGE_PATTERN_DEBUG "%{if-critical}CRITICAL %{message}%{endif}%{if-fatal}FATAL %{message}%{endif}%{if-warning}WARNING %{message}%{endif}%{if-info}INFO %{message}%{endif}%{if-debug}DEBUG %{message}%{endif}")
 
   # При компиляции можно указать QT_NO_DEBUG_OUTPUT, QT_NO_INFO_OUTPUT, or QT_NO_WARNING_OUTPUT
-  set(ENV{QT_MESSAGE_PATTERN} "${MESSAGE_PATTERN_INFO}")
+  set(ENV{QT_MESSAGE_PATTERN} "${MESSAGE_PATTERN_DEBUG}")
 
 ##############################################################################
 # Тестовые запуски программы
@@ -53,20 +53,6 @@
       set(ENV{QT_DEBUG_PLUGINS} 1)
   endif()
 
-  # для Windows
-  if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-      set(CMD_PREFIX "cmd /c")
-  # для MacOS
-  elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-      set(CMD_PREFIX "open -a")
-      set(CMD_SUFFIX ".app")
-      set(CMD_POSTFIX "--stdout ${BUILDDIR}/log_run.txt --args")
-  # для Linux
-  elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
-      set(CMD_PREFIX "${VALGRIND_MAIN}")
-      set(CMD_PATH "/bin")
-  endif()
-
   # Перебрать все тестовые последовательности
   list(LENGTH TEST_ARGUMENTS_LIST LEN)
   math(EXPR LEN "${LEN} - 1")
@@ -77,6 +63,21 @@
       list(GET TEST_ARGUMENTS_LIST ${index1} CMNT)
       # Получить строку аргументов для теста
       list(GET TEST_ARGUMENTS_LIST ${index2} ARG)
+
+      # для Windows
+      if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+          set(CMD_PREFIX "cmd /c")
+      # для MacOS
+      elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
+          set(CMD_PREFIX "open -n -a")
+          set(CMD_SUFFIX ".app")
+          set(CMD_POSTFIX "--stdout ${BUILDDIR}/log_runY_${num}.txt --args")
+      # для Linux
+      elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+          set(CMD_PREFIX "${VALGRIND_MAIN}")
+          set(CMD_PATH "/bin")
+      endif()
+
 
       # Создать скрипт для выполнения команды
       file(WRITE

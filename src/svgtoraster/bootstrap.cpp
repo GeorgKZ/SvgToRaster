@@ -73,8 +73,13 @@ void bootstrap::init()
      */
     QString locale = QLocale::system().name().left(2);
 
-    qDebug().noquote() << "Locale:" << locale;
+    qDebug().noquote() << "Locale:" << QLocale::system().name();
     setAllTranslators(locale);
+
+    QLocale currentLocale;
+    QString language = currentLocale.languageToString(currentLocale.language());
+    QString country = currentLocale.countryToString(currentLocale.country());
+    qDebug() << "Язык:" << language << ", Регион:" << country;
 }
 
 /**

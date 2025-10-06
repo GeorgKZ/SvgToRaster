@@ -115,18 +115,18 @@
 <context>
     <name>bootstrap</name>
     <message>
-        <location filename="../bootstrap.cpp" line="125"/>
-        <location filename="../bootstrap.cpp" line="164"/>
+        <location filename="../bootstrap.cpp" line="130"/>
+        <location filename="../bootstrap.cpp" line="169"/>
         <source>Error loading translation file</source>
         <translation>Ошибка загрузки файла перевода</translation>
     </message>
     <message>
-        <location filename="../bootstrap.cpp" line="142"/>
+        <location filename="../bootstrap.cpp" line="147"/>
         <source>Translation file</source>
         <translation>Файл перевода</translation>
     </message>
     <message>
-        <location filename="../bootstrap.cpp" line="142"/>
+        <location filename="../bootstrap.cpp" line="147"/>
         <source>loaded and installed</source>
         <translation>загружен и установлен</translation>
     </message>
