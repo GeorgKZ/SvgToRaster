@@ -25,6 +25,14 @@
 Task::Task(int argc, char **argv, QObject *parent) : QObject(parent)
 {
     m_parse_ok = parse_args(argc, argv);
+
+#ifdef Q_OS_MACOS
+
+    char *PWD = getenv("PWD");
+    m_currDir = PWD;
+
+#endif
+
 }
 
 /**
@@ -64,8 +72,12 @@ int Task::parse_args(int argc, char **argv)
           }
           m_input_file = args.get_parameters(i);
 
+#ifdef Q_OS_MACOS
+          if (!QFile::exists(m_currDir + "/" + m_input_file)) {
+#else
           if (!QFile::exists(m_input_file)) {
-              qCritical().noquote() << tr("Error: the specified") <<  m_input_file << tr("source file is missing");
+#endif
+              qCritical().noquote() << tr("Error: the specified") << m_currDir + "/" + m_input_file << tr("source file is missing");
               return -1;
           }
           continue;
@@ -123,7 +135,11 @@ void Task::run()
 
     if (m_parse_ok == 0)
     {
+#ifdef Q_OS_MACOS
+        QIcon icon = QIcon(m_currDir + "/" + m_input_file);
+#else
         QIcon icon = QIcon(m_input_file);
+#endif
         if (icon.isNull())
         {
             qCritical().noquote() << tr("Source file load error");

@@ -88,15 +88,13 @@ void bootstrap::init()
     QString locale = QLocale::system().name().left(2);
     setAllTranslators(locale);
 
-
-    QString pwd("");
-    char * PWD;
-    PWD = getenv ("PWD");
-    pwd.append(PWD);
+#ifdef Q_OS_MACOS
+    char *PWD = getenv("PWD");
+    QString pwd = PWD;
     qDebug() << "Working directory1: " << pwd;
-
+#else
     qDebug() << "Working directory2: " << QDir::currentPath();
-
+#endif
 
 
 }

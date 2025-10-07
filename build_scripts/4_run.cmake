@@ -103,6 +103,10 @@
           "    message(STATUS \"Run: Выполнение завершено с ошибкой \${result}.\")\n"
           "endif()\n"
       )
+
+      file(REMOVE "${BUILDDIR}/log_runY_${num}.txt")
+
+
       # Комментарий
       message(STATUS "${CMNT}")
       # Выполнить скрипт с командой
