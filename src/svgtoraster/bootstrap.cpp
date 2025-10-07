@@ -71,15 +71,34 @@ void bootstrap::init()
     /**
      * 3 Установить локализацию согласно указанному в файле конфигурации языку.
      */
-    QString locale = QLocale::system().name().left(2);
+    QLocale currentLocale;
+    QLocale systemLocale = QLocale::system();
 
-    qDebug().noquote() << "Locale:" << QLocale::system().name();
+    qDebug().noquote() << "Default Locale:" << currentLocale.name();
+    qDebug().noquote() << "System Locale:" << systemLocale.name();
+    qDebug() << "Default language:" << currentLocale.languageToString(currentLocale.language())
+      << "(" << currentLocale.nativeLanguageName() << ")";
+    qDebug() << "System language:" << systemLocale.languageToString(systemLocale.language())
+      << "(" << systemLocale.nativeLanguageName() << ")";
+    qDebug() << "Default Region:" << currentLocale.countryToString(currentLocale.country());
+    qDebug() << "System Region:" << systemLocale.countryToString(systemLocale.country());
+    qDebug() << "Default Territory:" << QLocale::territoryToCode(currentLocale.territory());
+    qDebug() << "UI Languages::" << currentLocale.uiLanguages();
+
+    QString locale = QLocale::system().name().left(2);
     setAllTranslators(locale);
 
-    QLocale currentLocale;
-    QString language = currentLocale.languageToString(currentLocale.language());
-    QString country = currentLocale.countryToString(currentLocale.country());
-    qDebug() << "Язык:" << language << ", Регион:" << country;
+
+    QString pwd("");
+    char * PWD;
+    PWD = getenv ("PWD");
+    pwd.append(PWD);
+    qDebug() << "Working directory1: " << pwd;
+
+    qDebug() << "Working directory2: " << QDir::currentPath();
+
+
+
 }
 
 /**
