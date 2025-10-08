@@ -73,13 +73,10 @@ private:
      */
     int m_parse_ok;
 
-#ifdef Q_OS_MACOS
     /**
      * \brief Текущая директория
      */
     QString m_currDir;
-#endif
-
 
 signals:
 

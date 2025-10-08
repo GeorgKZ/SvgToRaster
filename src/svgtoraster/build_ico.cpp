@@ -287,8 +287,7 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
      * * Создать изображения разных размеров из исходного значка.
      */
     QList<QImage> images;
-    for (const int &size : sizes)
-    {
+    for (const int &size : sizes) {
         QImage img = icon.pixmap(QSize(size, size)).toImage();
         img.convertTo(QImage::Format_ARGB32);
         images.append(img);
@@ -393,13 +392,10 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
         /**
          * * Заполнить буфер растра цветности масштабированным изображением размером image.width() * image.height() * RGBA_SIZE;
          */
-        for (int h = image.height() - 1; h >= 0; --h)
-        {
-            for (int w = 0; w < image.width(); ++w)
-            {
+        for (int h = image.height() - 1; h >= 0; --h) {
+            for (int w = 0; w < image.width(); ++w) {
                 QRgb rgb = image.pixel(w, h);
-                if (qAlpha(rgb) == 0)
-                {
+                if (qAlpha(rgb) == 0) {
                     out << static_cast<quint8>(0);
                     out << static_cast<quint8>(0);
                     out << static_cast<quint8>(0);

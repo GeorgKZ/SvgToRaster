@@ -17,9 +17,9 @@
  */
 arg_parser::arg_parser()
 #if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201103L) || __cplusplus >= 201103L)
-      = default;
+  = default;
 #else
-      {}
+  {}
 #endif
 
 /**

@@ -4,13 +4,13 @@
 
   # для MacOS
   if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin")
-      set(QT_ROOT "/opt/qt660")
+      set(QT_ROOT "/opt/qt6100")
   # Для Linux
   elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
       set(QT_ROOT "/opt/qt693")
   # Для Windows
   elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-      set(QT_ROOT "C:/QT_693")
+      set(QT_ROOT "C:/QT_6100")
   endif()
 
   if(NOT DEFINED QT_ROOT)

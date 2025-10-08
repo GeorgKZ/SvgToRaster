@@ -27,11 +27,18 @@ Task::Task(int argc, char **argv, QObject *parent) : QObject(parent)
     m_parse_ok = parse_args(argc, argv);
 
 #ifdef Q_OS_MACOS
-
     char *PWD = getenv("PWD");
     m_currDir = PWD;
-
+#else
+    m_currDir = QDir::currentPath();
 #endif
+
+    char *PWD = getenv("PWD");
+    QString pwd = PWD;
+    qDebug() << "Current directory (task pwd): " << pwd;
+    qDebug() << "Current directory (qpwd): " << qEnvironmentVariable("PWD");
+    qDebug() << "Working directory (task currpath): " << QDir::currentPath();
+
 
 }
 
@@ -70,14 +77,12 @@ int Task::parse_args(int argc, char **argv)
             qCritical().noquote() << tr("Command line format error: missing parameter after the") << "'i'" << tr("flag");
             return -1;
           }
-          m_input_file = args.get_parameters(i);
+          QDir dir(m_currDir);
+          m_input_file = QDir::cleanPath(dir.absoluteFilePath(args.get_parameters(i)));
+          qDebug() << "Absolute input path:" << m_input_file;
 
-#ifdef Q_OS_MACOS
-          if (!QFile::exists(m_currDir + "/" + m_input_file)) {
-#else
           if (!QFile::exists(m_input_file)) {
-#endif
-              qCritical().noquote() << tr("Error: the specified") << m_currDir + "/" + m_input_file << tr("source file is missing");
+              qCritical().noquote() << tr("Error: the specified") << args.get_parameters(i) << tr("source file is missing");
               return -1;
           }
           continue;
@@ -88,7 +93,9 @@ int Task::parse_args(int argc, char **argv)
             qCritical().noquote() << tr("Command line format error: missing parameter after the") << "'o'" << tr("flag");
             return -1;
           }
-          m_output_file = args.get_parameters(i);
+          QDir dir(m_currDir);
+          m_output_file = QDir::cleanPath(dir.absoluteFilePath(args.get_parameters(i)));
+          qDebug() << "Absolute output path:" << m_output_file;
           continue;
       
         } else if (curr_flag.compare("s") == 0) {
@@ -98,8 +105,7 @@ int Task::parse_args(int argc, char **argv)
             return -1;
           }
           QStringList size_set = args.get_parameters_set(i);
-          for (const QString &size : size_set)
-          {
+          for (const QString &size : size_set) {
               m_bitmap_size.append(size.toInt());
           }
           continue;
@@ -111,15 +117,13 @@ int Task::parse_args(int argc, char **argv)
     }
 
     /** 5 Проверить ошибку отсутствия исходного файла в командной строке; */
-    if (m_input_file.isEmpty())
-    {
+    if (m_input_file.isEmpty()) {
         qCritical().noquote() << tr("The source file is not specified");
         return -1;
     }
 
     /** 5 Проверить ошибку отсутствия результирующего файла в командной строке; */
-    if (m_output_file.isEmpty())
-    {
+    if (m_output_file.isEmpty()) {
         qCritical().noquote() << tr("The target file is not specified");
         return -1;
     }
@@ -133,45 +137,32 @@ int Task::parse_args(int argc, char **argv)
 void Task::run()
 {
 
-    if (m_parse_ok == 0)
-    {
-#ifdef Q_OS_MACOS
-        QIcon icon = QIcon(m_currDir + "/" + m_input_file);
-#else
+    if (m_parse_ok == 0) {
         QIcon icon = QIcon(m_input_file);
-#endif
-        if (icon.isNull())
-        {
+        if (icon.isNull()) {
             qCritical().noquote() << tr("Source file load error");
         } else {
 
-            if (m_bitmap_size.empty())
-            {
+            if (m_bitmap_size.empty()) {
               m_bitmap_size.append(256);
             }
 
-            if (QFileInfo(m_output_file).suffix().compare("ico", Qt::CaseInsensitive) == 0)
-            {
-                if (saveIco(icon, m_output_file, m_bitmap_size) != 0)
-                {
+            if (QFileInfo(m_output_file).suffix().compare("ico", Qt::CaseInsensitive) == 0) {
+                if (saveIco(icon, m_output_file, m_bitmap_size) != 0) {
                     qCritical() << tr("Cannot open output file") << m_output_file << tr("for writing");
                 }
-            } else if (QFileInfo(m_output_file).suffix().compare("icns", Qt::CaseInsensitive) == 0)
-            {
-                if (saveIcns(icon, m_output_file) != 0)
-                {
+            } else if (QFileInfo(m_output_file).suffix().compare("icns", Qt::CaseInsensitive) == 0) {
+                if (saveIcns(icon, m_output_file) != 0) {
                     qCritical() << tr("Cannot open output file") << m_output_file << tr("for writing");
                 }
             } else {
                 QImage image = icon.pixmap(QSize(m_bitmap_size[0], m_bitmap_size[0])).toImage();
-                if (!image.save(m_output_file))
-                {
+                if (!image.save(m_output_file)) {
                     qCritical() << tr("Cannot save output file") << m_output_file;
                 }
             }
         }
     }
-
     emit finished();
 }
 

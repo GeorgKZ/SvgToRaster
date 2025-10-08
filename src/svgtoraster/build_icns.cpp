@@ -192,8 +192,7 @@ int saveIcns(const QIcon &icon, const QString &filePath) {
      * 2 Для каждого размера растра:
      */
     QList<QByteArray> array_list(icns_size_num);
-    for (size_t i = 0; i < icns_size_num; ++i)
-    {
+    for (size_t i = 0; i < icns_size_num; ++i) {
         /**
          * &nbsp;&nbsp;&nbsp;&nbsp;2.1 Создать изображение необходимого размера из исходного значка.
          */
