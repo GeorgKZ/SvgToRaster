@@ -91,10 +91,10 @@ void bootstrap::init()
 //    char *PWD = getenv("PWD");
 //    QString pwd = PWD;
 
-    QString pwd(getenv("PWD"));
-    qDebug() << "Current directory (pwd): " << pwd;
-    qDebug() << "Current directory (qpwd): " << qEnvironmentVariable("PWD");
-    qDebug() << "Working directory (currpath): " << QDir::currentPath();
+//    QString pwd(getenv("PWD"));
+//    qDebug() << "Current directory (pwd): " << pwd;
+//    qDebug() << "Current directory (qpwd): " << qEnvironmentVariable("PWD");
+//    qDebug() << "Working directory (currpath): " << QDir::currentPath();
 
 
 }

@@ -76,7 +76,8 @@ private:
     /**
      * \brief Текущая директория
      */
-    QString m_currDir;
+    QDir m_currDir;
+
 
 signals:
 

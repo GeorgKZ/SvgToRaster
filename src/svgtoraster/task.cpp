@@ -24,22 +24,18 @@
  */
 Task::Task(int argc, char **argv, QObject *parent) : QObject(parent)
 {
-    m_parse_ok = parse_args(argc, argv);
 
 #ifdef Q_OS_MACOS
-    char *PWD = getenv("PWD");
-    m_currDir = PWD;
+    m_currDir = qEnvironmentVariable("PWD");
 #else
     m_currDir = QDir::currentPath();
 #endif
 
-    char *PWD = getenv("PWD");
-    QString pwd = PWD;
-    qDebug() << "Current directory (task pwd): " << pwd;
-    qDebug() << "Current directory (qpwd): " << qEnvironmentVariable("PWD");
-    qDebug() << "Working directory (task currpath): " << QDir::currentPath();
+//    qDebug() << "Current directory (task pwd): " << QString(getenv("PWD"));
+//    qDebug() << "Current directory (task qpwd): " << qEnvironmentVariable("PWD");
+//    qDebug() << "Working directory (task currpath): " << QDir::currentPath();
 
-
+    m_parse_ok = parse_args(argc, argv);
 }
 
 /**
@@ -77,9 +73,9 @@ int Task::parse_args(int argc, char **argv)
             qCritical().noquote() << tr("Command line format error: missing parameter after the") << "'i'" << tr("flag");
             return -1;
           }
-          QDir dir(m_currDir);
-          m_input_file = QDir::cleanPath(dir.absoluteFilePath(args.get_parameters(i)));
-          qDebug() << "Absolute input path:" << m_input_file;
+//        m_input_file = QDir::cleanPath(QFileInfo(m_currDir.filePath(args.get_parameters(i))).absoluteFilePath());
+          m_input_file = QFileInfo(m_currDir.filePath(args.get_parameters(i))).absoluteFilePath();
+//          qDebug() << "Absolute input path:" << m_input_file;
 
           if (!QFile::exists(m_input_file)) {
               qCritical().noquote() << tr("Error: the specified") << args.get_parameters(i) << tr("source file is missing");
@@ -93,9 +89,9 @@ int Task::parse_args(int argc, char **argv)
             qCritical().noquote() << tr("Command line format error: missing parameter after the") << "'o'" << tr("flag");
             return -1;
           }
-          QDir dir(m_currDir);
-          m_output_file = QDir::cleanPath(dir.absoluteFilePath(args.get_parameters(i)));
-          qDebug() << "Absolute output path:" << m_output_file;
+//        m_output_file = QDir::cleanPath(QFileInfo(m_currDir.filePath(args.get_parameters(i))).absoluteFilePath());
+          m_output_file = QFileInfo(m_currDir.filePath(args.get_parameters(i))).absoluteFilePath();
+//          qDebug() << "Absolute output path:" << m_output_file;
           continue;
       
         } else if (curr_flag.compare("s") == 0) {
