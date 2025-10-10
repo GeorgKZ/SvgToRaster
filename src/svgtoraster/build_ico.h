@@ -397,10 +397,10 @@ friend QDataStream &operator>>(QDataStream &in, tagICONDIRENTRY &icondirentry);
  *
  * \param[in] icon векторный значок <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>, на основе которого будет создан растровый значок.
  * \param[in] filePath строка <a href="https://doc.qt.io/qt-6/qstring.html">QString</a>, содержащая путь и имя файла создаваемого растрового значка.
- * \param[in] sizes Список <a href="https://doc.qt.io/qt-6/qlist.html">QList</a>, содержащий требуемые размеры битмапов значка.
+ * \param[in] sizes Список <a href="https://doc.qt.io/qt-6/qstringlist.html">QStringList</a>, содержащий требуемые размеры битмапов значка.
  * \retval 0 если значок успешно создан.
  * \retval -1 в случае ошибки.
  */
-int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes);
+int saveIco(const QIcon &icon, const QString &filePath, const QStringList &sizes);
 
 #endif // BUILD_ICO_H

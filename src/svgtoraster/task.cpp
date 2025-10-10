@@ -24,16 +24,14 @@
  */
 Task::Task(int argc, char **argv, QObject *parent) : QObject(parent)
 {
-
 #ifdef Q_OS_MACOS
+    /**
+     * \attention По какой-то причине в macOS 12 текущей директорией устанавливаестся '/'.
+     */
     m_currDir = qEnvironmentVariable("PWD");
 #else
     m_currDir = QDir::currentPath();
 #endif
-
-//    qDebug() << "Current directory (task pwd): " << QString(getenv("PWD"));
-//    qDebug() << "Current directory (task qpwd): " << qEnvironmentVariable("PWD");
-//    qDebug() << "Working directory (task currpath): " << QDir::currentPath();
 
     m_parse_ok = parse_args(argc, argv);
 }
@@ -73,9 +71,7 @@ int Task::parse_args(int argc, char **argv)
             qCritical().noquote() << tr("Command line format error: missing parameter after the") << "'i'" << tr("flag");
             return -1;
           }
-//        m_input_file = QDir::cleanPath(QFileInfo(m_currDir.filePath(args.get_parameters(i))).absoluteFilePath());
           m_input_file = QFileInfo(m_currDir.filePath(args.get_parameters(i))).absoluteFilePath();
-//          qDebug() << "Absolute input path:" << m_input_file;
 
           if (!QFile::exists(m_input_file)) {
               qCritical().noquote() << tr("Error: the specified") << args.get_parameters(i) << tr("source file is missing");
@@ -89,9 +85,7 @@ int Task::parse_args(int argc, char **argv)
             qCritical().noquote() << tr("Command line format error: missing parameter after the") << "'o'" << tr("flag");
             return -1;
           }
-//        m_output_file = QDir::cleanPath(QFileInfo(m_currDir.filePath(args.get_parameters(i))).absoluteFilePath());
           m_output_file = QFileInfo(m_currDir.filePath(args.get_parameters(i))).absoluteFilePath();
-//          qDebug() << "Absolute output path:" << m_output_file;
           continue;
       
         } else if (curr_flag.compare("s") == 0) {
@@ -100,10 +94,7 @@ int Task::parse_args(int argc, char **argv)
             qCritical().noquote() << tr("Command line format error: missing parameter after the") << "'s'" << tr("flag");
             return -1;
           }
-          QStringList size_set = args.get_parameters_set(i);
-          for (const QString &size : size_set) {
-              m_bitmap_size.append(size.toInt());
-          }
+          m_bitmap_size = args.get_parameters_set(i);
           continue;
 
         } else {
@@ -140,7 +131,7 @@ void Task::run()
         } else {
 
             if (m_bitmap_size.empty()) {
-              m_bitmap_size.append(256);
+              m_bitmap_size.append("256");
             }
 
             if (QFileInfo(m_output_file).suffix().compare("ico", Qt::CaseInsensitive) == 0) {
@@ -148,11 +139,22 @@ void Task::run()
                     qCritical() << tr("Cannot open output file") << m_output_file << tr("for writing");
                 }
             } else if (QFileInfo(m_output_file).suffix().compare("icns", Qt::CaseInsensitive) == 0) {
-                if (saveIcns(icon, m_output_file) != 0) {
-                    qCritical() << tr("Cannot open output file") << m_output_file << tr("for writing");
+                int err = saveIcns(icon, m_output_file, m_bitmap_size);
+                switch(err) {
+                    case 0:
+                        break;
+                    case -1:
+                        qCritical() << tr("Cannot open output file") << m_output_file << tr("for writing");
+                        break;
+                    case -2:
+                        qCritical() << tr("Cannot find icns format for bitmap size");
+                        break;
+                    case -3:
+                        qCritical() << tr("Cannot find icns approptiate format for doubled bitmap size");
+                        break;
                 }
             } else {
-                QImage image = icon.pixmap(QSize(m_bitmap_size[0], m_bitmap_size[0])).toImage();
+                QImage image = icon.pixmap(QSize(m_bitmap_size[0].toInt(), m_bitmap_size[0].toInt())).toImage();
                 if (!image.save(m_output_file)) {
                     qCritical() << tr("Cannot save output file") << m_output_file;
                 }

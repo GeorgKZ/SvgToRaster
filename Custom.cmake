@@ -81,8 +81,7 @@ set(QT_LANG "en_US;ru_RU")
     "Создание значка ICO"
     "--s 256 128 64 48 32 24 16 --i ../tests/my icon.svg --o ${TEST_RESULTS}/icon ico.ico"
     "Создание значка ICNS"
-#    --s 16 16@2x 32 32@2x 128 128@2x 256 256@2x 512 512@2x
-    "--s 16 --i ../tests/my icon.svg --o ${TEST_RESULTS}/icon icns.icns"
+    "--s 16 16@2x 32 32@2x 128 128@2x 256 256@2x 512 512@2x --i ../tests/my icon.svg --o ${TEST_RESULTS}/icon icns.icns"
     "Создание значка PNG"
     "--i ../tests/my icon.svg --o ${TEST_RESULTS}/icon png.png"
   )

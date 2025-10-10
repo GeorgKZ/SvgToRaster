@@ -71,32 +71,9 @@ void bootstrap::init()
     /**
      * 3 Установить локализацию согласно указанному в файле конфигурации языку.
      */
-    QLocale currentLocale;
-    QLocale systemLocale = QLocale::system();
 
-    qDebug().noquote() << "Default Locale:" << currentLocale.name();
-    qDebug().noquote() << "System Locale:" << systemLocale.name();
-    qDebug() << "Default language:" << currentLocale.languageToString(currentLocale.language())
-      << "(" << currentLocale.nativeLanguageName() << ")";
-    qDebug() << "System language:" << systemLocale.languageToString(systemLocale.language())
-      << "(" << systemLocale.nativeLanguageName() << ")";
-    qDebug() << "Default Region:" << currentLocale.countryToString(currentLocale.country());
-    qDebug() << "System Region:" << systemLocale.countryToString(systemLocale.country());
-    qDebug() << "Default Territory:" << QLocale::territoryToCode(currentLocale.territory());
-    qDebug() << "UI Languages::" << currentLocale.uiLanguages();
-
-    QString locale = QLocale::system().name().left(2);
+    QString locale = QLocale::territoryToCode(QLocale().territory()).toLower();
     setAllTranslators(locale);
-
-//    char *PWD = getenv("PWD");
-//    QString pwd = PWD;
-
-//    QString pwd(getenv("PWD"));
-//    qDebug() << "Current directory (pwd): " << pwd;
-//    qDebug() << "Current directory (qpwd): " << qEnvironmentVariable("PWD");
-//    qDebug() << "Working directory (currpath): " << QDir::currentPath();
-
-
 }
 
 /**

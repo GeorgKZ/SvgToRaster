@@ -275,9 +275,9 @@ QDataStream &operator>>(QDataStream &in, tagICONDIRENTRY &icondirentry) {
 
 /**
  * \file
- * * \copybrief saveIco(const QIcon&, const QString&, const QList<int>&)
+ * * \copybrief saveIco(const QIcon&, const QString&, const QStringList&)
  */
-int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes) {
+int saveIco(const QIcon &icon, const QString &filePath, const QStringList &sizes) {
 
     /**
      * Алгоритм:
@@ -287,8 +287,9 @@ int saveIco(const QIcon &icon, const QString &filePath, const QList<int> &sizes)
      * * Создать изображения разных размеров из исходного значка.
      */
     QList<QImage> images;
-    for (const int &size : sizes) {
-        QImage img = icon.pixmap(QSize(size, size)).toImage();
+    for (const QString &size : sizes) {
+        int isize = size.toInt();
+        QImage img = icon.pixmap(QSize(isize, isize)).toImage();
         img.convertTo(QImage::Format_ARGB32);
         images.append(img);
     }

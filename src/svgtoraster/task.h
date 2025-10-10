@@ -66,7 +66,7 @@ private:
     /**
      * \brief Список требуемых размеров битмапов
      */
-    QList<int> m_bitmap_size;
+    QStringList m_bitmap_size;
 
     /**
      * \brief Код завершения оперрации разбора командной строки

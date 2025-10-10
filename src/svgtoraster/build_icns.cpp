@@ -7,6 +7,7 @@
 
 #include <QFile>
 #include <QBuffer>
+#include <QDebug>
 #include "build_icns.h"
 
 /**
@@ -19,14 +20,14 @@ static const char* OSTYPE_ID[] = {
  "TOC ", "info"
 };
 
-/** \brief Размеры битмапов, которые будут помещены в ICNS */
-static const QList<int> icns_sizes = { 64,    128,  256,  256,   16,  512,  512,   32, 1024,   32 };
-
-/** \brief Коды типов  битмапов, которые будут помещены в ICNS */
-static const QList<int> icns_codes = { ic12, ic07, ic13, ic08, ic04, ic14, ic09, ic05, ic10, ic11 };
-
-/** \brief Количество битмапов, которые будут помещены в ICNS */
-static const size_t icns_size_num = icns_sizes.size();
+// /** \brief Размеры битмапов, которые будут помещены в ICNS */
+// static const QList<int> icns_sizes = { 64,    128,  256,  256,   16,  512,  512,   32, 1024,   32 };
+//
+// /** \brief Коды типов  битмапов, которые будут помещены в ICNS */
+// static const QList<int> icns_codes = { ic12, ic07, ic13, ic08, ic04, ic14, ic09, ic05, ic10, ic11 };
+//
+// /** \brief Количество битмапов, которые будут помещены в ICNS */
+// static const size_t icns_size_num = icns_sizes.size();
 
 /**
  * \file
@@ -173,11 +174,26 @@ QDataStream &operator>>(QDataStream &in, tagICNSDATA &idata) {
  * <BR>
  */
 
+bool getDouble(const QString &size) {
+    if (size.size() > 3 && size.right(3) == QString("@2x")) return true;
+    if (size.size() > 3 && size.right(3) == QString("@1x")) return false;
+    return false;
+}
+
+int getSize(const QString &size) {
+
+    if (size.size() > 3 &&
+      (size.right(3) == QString("@2x") || size.right(3) == QString("@1x"))) {
+        return size.chopped(3).toInt();
+    }
+    return size.toInt();
+}
+
 /**
  * \file
- * * \copybrief saveIco(const QIcon&, const QString&, const QList<int>&)
+ * * \copybrief saveIcns(const QIcon&, const QString&, const QStringList&)
  */
-int saveIcns(const QIcon &icon, const QString &filePath) {
+int saveIcns(const QIcon &icon, const QString &filePath, const QStringList& sizes) {
 
     /**
      * Алгоритм:
@@ -191,18 +207,34 @@ int saveIcns(const QIcon &icon, const QString &filePath) {
     /**
      * 2 Для каждого размера растра:
      */
-    QList<QByteArray> array_list(icns_size_num);
-    for (size_t i = 0; i < icns_size_num; ++i) {
+    QList<QByteArray> array_list(sizes.size());
+    for (qsizetype i = 0; i < sizes.size(); ++i) {
+
         /**
-         * &nbsp;&nbsp;&nbsp;&nbsp;2.1 Создать изображение необходимого размера из исходного значка.
+         * &nbsp;&nbsp;&nbsp;&nbsp;2.1 Определить формат исходя из требуемого размера и удвоения.
          */
-        QImage img = icon.pixmap(QSize(icns_sizes[i], icns_sizes[i])).toImage();
+        enum OSTYPE icns_code = getCode(sizes[i]);
+        int isize = getSize(sizes[i]);
+        bool retinaDoube = getDouble(sizes[i]);
+        if (icns_code == error) {
+             if (retinaDoube) {
+                 return -3;
+             } else {
+                 return -2;
+             }
+        }
+        if (retinaDoube) isize *= 2;
+
+        /**
+         * &nbsp;&nbsp;&nbsp;&nbsp;2.2 Создать изображение необходимого размера из исходного значка.
+         */
+        QImage img = icon.pixmap(QSize(isize, isize)).toImage();
         img.convertTo(QImage::Format_ARGB32);
 
-        /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.1 Для форматов ic04, ic05, icsb использовать сжатие ARGB. */
-        if (icns_codes[i] == ic04 || icns_codes[i] == ic05 || icns_codes[i] == icsb) {
+        /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1 Для форматов ic04, ic05, icsb использовать сжатие ARGB. */
+        if (icns_code == ic04 || icns_code == ic05 || icns_code == icsb) {
 
-            /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.1.1 Разобрать данные изображения по слоям. */
+            /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1.1 Разобрать данные изображения по слоям. */
             QByteArray alpha, red, green, blue;
             for (int h = 0; h < img.height(); ++h) {
                 for (int w = 0; w < img.width(); ++w) {
@@ -213,18 +245,18 @@ int saveIcns(const QIcon &icon, const QString &filePath) {
                     blue += (unsigned char)qBlue(rgb);
                 }
             }
-            /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.1.2 Записать заголовок 'ARGB'. */
+            /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1.2 Записать заголовок 'ARGB'. */
             array_list[i] += 'A';
             array_list[i] += 'R';
             array_list[i] += 'G';
             array_list[i] += 'B';
-            /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.1.2 Последовательно записать слои, сжатые по алгоритму ARGB. */
+            /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1.2 Последовательно записать слои, сжатые по алгоритму ARGB. */
             array_list[i] += compressARGB(alpha);
             array_list[i] += compressARGB(red);
             array_list[i] += compressARGB(green);
             array_list[i] += compressARGB(blue);
 
-        /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.2 В других случаях сформировать в буфере битмап PNG */
+        /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.2 В других случаях сформировать в буфере битмап PNG */
         } else {
           QBuffer buffer(&array_list[i]);
           buffer.open(QIODevice::WriteOnly);
@@ -232,7 +264,7 @@ int saveIcns(const QIcon &icon, const QString &filePath) {
         }
 
         /**
-         * &nbsp;&nbsp;&nbsp;&nbsp;2.2 Учесть размер битмапа и заголовка в общем размере файла
+         * &nbsp;&nbsp;&nbsp;&nbsp;2.3 Учесть размер битмапа и заголовка в общем размере файла
          */
         iheader.m_fsize += sizeof(ICNSDATA) + array_list[i].size();
     }
@@ -252,16 +284,26 @@ int saveIcns(const QIcon &icon, const QString &filePath) {
     out << iheader;
 
     /**
-     * 5 Для каждого размера растра записать в поток заголовок ICNSDATA и битмап
+     * 5 Записать в поток оглавление TOC.
      */
-    for (size_t i = 0; i < icns_size_num; ++i) {
-        ICNSDATA idata = { OSTYPE_ID[icns_codes[i]], sizeof(ICNSDATA) + array_list[i].size() };
+    ICNSDATA idata_toc = { OSTYPE_ID[TOC], sizeof(ICNSDATA) + sizes.size() * (4 + 4) };
+    out << idata_toc;
+    for (qsizetype i = 0; i < sizes.size(); ++i) {
+        ICNSDATA idata_toc_element = { OSTYPE_ID[getCode(sizes[i])], sizeof(ICNSDATA) + array_list[i].size() };
+        out << idata_toc_element;
+    }
+
+    /**
+     * 6 Для каждого размера растра записать в поток заголовок ICNSDATA и битмап
+     */
+    for (qsizetype i = 0; i < sizes.size(); ++i) {
+        ICNSDATA idata = { OSTYPE_ID[getCode(sizes[i])], sizeof(ICNSDATA) + array_list[i].size() };
         out << idata;
         out.writeRawData(array_list[i].constData(), array_list[i].size());
     }
 
     /**
-     * 6 Закрыть файл значка.
+     * 7 Закрыть файл значка.
      */
     icoFile.close();
     return 0;
@@ -327,6 +369,58 @@ QByteArray compressARGB(const QByteArray& data) {
   }
   return output;
 }
+
+/**
+ * \file
+ * * \copybrief getCode(const QString&)
+ */
+enum OSTYPE getCode(const QString &size) {
+
+    int isize = getSize(size);
+    bool retinaDoube = getDouble(size);
+
+    switch(isize) {
+
+        /**
+         * размер 32x32, MacOS v10.8, битмап PNG (16x16@2x "retina") или
+         * размер 16x16, битмап ARGB;
+         */
+        case   16:
+            return  retinaDoube ? ic11 : ic04;
+
+        /**
+         * Размер 64x64, MacOS v10.8, битмап JPEG 2000 или PNG (32x32@2x "retina") или
+         * размер 32x32, битмап ARGB;
+         */
+        case   32:
+            return retinaDoube ? ic12 : ic05;
+
+        /**
+         * Размер 256x256, MacOS v10.8, битмап PNG (128x128@2x "retina") или
+         * размер 128x128, MacOS v10.7, битмап PNG
+         */
+        case  128:
+            return retinaDoube ? ic13 : ic07;
+
+        /**
+         * Размер 512x512, MacOS v10.8, битмап PNG (256x256@2x "retina") или
+         * размер 256x256, MacOS v10.5, битмап PNG
+         */
+        case  256:
+            return retinaDoube ? ic14 : ic08;
+
+        /**
+         * Размер 1024x1024, MacOS v10.7, битмап PNG (512x512@2x "retina" в MacOS 10.8) или
+         * размер 512x512, MacOS v10.5, битмап PNG
+         */
+        case  512:
+            return retinaDoube ? ic10 : ic09;
+
+        default:
+            return error;
+    }
+}
+
 
 /**
  * \TODO Учесть тонкости

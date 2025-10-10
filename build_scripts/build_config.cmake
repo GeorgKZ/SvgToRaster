@@ -39,7 +39,7 @@
     ${LOGLEVEL_STRING}
     ${CMAKE_CNF}
     ${GENERATOR_STRING}
-    -S ${SOURCEDIR}
+    -S "../"
     -B ${CMAKEDIR}
     RESULT_VARIABLE result
     OUTPUT_VARIABLE output

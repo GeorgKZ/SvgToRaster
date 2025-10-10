@@ -345,12 +345,13 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
         "-D__MYFUNCNAME__=__PRETTY_FUNCTION__"  #!!! Проверить на MacOS!!!
     )
     # Обрезать таблицы символов для Release
-    add_link_options(
-        $<$<CONFIG:RELEASE>:-s>
-    )
+#    add_link_options(
+#        $<$<CONFIG:RELEASE>:-x>
+#        $<$<CONFIG:RELEASE>:-S>
+#    )
     # Обрезать таблицы символов для MinSizeRel
     add_link_options(
-        $<$<CONFIG:MINSIZEREL>:-s>
+        $<$<CONFIG:MINSIZEREL>:--strip-all>
     )
 
 # gcc
@@ -684,7 +685,7 @@ if((DEFINED CUSTOM_SVG_ICON_FILE) AND (EXISTS ${CUSTOM_SVG_ICON_FILE}))
 endif()
 
 ##############################################################################
-# Создание файлов для Mac OS/OS X
+# Создание файлов для macOS/OS X
 ##############################################################################
 
 # Если сборка предназначена для выполнения под MacOS / OS X,
@@ -714,6 +715,8 @@ message(STATUS "Целевая разрядность ${TARGET_BIT_WIDTH}")
 message(STATUS "Целевая среда исполнения ${CMAKE_SYSTEM_NAME}")
 if (CMAKE_BUILD_TYPE)
     message(STATUS "Конфигурация ${CMAKE_BUILD_TYPE}")
+#   set(CMAKE_MAP_IMPORTED_CONFIG_MINSIZEREL Release)
+#   set(CMAKE_MAP_IMPORTED_CONFIG_RELEASE Release)
 endif()
 
 if (DEFINED USE_QT) 
@@ -833,7 +836,7 @@ foreach(PLUGIN ${QT_PLUGIN_LIST})
         )
     endforeach(FILE)
 
-    # Получить список директорий *.dSYM плюгина (Mac OS)
+    # Получить список директорий *.dSYM плюгина (macOS)
     file(GLOB QT_PLUGIN_FILES_LIST
       RELATIVE "${QT_PLUGIN_PATH}/${PLUGIN}"
       "${QT_PLUGIN_PATH}/${PLUGIN}/*.dSYM"

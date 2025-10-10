@@ -31,7 +31,7 @@ set(qt_mirrors
 # Настройка требуемой версии Qt
 ##############################################################################
 #
-set(qt_version "6.10.0")
+set(qt_version "6.9.3")
 #
 ##############################################################################
 # Настройки для отладочного режима
@@ -79,10 +79,17 @@ elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND (DEFINED ARM64))
 # Linux x86
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
     set(ARCH_PATH "/var/tmp/archive")
-    set(url_os "linux_x64")
-    set(compiler_id1 "gcc_64")
-    set(compiler_id "linux_gcc_64")
-    set(qt_dir "/opt/qt${qt_version_dotless}")
+    if(DEFINED MINGW64)
+        set(url_os "windows_x86")
+        set(compiler_id "win64_mingw")
+        set(compiler_id1 "mingw_64")
+        set(qt_dir "/opt/qt_mingw64_${qt_version_dotless}")
+    else()
+        set(url_os "linux_x64")
+        set(compiler_id1 "gcc_64")
+        set(compiler_id "linux_gcc_64")
+        set(qt_dir "/opt/qt${qt_version_dotless}")
+    endif()
 # Linux arm64
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND (DEFINED ARM64))
     set(ARCH_PATH "/var/tmp/archive")
