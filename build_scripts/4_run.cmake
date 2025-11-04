@@ -45,7 +45,7 @@
       # Настройки Valgrind
       # set(VALGRIND_LEAKS --leak-check=full --show-leak-kinds=all --leak-resolution=high)
       # set(VALGRIND_UNDEFS --undef-value-errors=yes --track-origins=yes)
-      set(VALGRIND_MAIN valgrind --show-error-list=yes --keep-debuginfo=yes ${VALGRIND_LEAKS} ${VALGRIND_UNDEFS})
+      set(VALGRIND_MAIN "valgrind --show-error-list=yes --keep-debuginfo=yes ${VALGRIND_LEAKS} ${VALGRIND_UNDEFS}")
   endif()
 
   # Вывод информации о работе с плюгинами Qt
@@ -77,7 +77,6 @@
           set(CMD_PREFIX "${VALGRIND_MAIN}")
           set(CMD_PATH "/bin")
       endif()
-
 
       # Создать скрипт для выполнения команды
       file(WRITE

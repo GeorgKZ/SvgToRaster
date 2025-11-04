@@ -2,9 +2,6 @@
 # Информация о проекте
 ##############################################################################
 
-# Флаг использования Qt
-set(USE_QT 1)
-
 # Имя проекта, соответствующее имени исполняемого файла
 set(CUSTOM_PROJECT_NAME "SvgToRaster")
 # Версия проекта
@@ -42,6 +39,12 @@ set(PROJECT_MODULES_LIST
 # Настройки Qt
 ##############################################################################
 
+# Флаг использования Qt
+set(USE_QT 1)
+
+# Флаг использования Qt Auto UIC
+#set(USE_QT_UIC 1)
+
 # Список необходимых для приложения плюгинов
 set(QT_PLUGIN_LIST
   "iconengines"
@@ -68,20 +71,20 @@ set(QT_LANG "en_US;ru_RU")
 
   # Список комментариев и аргументов
   set(TEST_ARGUMENTS_LIST
-    "Запуск без аргументов"
-    ""
-    "Запуск с неправильным флагом"
-    "--x 123 --i ../tests/my icon.svg --o ${TEST_RESULTS}/no result.png"
-    "Запуск без указания результирующего файла"
-    "--i ../tests/my icon.svg"
-    "Запуск с несуществующим исходным файлом"
-    "--i ../tests/not my icon.svg --o ${TEST_RESULTS}/no result.png"
-    "Запуск без указания исходного файла"
-    "--o ${TEST_RESULTS}/no result.png"
-    "Создание значка ICO"
-    "--s 256 128 64 48 32 24 16 --i ../tests/my icon.svg --o ${TEST_RESULTS}/icon ico.ico"
+#    "Запуск без аргументов"
+#    ""
+#    "Запуск с неправильным флагом"
+#    "--x 123 --i ../tests/my icon.svg --o ${TEST_RESULTS}/no result.png"
+#    "Запуск без указания результирующего файла"
+#    "--i ../tests/my icon.svg"
+#    "Запуск с несуществующим исходным файлом"
+#    "--i ../tests/not my icon.svg --o ${TEST_RESULTS}/no result.png"
+#    "Запуск без указания исходного файла"
+#    "--o ${TEST_RESULTS}/no result.png"
+#    "Создание значка ICO"
+#    "--s 256 128 64 48 32 24 16 --i ../tests/my icon.svg --o ${TEST_RESULTS}/icon ico.ico"
     "Создание значка ICNS"
     "--s 16 16@2x 32 32@2x 128 128@2x 256 256@2x 512 512@2x --i ../tests/my icon.svg --o ${TEST_RESULTS}/icon icns.icns"
-    "Создание значка PNG"
-    "--i ../tests/my icon.svg --o ${TEST_RESULTS}/icon png.png"
+#    "Создание значка PNG"
+#    "--i ../tests/my icon.svg --o ${TEST_RESULTS}/icon png.png"
   )

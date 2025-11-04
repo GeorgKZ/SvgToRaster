@@ -719,6 +719,7 @@ if (CMAKE_BUILD_TYPE)
 #   set(CMAKE_MAP_IMPORTED_CONFIG_RELEASE Release)
 endif()
 
+# При использовании Qt вывести сообщение об используемой версии
 if (DEFINED USE_QT) 
     message(STATUS "Qt версии ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
     if (DEFINED QT_HOST_PATH) 
@@ -728,11 +729,14 @@ endif()
 
 message(STATUS "##############################################################################")
 
+# При использовании Qt использовать метаобъектный компилятор
 if (DEFINED USE_QT) 
-    # Создавать заголовочные файлы для файлов *.ui
-    set(CMAKE_AUTOUIC ON)
-    # Использовать метаобъектный компилятор
     set(CMAKE_AUTOMOC ON)
+endif()
+
+# При использовании файлов UI в Qt создавать заголовочные файлы для файлов *.ui
+if (DEFINED USE_QT_UIC) 
+    set(CMAKE_AUTOUIC ON)
 endif()
 
 ##############################################################################
