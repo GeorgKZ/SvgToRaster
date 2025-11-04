@@ -3,6 +3,9 @@
  * \brief Заголовочный файл с классами и функциями, необходимыми для преобразования
  * векторного изображения <a href="https://doc.qt.io/qt-6/qicon.html">QIcon</a>
  * в растровый значок формата <a href="https://en.wikipedia.org/wiki/Apple_Icon_Image_format">ICNS</a> с несколькими битмапами различного размера.
+ *
+ * \note Во всех структурах принят порядок следования байт в многобайтовом слове
+ *  (а также при записи в поток) Big-endian, то есть первым идёт старший байт.
  */
 
 #ifndef BUILD_ICNS_H
@@ -102,6 +105,48 @@ enum OSTYPE {
     error = 999
 };
 
+
+
+/*
+
+OBJECT TABLE
+variable-sized objects
+
+Object Formats
+null	00
+bool	08 // false
+bool	09 // true
+fill	0F // fill byte
+int	1n ... // # of bytes is 2^n, big-endian bytes
+real	2n ... // # of bytes is 2^n, big-endian bytes
+date	33 ... // 8 byte float follows, big-endian bytes
+data	4n ... // n - количество от 0 до 14
+data	4F int ... // int - количество больше 15
+string	5n ... // ASCII string, nnnn is # of chars, else 1111 then int count, then bytes
+string	5F int ... // ASCII string, nnnn is # of chars, else 1111 then int count, then bytes
+string	6n ... // Unicode string, nnnn is # of chars, else 1111 then int count, then big-endian 2-byte uint16_t
+string	6F int ... // Unicode string, nnnn is # of chars, else 1111 then int count, then big-endian 2-byte uint16_t
+не исп. 7x
+uid	8n ... // n+1 - количество байт
+не исп. 9x
+array	An objref* // n - количество, не равно Fh
+array	An int objref* // int - количество
+не исп. Bx
+set	Cn objref* // n - количество, не равно Fh
+set	CF int objref* // int - количество
+dict	Dn keyref* objref* // n - количество, не равно Fh
+dict	DF int keyref* objref* // int - количество
+не исп. Ex
+не исп. Fx
+
+OFFSET TABLE
+	list of ints, byte size of which is given in trailer
+	-- these are the byte offsets into the file
+	-- number of these is in the trailer
+
+TRAILER
+*/
+
 /**
  * \brief Класс, переопределяющий четырёхбайтовое число для обеспечения необходимого
  * (первым идёт старший байт, Big-endian) порядка байт при записи в поток.
@@ -174,7 +219,7 @@ public:
 
 };
 
-/* Установка выравнивания в 1 бит для стркутур */
+/* Установка выравнивания в 1 бит для структур */
 #pragma pack(push, 1)
 
 /**

@@ -3,6 +3,7 @@
  * \brief Файл с определениями функций-членов класса \ref Task "Task"
  */
 
+#include <iostream>
 #include <QIcon>
 #include <QSize>
 #include <QImageReader>
@@ -169,11 +170,12 @@ void Task::run()
  * * \copybrief Task::print_help()
  */
 void Task::print_help() {
-  qInfo().noquote() << tr("USAGE:");
-  qInfo().noquote() << "svgtoraster [--s <S>] --i <in_file> --o <out_file>";
-  qInfo().noquote() << "    <S>              -" << tr("output bitmap sizes");
-  qInfo().noquote() << "    <in_file>        -" << tr("source SVG file");
-  qInfo().noquote() << "    <out_file>       -" << tr("target PNG, ICO, ICNS file");
+  std::cout << tr("USAGE:").toStdString() << std::endl;
+  std::cout << "svgtoraster [--s <S>] --i <in_file> --o <out_file>" << std::endl;
+  std::cout << "    <S>              - " << tr("output bitmap sizes").toStdString() << std::endl;
+  std::cout << "    <in_file>        - " << tr("source SVG file").toStdString() << std::endl;
+  std::cout << "    <out_file>       - " << tr("target PNG, ICO, ICNS file").toStdString() << std::endl;
+
   qDebug().noquote() << tr("Supported input formats:") << QImageReader::supportedImageFormats();
   qDebug().noquote() << tr("Supported output formats:") << QImageWriter::supportedImageFormats();
 }

@@ -7,8 +7,10 @@
 
 #include <QFile>
 #include <QBuffer>
+#include <QXmlStreamReader>
 #include <QDebug>
 #include "build_icns.h"
+#include "bplist.h"
 
 /**
  * \brief Четырёхбуквенные коды типов битмапов, которые могут быть помещены в ICNS
@@ -20,14 +22,84 @@ static const char* OSTYPE_ID[] = {
  "TOC ", "info"
 };
 
-// /** \brief Размеры битмапов, которые будут помещены в ICNS */
-// static const QList<int> icns_sizes = { 64,    128,  256,  256,   16,  512,  512,   32, 1024,   32 };
-//
-// /** \brief Коды типов  битмапов, которые будут помещены в ICNS */
-// static const QList<int> icns_codes = { ic12, ic07, ic13, ic08, ic04, ic14, ic09, ic05, ic10, ic11 };
-//
-// /** \brief Количество битмапов, которые будут помещены в ICNS */
-// static const size_t icns_size_num = icns_sizes.size();
+/**
+ * \brief Plist, который в двоичной форме должен храниться в ICNS
+ */
+static const char *icns_plist = "\
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\
+<plist version=\"1.0\">\
+<dict>\
+    <key>$version</key>\
+    <integer>100000</integer>\
+    <key>$archiver</key>\
+    <string>NSKeyedArchiver</string>\
+    <key>$top</key>\
+    <dict>\
+        <key>root</key>\
+        <dict>\
+            <key>CF$UID</key>\
+            <integer>1</integer>\
+        </dict>\
+    </dict>\
+    <key>$objects</key>\
+    <array>\
+        <string>$null</string>\
+        <dict>\
+            <key>NS.keys</key>\
+            <array>\
+                <dict>\
+                    <key>CF$UID</key>\
+                    <integer>2</integer>\
+                </dict>\
+                <dict>\
+                    <key>CF$UID</key>\
+                    <integer>3</integer>\
+                </dict>\
+            </array>\
+            <key>NS.objects</key>\
+            <array>\
+                <dict>\
+                    <key>CF$UID</key>\
+                    <integer>4</integer>\
+                </dict>\
+                <dict>\
+                    <key>CF$UID</key>\
+                    <integer>5</integer>\
+                </dict>\
+            </array>\
+            <key>$class</key>\
+                <dict>\
+                    <key>CF$UID</key>\
+                    <integer>6</integer>\
+                </dict>\
+        </dict>\
+        <string>name</string>\
+        <string>assetcatalog-reference</string>\
+        <string>icon</string>\
+        <dict>\
+            <key>NS.keys</key>\
+            <array></array>\
+            <key>NS.objects</key>\
+            <array></array>\
+            <key>$class</key>\
+            <dict>\
+                <key>CF$UID</key>\
+                <integer>6</integer>\
+            </dict>\
+        </dict>\
+        <dict>\
+            <key>$classname</key>\
+            <string>NSDictionary</string>\
+            <key>$classes</key>\
+            <array>\
+                <string>NSDictionary</string>\
+                <string>NSObject</string>\
+            </array>\
+        </dict>\
+    </array>\
+</dict>\
+</plist>";
 
 /**
  * \file
@@ -239,10 +311,10 @@ int saveIcns(const QIcon &icon, const QString &filePath, const QStringList& size
             for (int h = 0; h < img.height(); ++h) {
                 for (int w = 0; w < img.width(); ++w) {
                     QRgb rgb = img.pixel(w, h);
-                    alpha += (unsigned char)qAlpha(rgb);
-                    red += (unsigned char)qRed(rgb);
-                    green += (unsigned char)qGreen(rgb);
-                    blue += (unsigned char)qBlue(rgb);
+                    alpha += static_cast<quint8>(qAlpha(rgb));
+                    red += static_cast<quint8>(qRed(rgb));
+                    green += static_cast<quint8>(qGreen(rgb));
+                    blue += static_cast<quint8>(qBlue(rgb));
                 }
             }
             /** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1.2 Записать заголовок 'ARGB'. */
@@ -302,8 +374,74 @@ int saveIcns(const QIcon &icon, const QString &filePath, const QStringList& size
         out.writeRawData(array_list[i].constData(), array_list[i].size());
     }
 
+
+binaryPlist p1;
+p1.parser(icns_plist);
+QFile bplist("/home/user/_My_SvgToRaster/SvgToRaster/tests/mybplist.bin");
+bplist.open(QIODevice::WriteOnly);
+QDataStream bpout(&bplist);
+p1.output(bpout);
+
+
     /**
-     * 7 Закрыть файл значка.
+     * 7 Записать двоичный Plist
+     *
+     * &nbsp;&nbsp;&nbsp;&nbsp;7.1 Сформировать двоичный Plist по шаблону:
+     */
+    binaryPlist p;
+    p.parser(icns_plist);
+#if 0
+    p.addDictonaryObject( { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x0A } );
+    p.addStringObject("$version");
+    p.addStringObject("$archiver");
+    p.addStringObject("$top");
+    p.addStringObject("$objects");
+    p.addIntegerObject(100000);
+    p.addStringObject("NSKeyedArchiver");
+    p.addDictonaryObject( { 0x08, 0x09 } );
+    p.addStringObject("root");
+    p.addUidObject({1});
+    p.addArrayObject( { 0x0B, 0x0C, 0x17, 0x18, 0x19, 0x1A, 0x1E } );
+    p.addStringObject("$null");
+    p.addDictonaryObject( { 0x0D, 0x0E, 0x0F, 0x10, 0x13, 0x16 } );
+    p.addStringObject("NS.keys");
+    p.addStringObject("NS.objects");
+    p.addStringObject("$class");
+    p.addArrayObject( { 0x11, 0x12 } );
+    p.addUidObject({2});
+    p.addUidObject({3});
+    p.addArrayObject( { 0x14, 0x15 } );
+    p.addUidObject({4});
+    p.addUidObject({5});
+    p.addUidObject({6});
+    p.addStringObject("name");
+    p.addStringObject("assetcatalog-reference");
+    p.addStringObject("icon");
+    p.addDictonaryObject( { 0x0D, 0x0E, 0x0F, 0x1B, 0x1C, 0x16 } );
+    p.addArrayObject({});
+    p.addArrayObject({});
+    p.addUidObject({6});
+    p.addDictonaryObject( { 0x1F, 0x20, 0x21, 0x22 } );
+    p.addStringObject("$classname");
+    p.addStringObject("$classes");
+    p.addStringObject("NSDictionary");
+    p.addArrayObject( { 0x21, 0x23 } );
+    p.addStringObject("NSObject");
+    p.finish(0x00);
+#endif
+    /**
+     * &nbsp;&nbsp;&nbsp;&nbsp;7.2 Записать заголовок ICNSDATA
+     */
+    ICNSDATA plist_data = { OSTYPE_ID[info], sizeof(ICNSDATA) + p.size() };
+    out << plist_data;
+
+    /**
+     * &nbsp;&nbsp;&nbsp;&nbsp;7.3 Записать двоичный Plist.
+     */
+    p.output(out);
+
+    /**
+     * 8 Закрыть файл значка.
      */
     icoFile.close();
     return 0;
@@ -420,6 +558,7 @@ enum OSTYPE getCode(const QString &size) {
             return error;
     }
 }
+
 
 
 /**
