@@ -9,6 +9,8 @@
 [![Compiler: Visual_Studio](doc/badges/Visual_Studio.svg)](https://visualstudio.microsoft.com)
 [![Compiler: MinGW](doc/badges/MinGW.svg)](https://www.mingw-w64.org)
 [![Platform Windows](doc/badges/Windows.svg)](https://support.microsoft.com/ru-ru/windows)
+[![Platform linux](doc/badges/linux.svg)](https://ru.wikipedia.org/wiki/Linux)
+[![Platform ubuntu](doc/badges/ubuntu.svg)](https://ubuntu.com/)
 [![Platform debian](doc/badges/debian.svg)](https://www.debian.org/)
 [![Platform macOS](doc/badges/macOS.svg)](https://www.apple.com/os/macos/)
 [![Framework Qt v6.X.X](doc/badges/Qt6.svg)](https://www.qt.io/product/qt6)
