@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QBuffer>
 #include <QXmlStreamReader>
+#include <QDateTime>
 #include <QDebug>
 #include "build_icns.h"
 #include "bplist.h"
@@ -62,7 +63,7 @@ void binaryPlist::parser(const QString &plist) {
 
 //    std::cout << pnode->toString().toStdString().c_str();
 
-    for (auto i = 0; i < m_binary_list.size(); ++i) {
+    for (qsizetype i = 0; i < m_binary_list.size(); ++i) {
         switch(m_binary_list[i]->getTag()) {
             default:
                 break;
@@ -74,24 +75,34 @@ void binaryPlist::parser(const QString &plist) {
                 this->addArrayObject(m_binary_list[i]->getRefList());
 //                qDebug() << Qt::hex << "[" << i << "] " << m_binary_list[i]->tagToString() << m_binary_list[i]->getRefList();
                 break;
-//        tag_bool,
-//        tag_fill,
+            case tag_bool:
+                this->addBooleanObject(m_binary_list[i]->getBoolValue());
+                break;
+            case tag_fill:
+                this->addFillObject();
+                break;
             case tag_int:
                 this->addIntegerObject(m_binary_list[i]->getIntValue());
 //                qDebug() << Qt::hex << "[" << i << "] " << m_binary_list[i]->tagToString() << m_binary_list[i]->getIntValue();
                 break;
-//        tag_real,
-//        tag_date,
-//        tag_data,
-           case tag_string:
-           case tag_key:
+            case tag_real:
+                this->addRealObject(m_binary_list[i]->getRealValue());
+                break;
+            case tag_date:
+                this->addDateObject(m_binary_list[i]->getStringValue());
+                break;
+            case tag_data:
+                this->addDataObject(m_binary_list[i]->getStringValue());
+                break;
+            case tag_string:
+            case tag_key:
                 this->addStringObject(m_binary_list[i]->getStringValue());
 //                qDebug() << Qt::hex << "[" << i << "] " << m_binary_list[i]->tagToString() << m_binary_list[i]->getStringValue();
-               break;
-           case tag_uid:
-                this->addUidObject( { static_cast<quint8>(m_binary_list[i]->getIntValue()) } );
+                break;
+            case tag_uid:
+                this->addUidObject(m_binary_list[i]->getIntValue());
 //                qDebug() << Qt::hex << "[" << i << "] " << m_binary_list[i]->tagToString() << m_binary_list[i]->getIntValue();
-               break;
+                break;
         }
     }
     delete pnode;
@@ -158,6 +169,28 @@ qsizetype binaryPlist::element_size(const QPair<qsizetype, enum TYPE> &element) 
 
 /**
  * \file
+ * * \copybrief binaryPlist::addFillObject()
+ */
+void binaryPlist::addFillObject() {
+
+    qsizetype start = m_rawTable.size();
+    m_rawTable += { 0x0F, CNTRL };
+    m_objectIndexTable += { start, m_rawTable.size() };
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::addBooleanObject(bool)
+ */
+void binaryPlist::addBooleanObject(bool val) {
+
+    qsizetype start = m_rawTable.size();
+    m_rawTable += { (val ? 0x09 : 0x08), CNTRL };
+    m_objectIndexTable += { start, m_rawTable.size() };
+}
+
+/**
+ * \file
  * * \copybrief binaryPlist::addIntegerObject(quint64, bool)
  */
 void binaryPlist::addIntegerObject(quint64 val, bool isObject) {
@@ -181,11 +214,74 @@ void binaryPlist::addIntegerObject(quint64 val, bool isObject) {
     for (qsizetype i = 0; i < byte_size; ++i) {
         m_rawTable += { (val >> (8 * (byte_size - i - 1))) & 0xFF, DATA8 };
     }
-    qsizetype end = m_rawTable.size();
 
     if (isObject) {
-        m_objectIndexTable += { start, end };
+        m_objectIndexTable += { start, m_rawTable.size() };
     }
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::addRealObject(double)
+ */
+void binaryPlist::addRealObject(double val) {
+
+    quint32 *intval = reinterpret_cast<quint32*>(&val);
+    qsizetype start = m_rawTable.size();
+    m_rawTable += { 0x22, CNTRL };
+    qsizetype byte_size = sizeof(double);
+    for (qsizetype i = 0; i < byte_size; ++i) {
+        m_rawTable += { ((*intval) >> (8 * (byte_size - i - 1))) & 0xFF, DATA8 };
+    }
+    m_objectIndexTable += { start, m_rawTable.size() };
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::addDateObject(const QString&)
+ */
+void binaryPlist::addDateObject(const QString &d) {
+    if (d.size() != 20) {
+        qCritical().noquote().nospace() << "Error parsing XML: wrong Date size=" << d.size();
+        return;
+    }
+
+    if (d[4]  != '-' || d[7]  != '-' ||
+        d[10] != 'T' || d[13] != ':' || d[16] != ':' ||
+        d[19] != 'Z') {
+        qCritical().noquote().nospace() << "Error parsing XML: wrong Date '" << d << "'";
+        return;
+    }
+
+    /** Разобрать формат YYYY-MM-DDThh:mm:ssZ */
+    QString yearString = d.sliced(0, 4);
+    QString monthString = d.sliced(5, 2);
+    QString dayString = d.sliced(8, 2);
+    QString hourString = d.sliced(11, 2);
+    QString minutesString = d.sliced(14, 2);
+    QString secondsString = d.sliced(17, 2);
+
+    //!!! сделать проверку isNumber
+    int year = yearString.toInt();
+    int month = monthString.toInt();
+    int day = dayString.toInt();
+    int hour = hourString.toInt();
+    int minutes = minutesString.toInt();
+    int seconds = secondsString.toInt();
+
+    QDateTime timeDate(QDate(year, month, day), QTime(hour, minutes, seconds));
+    quint64 timeDateSecs = timeDate.toSecsSinceEpoch();
+    QDateTime macEpoch(QDate(2001, 1, 1), QTime(0, 0, 0));
+    quint64 macEpochSecs = macEpoch.toSecsSinceEpoch();
+    quint64 intval = timeDateSecs - macEpochSecs;
+
+    qsizetype start = m_rawTable.size();
+    m_rawTable += { 0x33, CNTRL };
+    qsizetype byte_size = 8;
+    for (qsizetype i = 0; i < byte_size; ++i) {
+        m_rawTable += { ((intval) >> (8 * (byte_size - i - 1))) & 0xFF, DATA8 };
+    }
+    m_objectIndexTable += { start, m_rawTable.size() };
 }
 
 /**
@@ -195,6 +291,16 @@ void binaryPlist::addIntegerObject(quint64 val, bool isObject) {
 void binaryPlist::addDataString(const QString& s) {
     for (qsizetype i = 0; i < s.size(); ++i) {
         m_rawTable += { s[i].toLatin1(), DATA8 };
+    }
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::addByteArray(const QString&)
+ */
+void binaryPlist::addByteArray(const QByteArray& b) {
+    for (qsizetype i = 0; i < b.size(); ++i) {
+        m_rawTable += { b[i], DATA8 };
     }
 }
 
@@ -226,8 +332,7 @@ void binaryPlist::addDictonaryObject(const QList<quint64> &l) {
     for (quint64 a : l) {
         m_rawTable += { a, OBJREF };
     }
-    qsizetype end = m_rawTable.size();
-    m_objectIndexTable += { start, end };
+    m_objectIndexTable += { start, m_rawTable.size() };
 }
 
 /**
@@ -243,8 +348,30 @@ void binaryPlist::addArrayObject(const QList<quint64> &l) {
     for (quint8 a : l) {
         m_rawTable += { a, OBJREF };
     }
-    qsizetype end = m_rawTable.size();
-    m_objectIndexTable += { start, end };
+    m_objectIndexTable += { start, m_rawTable.size() };
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::isASCII(QChar)
+ */
+bool binaryPlist::isASCII(QChar c) {
+    char16_t chr = c.unicode();
+    /** Проверить, может это первый набор знаков */
+    if (chr >= 0x20 && chr <= 0x2F) return true;
+    /** Проверить, может это цифра */
+    if (chr >= '0' && chr <= '9') return true;
+    /** Проверить, может это второй набор знаков */
+    if (chr >= 0x3A && chr <= 0x40) return true;
+    /** Проверить, может это заглавная буква */
+    if (chr >= 'A' && chr <= 'Z') return true;
+    /** Проверить, может это третий набор знаков */
+    if (chr >= 0x5B && chr <= 0x60) return true;
+    /** Проверить, может это строчная буква */
+    if (chr >= 'a' && chr <= 'z') return true;
+    /** Проверить, может это четвёртый набор знаков */
+    if (chr >= 0x7B && chr <= 0x7E) return true;
+    return false;
 }
 
 /**
@@ -252,25 +379,105 @@ void binaryPlist::addArrayObject(const QList<quint64> &l) {
  * * \copybrief binaryPlist::addStringObject(const QString&)
  */
 void binaryPlist::addStringObject(const QString &s) {
-    qsizetype start = m_rawTable.size();
-    m_rawTable += { 0x50 | (s.size() >= 0x0F ? 0x0F : s.size()), CNTRL };
-    if (s.size() >= 0x0F) {
-        addIntegerObject(s.size(), false);
+    /** Выполнить проверку - это ASCII или UNICODE */
+    bool unicodeString = false;
+    for (const QChar &chr : s) {
+        if (!isASCII(chr)) {
+            unicodeString = true;
+            break;
+        }
+    }    
+    if (unicodeString) {
+        qsizetype start = m_rawTable.size();
+        m_rawTable += { 0x60 | (s.size() >= 0x0F ? 0x0F : s.size()), CNTRL };
+        if (s.size() >= 0x0F) {
+            addIntegerObject(s.size(), false);
+        }
+        for (const QChar &chr : s) {
+            quint16 c = chr.unicode();
+            m_rawTable += { static_cast<quint8>(c >> 8), DATA8 };
+            m_rawTable += { static_cast<quint8>(c),      DATA8 };
+        }
+        m_objectIndexTable += { start, m_rawTable.size() };
+    } else {
+        qsizetype start = m_rawTable.size();
+        m_rawTable += { 0x50 | (s.size() >= 0x0F ? 0x0F : s.size()), CNTRL };
+        if (s.size() >= 0x0F) {
+            addIntegerObject(s.size(), false);
+        }
+        addDataString(s);
+//        for (const QChar &chr : s) {
+//            quint16 c = chr.unicode();
+//            m_rawTable += { static_cast<quint8>(c), DATA8 };
+//        }
+        m_objectIndexTable += { start, m_rawTable.size() };
     }
-    addDataString(s);
-    qsizetype end = m_rawTable.size();
-    m_objectIndexTable += { start, end };
 }
 
+/**
+ * \file
+ * * \copybrief binaryPlist::addDataObject(const QString&)
+ */
+void binaryPlist::addDataObject(const QString &s) {
+    const QString Base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-void binaryPlist::addUidObject(std::initializer_list<quint8> args) {
-    qsizetype start = m_rawTable.size();
-    m_rawTable += { 0x80 | (args.size() - 1), CNTRL };
-    for (quint8 a : args) {
-        m_rawTable += { a, DATA8 };
+    quint32 word = 0;
+    qsizetype phase = 0;
+    QByteArray byteArray;
+    for (qsizetype strPos = 0; strPos < s.size(); ++strPos) {
+        qsizetype pos;
+        if (s[strPos] == '=') {
+            pos = 0;
+        } else {
+            pos = Base64.indexOf(s[strPos]);
+            if (pos < 0) {
+                qCritical().noquote().nospace() << "Error parsing XML: wrong Base-64 '" << s << "'";
+                return;
+            }
+        }
+        word <<= 6;
+        word |= static_cast<quint8>(pos);
+        phase++;
+        /** После накопления четырёх символов превратить их в три байта */
+        if (phase == 4) {
+            phase = 0;
+            for (qsizetype i = 0; i < 3; ++i) {
+                byteArray += word >> 16;
+                word <<= 8;
+            }
+        }
     }
-    qsizetype end = m_rawTable.size();
-    m_objectIndexTable += { start, end };
+    qsizetype start = m_rawTable.size();
+    m_rawTable += { 0x40 | (byteArray.size() >= 0x0F ? 0x0F : byteArray.size()), CNTRL };
+    if (byteArray.size() >= 0x0F) {
+        addIntegerObject(byteArray.size(), false);
+    }
+    addByteArray(byteArray);
+    m_objectIndexTable += { start, m_rawTable.size() };
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::addUidObject(quint64)
+ */
+void binaryPlist::addUidObject(quint64 val) {
+    qsizetype start = m_rawTable.size();
+    qsizetype byte_size;
+    if (val <= 0xFF) {
+        byte_size = 1;
+    } else if (val <= 0xFFFF) {
+        byte_size = 2;
+    } else if (val <= 0xFFFFFFFF) {
+        byte_size = 4;
+    }
+    else {
+        byte_size = 8;
+    }
+    m_rawTable += { 0x80 | static_cast<quint8>(byte_size - 1), CNTRL };
+    for (qsizetype i = 0; i < byte_size; ++i) {
+        m_rawTable += { (val >> (8 * (byte_size - i - 1))) & 0xFF, DATA8 };
+    }
+    m_objectIndexTable += { start, m_rawTable.size() };
 }
 
 /**
@@ -294,7 +501,7 @@ void binaryPlist::finish(quint64 topObject) {
     if (m_objectRefSize == 3) m_objectRefSize = 4;
     else if (m_objectRefSize > 4 && m_objectRefSize < 8) m_objectRefSize = 8;
     else if (m_objectRefSize > 8) {
-       //!!! FATAL ERROR
+        qCritical().noquote().nospace() << "Error building binary plist: reference is " << m_objectRefSize << " bytes length (more than 8)";
     }
     qDebug() << "Исходя из количества объектов" << Qt::hex << Qt::showbase << m_objectIndexTable.size() << "получен размер индекса в байтах:" << m_objectRefSize;
 
@@ -310,7 +517,7 @@ void binaryPlist::finish(quint64 topObject) {
     if (m_offsetIntSize == 3) m_offsetIntSize = 4;
     else if (m_offsetIntSize > 4 && m_offsetIntSize < 8) m_offsetIntSize = 8;
     else if (m_offsetIntSize > 8) {
-       //!!! FATAL ERROR
+        qCritical().noquote().nospace() << "Error building binary plist: offset is " << m_objectRefSize << " bytes length (more than 8)";
     }
 
     qDebug() << "Исходя из количества байтового размера таблицы объектов" << Qt::hex << Qt::showbase << m_rawTable.size() << "получен размер смещения в байтах:" << m_offsetIntSize;
@@ -382,12 +589,17 @@ void binaryPlist::finish(quint64 topObject) {
 
 /**
  * \file
- * * \copybrief binaryPlist::parse_xml(QXmlStreamReader&, const QString&)
+ * * \copybrief binaryPlist::parse_xml(QXmlStreamReader&)
  */
-binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml, const QString &tag) {
+binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml) {
+
+    QString tag = xml.name().toString();
+    qDebug().noquote().nospace() << "Incoming tag '" << tag << "'";
+   
+
     binaryPlist::pNode *root = nullptr;
 
-    if (tag == "") {
+    if (tag.isEmpty()) {
         root = new pRoot(this);
     } else if (tag == "plist") {
         root = new pPlist(this);
@@ -397,10 +609,22 @@ binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml, const QString 
         root = new pDict(this);
     } else if (tag == "integer") {
         root = new pInt(this);
+    } else if (tag == "real") {
+        root = new pReal(this);
+    } else if (tag == "true") {
+        root = new pBool(this);
+        root->setBoolValue(true);
+    } else if (tag == "false") {
+        root = new pBool(this);
+        root->setBoolValue(false);
     } else if (tag == "string") {
         root = new pString(this);
     } else if (tag == "key") {
         root = new pKey(this);
+    } else if (tag == "data") {
+        root = new pData(this);
+    } else if (tag == "date") {
+        root = new pDate(this);
     } else {
         qCritical().noquote().nospace() << "Unsupported tag '" << tag << "'";
         return nullptr;
@@ -411,6 +635,7 @@ binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml, const QString 
         switch(token) {
             case QXmlStreamReader::NoToken:
                 qCritical().noquote().nospace() << "XML error in '"<< root->tagToString() << "': NoToken state";
+                delete root;
                 return nullptr;
             case QXmlStreamReader::Invalid:
                 qCritical().noquote().nospace() << "XML error in '"<< root->tagToString() << "': " << xml.errorString();
@@ -429,7 +654,7 @@ binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml, const QString 
                 break;
             case QXmlStreamReader::StartElement:
                 {
-                    pNode *node = parse_xml(xml, xml.name().toString());
+                    pNode *node = parse_xml(xml);
                     if (node == nullptr) {
                         return nullptr;
                     }
@@ -437,9 +662,9 @@ binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml, const QString 
                 }
                 break;
             case QXmlStreamReader::EndElement:
-                if (xml.name().toString() != root->tagToString()) {
+                if (!root->checkTag(xml.name().toString())) {
+                    qCritical().noquote().nospace() << "XML error in '"<< root->tagToString() << "' node: closing tag is '" << xml.name().toString() << "'";
                     delete root;
-                    qCritical().noquote().nospace() << "XML error in '"<< root->tagToString() << "': not '"<< root->tagToString() << "' closing tag";
                     return nullptr;
                 }
 
@@ -500,6 +725,8 @@ binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml, const QString 
  */
 binaryPlist::pNode::pNode(enum binaryPlist::PLIST_TAG tag, class binaryPlist *parent) :
   m_parent(parent), m_tag(tag), m_alias(nullptr) {
+    qDebug() << "Created pNode with tag=" << tagToString();
+
 }
 
 /**
@@ -656,6 +883,38 @@ quint64 binaryPlist::pNode::getIntValue() const {
 
 /**
  * \file
+ * * \copybrief binaryPlist::pNode::setRealValue(double)
+ */
+void binaryPlist::pNode::setRealValue(double value) {
+    Q_UNUSED(value);
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pNode::getRealValue() const
+ */
+double binaryPlist::pNode::getRealValue() const {
+    return 0.0;
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pNode::setBoolValue(bool)
+ */
+void binaryPlist::pNode::setBoolValue(bool value) {
+    Q_UNUSED(value);
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pNode::getBoolValue() const
+ */
+bool binaryPlist::pNode::getBoolValue() const {
+    return false;
+}
+
+/**
+ * \file
  * * \copybrief binaryPlist::pNode::getRefList() const
  */
 QList<quint64> binaryPlist::pNode::getRefList() const {
@@ -666,6 +925,45 @@ QList<quint64> binaryPlist::pNode::getRefList() const {
     }
     return l;
 }
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pNode::checkTag(const QString&) const
+ */
+bool binaryPlist::pNode::checkTag(const QString& tag) const {
+    switch(m_tag) {
+        case tag_root:
+            return tag.isEmpty();
+        case tag_plist:
+            return tag == "plist";
+        case tag_bool:
+            return (tag == "true" || tag == "false");
+        case tag_fill:
+            return false;
+        case tag_int:
+            return tag == "integer";
+        case tag_real:
+            return tag == "real";
+        case tag_date:
+            return tag == "date";
+        case tag_data:
+            return tag == "data";
+        case tag_string:
+        case tag_ustring:
+            return tag == "string";
+        case tag_key:
+            return tag == "key";
+        case tag_uid:
+            return false;
+        case tag_array:
+            return tag == "array";
+        case tag_dict:
+            return tag == "dict";
+        default:
+            return false;
+    }
+}
+
 
 /**
  * \file
@@ -691,6 +989,8 @@ QString binaryPlist::pNode::tagToString() const {
             return "data";
         case tag_string:
             return "string";
+        case tag_ustring:
+            return "string";
         case tag_key:
             return "key";
         case tag_uid:
@@ -700,7 +1000,7 @@ QString binaryPlist::pNode::tagToString() const {
         case tag_dict:
             return "dict";
         default:
-            return "WRONG TAG";
+            return QString("WRONG TAG = 0x") + QString::number(static_cast<int>(m_tag), 16);
     }
 }
 
@@ -714,6 +1014,44 @@ qsizetype binaryPlist::pNode::getRef() const {
     }
     qCritical() << "CAN NOT FIND" << tagToString() << getStringValue();
     return -1;
+}
+
+/**
+ * \file
+ * Функции, являющиеся методами класса \ref binaryPlist::pBool "pBool":
+ * <BR>
+ */
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pBool::pBool()
+ */
+binaryPlist::pBool::pBool(class binaryPlist *parent, enum PLIST_TAG tag) :
+  pNode(tag, parent), m_value(false) {
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pBool::setBoolValue(bool)
+ */
+void binaryPlist::pBool::setBoolValue(bool value) {
+    m_value = value;
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pBool::getIntValue() const
+ */
+bool binaryPlist::pBool::getBoolValue() const {
+    return m_value;
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pBool::getStringValue() const
+ */
+QString binaryPlist::pBool::getStringValue() const {
+    return m_value ? "true" : "false";
 }
 
 /**
@@ -754,6 +1092,46 @@ QString binaryPlist::pInt::getStringValue() const {
     return QString::number(m_value);
 }
 
+
+/**
+ * \file
+ * Функции, являющиеся методами класса \ref binaryPlist::pReal "pReal":
+ * <BR>
+ */
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pReal::pReal()
+ */
+binaryPlist::pReal::pReal(class binaryPlist *parent) :
+  pNode(tag_real, parent), m_value(0.0) {
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pReal::setRealValue(double)
+ */
+void binaryPlist::pReal::setRealValue(double value) {
+    m_value = value;
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pReal::getRealValue() const
+ */
+double binaryPlist::pReal::getRealValue() const {
+    return m_value;
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pReal::getStringValue() const
+ */
+QString binaryPlist::pReal::getStringValue() const {
+    return QString::number(m_value);
+}
+
+
 /**
  * \file
  * Функции, являющиеся методами класса \ref binaryPlist::pUid "pUid":
@@ -781,7 +1159,7 @@ QString binaryPlist::pUid::toString() const {
  * * \copybrief binaryPlist::pUid::findRef() const
  */
 void binaryPlist::pUid::findRef() const {
-    for (auto i = 0; i < getParent()->m_binary_list.size(); ++i) {
+    for (qsizetype i = 0; i < getParent()->m_binary_list.size(); ++i) {
         if (getParent()->m_binary_list[i]->getTag() == getTag() && 
           getParent()->m_binary_list[i]->getIntValue() == getIntValue()) {
              this->setAlias(getParent()->m_binary_list[i]);
@@ -855,6 +1233,34 @@ QString binaryPlist::pString::getStringValue() const {
  */
 binaryPlist::pKey::pKey(binaryPlist *parent) :
   pString(parent, tag_key) {
+}
+
+/**
+ * \file
+ * Функции, являющиеся методами класса \ref binaryPlist::pData "pData":
+ * <BR>
+ */
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pData::pData()
+ */
+binaryPlist::pData::pData(binaryPlist *parent) :
+  pString(parent, tag_data) {
+}
+
+/**
+ * \file
+ * Функции, являющиеся методами класса \ref binaryPlist::pDate "pDate":
+ * <BR>
+ */
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pDate::pDate()
+ */
+binaryPlist::pDate::pDate(binaryPlist *parent) :
+  pString(parent, tag_date) {
 }
 
 /**

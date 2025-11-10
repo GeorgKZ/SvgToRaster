@@ -149,8 +149,8 @@ int arg_parser::process_cmdline(const char *cmdline[], int cmdnum) {
 
   /** 6 Перебрать оставшиеся аргументы. */
   for (qsizetype argi = 2; argi < processed_cmdnum; argi++) {
-    /** \todo Заменить на сравнение начала с "--" */
-    if (processed_cmdline[argi].size() >= 2 && processed_cmdline[argi][0] == '-' && processed_cmdline[argi][1] == '-') {
+    if (processed_cmdline[argi].startsWith("--")) {
+
       /**
        * &nbsp;&nbsp;&nbsp;&nbsp;6.1 Если аргументом окажется флаг, добавить его в список
        * обнаруженных флагов и продолжить перебирать аргументы.

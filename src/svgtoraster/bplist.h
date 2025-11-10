@@ -83,13 +83,11 @@ class binaryPlist {
 
         /**
          * Тип для булевого значения с тегами "true" и "false"
-         * \todo Сделать этот тип.
          */
         tag_bool,
 
         /**
          * Тип для выравнивающего байта в двоичном представлении списка
-         * \todo Сделать этот тип.
          */
         tag_fill,
 
@@ -209,6 +207,11 @@ class binaryPlist {
     void addDataString(const QString& s);
 
     /**
+     * \brief Дополнить двоичное представлене списка байтами указанного массива
+     */
+    void addByteArray(const QByteArray& b);
+
+    /**
      * \brief Получить размер двоичного представления объекта в двоичном представлении списка
      * \note Для правильной работы функции должно быть определено значение \ref binaryPlist::m_objectRefSize "m_objectRefSize".
      *
@@ -217,10 +220,27 @@ class binaryPlist {
     qsizetype objLength(qsizetype index) const;
 
     /**
-     * \brief Добавление целого числа (1, 2, 4 байта длиной) в форме двоичного объекта
+     * \brief Добавление заполняющего байта в двоичное представление списка
+     */
+    void addFillObject();
+
+    /**
+     * \brief Добавление булева значения в форме двоичного объекта
+     * в двоичное представление списка
+     */
+    void addBooleanObject(bool val);
+
+    /**
+     * \brief Добавление целого числа (1, 2, 4, 8 байт длиной) в форме двоичного объекта
      * в двоичное представление списка
      */
     void addIntegerObject(quint64 val, bool isObject = true);
+
+    /**
+     * \brief Добавление действительного числа (4 или 8 байт длиной) в форме двоичного объекта
+     * в двоичное представление списка
+     */
+    void addRealObject(qreal val);
 
     /**
      * \brief Добавление словаря со списком номеров объектов в форме двоичного объекта
@@ -235,16 +255,33 @@ class binaryPlist {
     void addArrayObject(const QList<quint64> &l);
 
     /**
+     * \brief Добавление последовательности байт, закодированных по алгоритму <a href="https://ru.wikipedia.org/wiki/Base64">Base-64</a>,
+     * в двоичное представление списка
+     */
+    void addDataObject(const QString &b);
+
+    /**
+     * \brief Добавление даты, указанной в формате <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a>,
+     * в двоичное представление списка
+     */
+    void addDateObject(const QString &d);
+
+    /**
+     * \brief Проверить, входит ли символ в подмножество ASCII
+     */
+    static bool isASCII(QChar c);
+
+    /**
      * \brief Добавление строки в форме двоичного объекта
      * в двоичное представление списка
      */
     void addStringObject(const QString &s);
 
     /**
-     * \brief Добавление UID с произвольным количеством аргументов в форме двоичного объекта
+     * \brief Добавление UID в форме двоичного объекта
      * в двоичное представление списка
      */
-    void addUidObject(std::initializer_list<quint8> args);
+    void addUidObject(quint64 val);
 
     /**
      * \brief Добавление таблицы смещений и трейлера
@@ -324,7 +361,6 @@ class binaryPlist {
          */
         void addNode(pNode* node);
 
-        //!!! Какой он может быть? Если несколько чисел?
         /**
          * \brief Проверить, является ли этот объект объектом UID
          */
@@ -361,14 +397,34 @@ class binaryPlist {
         virtual QString getStringValue() const;
 
         /**
-         * \brief Установить числовое значение узла
+         * \brief Установить целочисленное значение узла
          */
         virtual void setIntValue(quint64 value);
 
         /**
-         * \brief Получить числовое значение узла
+         * \brief Получить целочисленное значение узла
          */
         virtual quint64 getIntValue() const;
+
+        /**
+         * \brief Установить числовое (действительное) значение узла
+         */
+        virtual void setRealValue(double value);
+
+        /**
+         * \brief Получить числовое (действительное) значение узла
+         */
+        virtual double getRealValue() const;
+
+        /**
+         * \brief Установить булево значение узла
+         */
+        virtual void setBoolValue(bool value);
+
+        /**
+         * \brief Получить булево значение узла
+         */
+        virtual bool getBoolValue() const;
 
         /**
          * \brief Получить список узлов данного узла
@@ -384,6 +440,11 @@ class binaryPlist {
          * \brief Получить индекс данного узла в "плоском" списке узлов
          */
         qsizetype getRef() const;
+
+        /**
+         * \brief Проверить, совместим ли данный узел с указанным тегом XML-представления
+         */
+        bool checkTag(const QString& tag) const;
     };
 
     /**
@@ -396,7 +457,40 @@ class binaryPlist {
      * \brief Разбор XML-представления списка и формирование списка объектов в
      * виде классов, дочерних по отношению к \ref binaryPlist::pNode "pNode"
      */
-    pNode *parse_xml(QXmlStreamReader &xml, const QString &tag = "");
+    pNode *parse_xml(QXmlStreamReader &xml);
+
+    /**
+     * \brief Вспомогательный класс для промежуточного представления
+     * булевых значений из разобранного XML-представления
+     * перед преобразованием в двоичное представление
+     */
+    class pBool : public pNode {
+
+        /** \brief Булево значение */
+        bool m_value;
+
+        public:
+
+        /**
+         * \brief Конструктор
+         */
+        pBool(class binaryPlist *parent, enum PLIST_TAG tag = tag_bool);
+
+        /**
+         * \brief Установить булево значение
+         */
+        virtual void setBoolValue(bool value) override;
+
+        /**
+         * \brief Получить числовое значение
+         */
+        virtual bool getBoolValue() const override;
+
+        /**
+         * \brief Получить строковое значение
+         */
+        virtual QString getStringValue() const override;
+    };
 
     /**
      * \brief Вспомогательный класс для промежуточного представления
@@ -405,7 +499,7 @@ class binaryPlist {
      */
     class pInt : public pNode {
 
-        /** \brief Числовое значение */
+        /** \brief Целочисленное значение */
         quint64 m_value;
 
         public:
@@ -424,6 +518,39 @@ class binaryPlist {
          * \brief Получить числовое значение
          */
         virtual quint64 getIntValue() const override;
+
+        /**
+         * \brief Получить строковое значение
+         */
+        virtual QString getStringValue() const override;
+    };
+
+    /**
+     * \brief Вспомогательный класс для промежуточного представления
+     * действительных чисел из разобранного XML-представления
+     * перед преобразованием в двоичное представление
+     */
+    class pReal : public pNode {
+
+        /** \brief Действительное значение */
+        double m_value;
+
+        public:
+
+        /**
+         * \brief Конструктор
+         */
+        pReal(class binaryPlist *parent);
+
+        /**
+         * \brief Установить числовое (действительное) значение узла
+         */
+        virtual void setRealValue(double value) override;
+
+        /**
+         * \brief Получить числовое (действительное) значение узла
+         */
+        virtual double getRealValue() const override;
 
         /**
          * \brief Получить строковое значение
@@ -506,6 +633,35 @@ class binaryPlist {
          * \brief Конструктор
          */
         pKey(binaryPlist *parent);
+    };
+
+    /**
+     * \brief Вспомогательный класс для промежуточного представления
+     * последовательности байт (хранимой в виде строки в кодировке <a href="https://ru.wikipedia.org/wiki/Base64">Base-64</a>)
+     * из разобранного XML-представления перед преобразованием в двоичное представление
+     */
+    class pData : public pString {
+
+        public:
+
+        /**
+         * \brief Конструктор
+         */
+        pData(binaryPlist *parent);
+    };
+
+    /**
+     * \brief Вспомогательный класс для промежуточного представления
+     * даты из разобранного XML-представления перед преобразованием в двоичное представление
+     */
+    class pDate : public pString {
+
+        public:
+
+        /**
+         * \brief Конструктор
+         */
+        pDate(binaryPlist *parent);
     };
 
     /**
