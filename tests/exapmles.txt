@@ -1,0 +1,24 @@
+< -> &lt;
+> -> &gt;
+
+This ice cream is from Ben & Jerry’s
+<data>VGhpcyBpY2UgY3JlYW0gaXMgZnJvbSBCZW4gJiBKZXJyeeKAmXM=</data>
+
+ISO 8601
+YYYY-MM-DDThh:mm:ssZ
+<date>2023-11-09T16:29:34Z</date>
+
+<real>+5.332E-3</real>
+
+<true/>
+<false/>
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>beast-mode</key>
+    <true/>
+</dict>
+</plist>

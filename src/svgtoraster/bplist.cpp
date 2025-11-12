@@ -48,6 +48,47 @@ binaryPlist::binaryPlist() {
 
 }
 
+void fromDouble(double d, quint64& i) {
+// IEEE 754
+// 1 бит - знак (0 для положительного, 1 для отрицательного числа).
+// 11 бит - экспонента, которая определяет масштаб числа.
+// 52 бита - мантисса (или дробная часть), которая хранит значимое число.
+// sign * (2 ^ exponent) * mantissa 
+// -11234.32442E+25 -> 0xC5F6B00274F49151
+
+    const int exponent_len = 11; // размер экспоненты в битах
+    const int mantissa_len = 52; // размер мантиссы в битах
+
+    quint64 sign = 0LL;
+    if (d < 0) {
+        sign = 1LL << (exponent_len + mantissa_len);
+        d = -d;
+    }
+
+    /** Выполнить номализацию числа, получая при этом его экспоненту */
+    quint64 exponent = (1LL << (exponent_len - 1)) - 1;
+    while (d >= 2.0) {
+        d /= 2.0;
+        exponent ++;
+    }
+    while (d < 1.0 && d > 0.0) {
+        d *= 2.0;
+        exponent --;
+    }
+    exponent <<= mantissa_len;
+    d -= 1.0;
+
+    /** Получить мантиссу */
+    quint64 mantissa = static_cast<qint64>(d * (1LL << mantissa_len));
+
+    /** Объединить битовые представления знака, экспоненты и мантиссы */
+    i = sign | exponent | mantissa;
+
+    // Выводим результаты
+    qDebug() << "Полное число: " << QString::number(i, 16);
+}
+
+
 /**
  * \file
  * * \copybrief binaryPlist::parser(const QString&)
@@ -226,12 +267,14 @@ void binaryPlist::addIntegerObject(quint64 val, bool isObject) {
  */
 void binaryPlist::addRealObject(double val) {
 
-    quint32 *intval = reinterpret_cast<quint32*>(&val);
+    quint64 intval;
+    fromDouble(val, intval);
+
     qsizetype start = m_rawTable.size();
-    m_rawTable += { 0x22, CNTRL };
-    qsizetype byte_size = sizeof(double);
+    m_rawTable += { 0x23, CNTRL };
+    qsizetype byte_size = sizeof(quint64);
     for (qsizetype i = 0; i < byte_size; ++i) {
-        m_rawTable += { ((*intval) >> (8 * (byte_size - i - 1))) & 0xFF, DATA8 };
+        m_rawTable += { ((intval) >> (8 * (byte_size - i - 1))) & 0xFF, DATA8 };
     }
     m_objectIndexTable += { start, m_rawTable.size() };
 }
@@ -269,11 +312,11 @@ void binaryPlist::addDateObject(const QString &d) {
     int minutes = minutesString.toInt();
     int seconds = secondsString.toInt();
 
-    QDateTime timeDate(QDate(year, month, day), QTime(hour, minutes, seconds));
-    quint64 timeDateSecs = timeDate.toSecsSinceEpoch();
-    QDateTime macEpoch(QDate(2001, 1, 1), QTime(0, 0, 0));
-    quint64 macEpochSecs = macEpoch.toSecsSinceEpoch();
-    quint64 intval = timeDateSecs - macEpochSecs;
+    double dval = QDateTime(QDate(year, month, day), QTime(hour, minutes, seconds)).toSecsSinceEpoch() -
+      QDateTime(QDate(2001, 1, 1), QTime(0, 0, 0)).toSecsSinceEpoch();
+
+    quint64 intval;
+    fromDouble(dval, intval);
 
     qsizetype start = m_rawTable.size();
     m_rawTable += { 0x33, CNTRL };
@@ -406,10 +449,6 @@ void binaryPlist::addStringObject(const QString &s) {
             addIntegerObject(s.size(), false);
         }
         addDataString(s);
-//        for (const QChar &chr : s) {
-//            quint16 c = chr.unicode();
-//            m_rawTable += { static_cast<quint8>(c), DATA8 };
-//        }
         m_objectIndexTable += { start, m_rawTable.size() };
     }
 }
@@ -426,8 +465,10 @@ void binaryPlist::addDataObject(const QString &s) {
     QByteArray byteArray;
     for (qsizetype strPos = 0; strPos < s.size(); ++strPos) {
         qsizetype pos;
+        int numEquals = 0;
         if (s[strPos] == '=') {
             pos = 0;
+            numEquals ++;
         } else {
             pos = Base64.indexOf(s[strPos]);
             if (pos < 0) {
@@ -438,13 +479,17 @@ void binaryPlist::addDataObject(const QString &s) {
         word <<= 6;
         word |= static_cast<quint8>(pos);
         phase++;
-        /** После накопления четырёх символов превратить их в три байта */
+        /**
+         * После накопления четырёх символов превратить их в три, два или один байт,
+         * в зависимотсти от количества символов '='.
+         */
         if (phase == 4) {
             phase = 0;
-            for (qsizetype i = 0; i < 3; ++i) {
+            for (qsizetype i = 0; i < 3 - numEquals; ++i) {
                 byteArray += word >> 16;
                 word <<= 8;
             }
+            word = 0;
         }
     }
     qsizetype start = m_rawTable.size();
@@ -594,9 +639,6 @@ void binaryPlist::finish(quint64 topObject) {
 binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml) {
 
     QString tag = xml.name().toString();
-    qDebug().noquote().nospace() << "Incoming tag '" << tag << "'";
-   
-
     binaryPlist::pNode *root = nullptr;
 
     if (tag.isEmpty()) {
@@ -683,11 +725,11 @@ binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml) {
             case QXmlStreamReader::Characters:
                 {
                     if (!xml.isWhitespace()) {
-                        bool ok;
-                        quint64 val = xml.text().toLongLong(&ok, 10);
-                        if (ok) {
-                            root->setIntValue(val);
-                        }
+//                        bool ok;
+//                        quint64 val = xml.text().toLongLong(&ok, 10);
+//                        if (ok) {
+//                            root->setIntValue(val);
+//                        }
                         root->setStringValue(xml.text().toString());
                     }
                 }
@@ -725,8 +767,6 @@ binaryPlist::pNode *binaryPlist::parse_xml(QXmlStreamReader &xml) {
  */
 binaryPlist::pNode::pNode(enum binaryPlist::PLIST_TAG tag, class binaryPlist *parent) :
   m_parent(parent), m_tag(tag), m_alias(nullptr) {
-    qDebug() << "Created pNode with tag=" << tagToString();
-
 }
 
 /**
@@ -1086,6 +1126,18 @@ quint64 binaryPlist::pInt::getIntValue() const {
 
 /**
  * \file
+ * * \copybrief binaryPlist::pInt::setStringValue(const QString&)
+ */
+void binaryPlist::pInt::setStringValue(const QString &value) {
+    bool ok;
+    m_value = value.toLongLong(&ok, 10);
+    if (!ok) {
+        qCritical() << "ERROR setting integer value by string " << value;
+    }
+}
+
+/**
+ * \file
  * * \copybrief binaryPlist::pInt::getStringValue() const
  */
 QString binaryPlist::pInt::getStringValue() const {
@@ -1121,6 +1173,18 @@ void binaryPlist::pReal::setRealValue(double value) {
  */
 double binaryPlist::pReal::getRealValue() const {
     return m_value;
+}
+
+/**
+ * \file
+ * * \copybrief binaryPlist::pReal::setStringValue(const QString&)
+ */
+void binaryPlist::pReal::setStringValue(const QString &value) {
+    bool ok;
+    m_value = value.toDouble(&ok);
+    if (!ok) {
+        qCritical() << "ERROR setting real value by string " << value;
+    }
 }
 
 /**

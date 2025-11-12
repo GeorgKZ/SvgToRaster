@@ -233,12 +233,14 @@ class binaryPlist {
     /**
      * \brief Добавление целого числа (1, 2, 4, 8 байт длиной) в форме двоичного объекта
      * в двоичное представление списка
+     * \note Последовательнось записываемых байт начинается со старшего байта.
      */
     void addIntegerObject(quint64 val, bool isObject = true);
 
     /**
      * \brief Добавление действительного числа (4 или 8 байт длиной) в форме двоичного объекта
      * в двоичное представление списка
+     * \note Последовательнось записываемых байт начинается со старшего байта.
      */
     void addRealObject(qreal val);
 
@@ -510,17 +512,22 @@ class binaryPlist {
         pInt(class binaryPlist *parent, enum PLIST_TAG tag = tag_int);
 
         /**
-         * \brief Установить числовое значение
+         * \brief Установить значение хранимого числа
          */
         virtual void setIntValue(quint64 value) override;
 
         /**
-         * \brief Получить числовое значение
+         * \brief Получить значение хранимого числа
          */
         virtual quint64 getIntValue() const override;
 
         /**
-         * \brief Получить строковое значение
+         * \brief Установить значение хранимого числа из строки
+         */
+        virtual void setStringValue(const QString &value) override;
+
+        /**
+         * \brief Получить строковое значение хранимого числа
          */
         virtual QString getStringValue() const override;
     };
@@ -543,17 +550,22 @@ class binaryPlist {
         pReal(class binaryPlist *parent);
 
         /**
-         * \brief Установить числовое (действительное) значение узла
+         * \brief Установить числовое (действительное) значение хранимого числа
          */
         virtual void setRealValue(double value) override;
 
         /**
-         * \brief Получить числовое (действительное) значение узла
+         * \brief Получить числовое (действительное) значение хранимого числа
          */
         virtual double getRealValue() const override;
 
         /**
-         * \brief Получить строковое значение
+         * \brief Установить значение хранимого числа из строки
+         */
+        virtual void setStringValue(const QString &value) override;
+
+        /**
+         * \brief Получить строковое значение хранимого числа
          */
         virtual QString getStringValue() const override;
     };

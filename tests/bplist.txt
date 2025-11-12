@@ -1,0 +1,96 @@
+---> OFFSET 08 (00):
+DICTONARY <D4> 01 02 03 04 - 05 06 07 0A // $version=100000, $archiver=NSKeyedArchiver $top= DICT {root=UID { 01 } } $objects=ARRAY { $null, dict_0C, name, assetcatalog-reference, dict_1A, dict_1E } 
+---> OFFSET 11 (01):
+STRING <58> $version
+---> OFFSET 1A (02):
+STRING <59> $archiver
+---> OFFSET 24 (03):
+STRING <54> $top
+---> OFFSET 29 (04):
+STRING <58> $objects
+---> OFFSET 32 (05):
+INT <12> 00 01 86 A0
+---> OFFSET 37 (06):
+STRING <5F> <10> 0F NSKeyedArchiver
+---> OFFSET 49 (07):
+DICTONARY <D1> 08 09 // root=UID { 01 }
+---> OFFSET 4C (08):
+STRING <54> root
+---> OFFSET 51 (09):
+UID <80> 01
+---> OFFSET 53 (0A):
+ARRAY <A7> 0B 0C 17 18 19 1A 1E // { $null, dict_0C, name, assetcatalog-reference, dict_1A, dict_1E }
+---> OFFSET 5B (0B):
+STRING <55> $null
+---> OFFSET 61 (0C):
+DICTONARY 0D 0E 0F - 10 13 16 // NS.keys= ARRAY { UID {02} UID {03} } NS.objects= ARRAY { UID { 04 } UID { 05 } } $class= UID { 06 }
+<D3> 0D 0E 0F 10 13 16
+---> OFFSET 68 (0D):
+STRING <57> NS.keys
+---> OFFSET 70 (0E):
+STRING <5A> NS.objects
+---> OFFSET 7B (0F):
+<56> $class
+---> OFFSET 82 (10):
+ARRAY <A2> 11 12
+---> OFFSET 85 (11):
+UID <80> 02
+---> OFFSET 87 (12):
+UID <80> 03
+---> OFFSET 89 (13):
+ARRAY <A2> 14 15
+---> OFFSET 8C (14):
+UID <80> 04
+---> OFFSET 8E (15):
+UID <80> 05
+---> OFFSET 90 (16):
+UID <80> 06
+---> OFFSET 92 (17):
+STRING <54> name
+---> OFFSET 97 (18):
+STRING <5F> <10> 16 assetcatalog-reference
+---> OFFSET B0 (19):
+STRING <54> icon
+---> OFFSET B5 (1A):
+DICTONARY <D3> 0D 0E 0F 1B 1C 16 // DICTONARY { NS.keys=ARRAY {} NS.objects=ARRAY{} $class=UID {06} }
+---> OFFSET BC (1B):
+ARRAY A0
+---> OFFSET BD (1C):
+ARRAY A0
+---> OFFSET BE (1D):
+UID <80> 06 
+---> OFFSET C0 (1E):
+DICTONARY <D2> 1F 20 21 22 // $classname=NSDictionary, $classes=ARRAY { "NSDictionary", "NSObject"}
+---> OFFSET C5 (1F):
+STRING <5A> $classname
+---> OFFSET D0 (20):
+STRING <58> $classes
+---> OFFSET D9 (21):
+STRING <5C> NSDictionary
+---> OFFSET E6 (22):
+ARRAY <A2> 21 23 // { "NSDictionary", "NSObject"}
+---> OFFSET E9 (23):
+STRING <58> NSObject
+
+OFFSET TABLE
+
+08
+11 1A 24 29 32 37 49 4C 51 53 5B 61 68 70 7B 82
+85 87 89 8C 8E 90 92 97 B0 B5 BC BD BE C0 C5 D0
+D9 E6 E9
+
+
+Unused
+00 00 00 00 00
+sortVersion
+00
+byte size of offset ints in offset table
+01
+byte size of object refs in arrays and dicts
+01
+number of offsets in offset table (also is number of objects)
+00 00 00 00 00 00 00 24
+element # in offset table which is top level object
+00 00 00 00 00 00 00 00
+Смещение в файле таблицы смещений OFFSET TABLE
+00 00 00 00 00 00 00 F2

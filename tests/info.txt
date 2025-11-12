@@ -1,0 +1,37 @@
+OBJECT TABLE
+variable-sized objects
+
+Object Formats
+null	00
+bool	08 // false
+bool	09 // true
+fill	0F // fill byte
+int	1n ... // # количество байт 2^n, big-endian bytes
+real	2n ... // # количество байт 2^n, big-endian bytes (float - 4 байта, double - 8 байт)
+date	33 ... // восьмибайтовое количество секунд с 1/1/2001 (Core Data epoch) 
+data	4n ... // n - количество от 0 до 14
+data	4F int ... // int - количество больше 15
+string	5n ... // ASCII string, nnnn is # of chars, else 1111 then int count, then bytes
+string	5F int ... // ASCII string, nnnn is # of chars, else 1111 then int count, then bytes
+string	6n ... // Unicode string, nnnn is # of chars, else 1111 then int count, then big-endian 2-byte uint16_t
+string	6F int ... // Unicode string, nnnn is # of chars, else 1111 then int count, then big-endian 2-byte uint16_t
+не исп. 7x
+uid	8n ... // n+1 - количество байт
+не исп. 9x
+array	An objref* // n - количество, не равно Fh
+array	An int objref* // int - количество
+не исп. Bx
+set	Cn objref* // n - количество, не равно Fh
+set	CF int objref* // int - количество
+dict	Dn keyref* objref* // n - количество, не равно Fh
+dict	DF int keyref* objref* // int - количество
+не исп. Ex
+не исп. Fx
+
+OFFSET TABLE
+	list of ints, byte size of which is given in trailer
+	-- these are the byte offsets into the file
+	-- number of these is in the trailer
+
+TRAILER
+

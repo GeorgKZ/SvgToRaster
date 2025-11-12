@@ -359,7 +359,7 @@ static const char *test1 = "\
 binaryPlist p1;
 p1.parser(test1);
 //QFile bplist("/home/user/_My_SvgToRaster/SvgToRaster/tests/mybplist.bin");
-//QFile bplist("/var/tmp/build_svgtoraster/testplist.bin");
+//QFile bplist("/var/tmp/build_svgtoraster/testplist.plist");
 QFile bplist("/Volumes/RAM_Disk/build_svgtoraster/testplist.plist");
 bplist.open(QIODevice::WriteOnly);
 QDataStream bpout(&bplist);
